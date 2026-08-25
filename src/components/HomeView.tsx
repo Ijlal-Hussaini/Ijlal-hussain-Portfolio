@@ -221,7 +221,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                       src={personalInfo.photoUrl}
                       alt={personalInfo.name}
                       onError={() => setImageError(true)}
-                      className="w-full h-full object-cover object-top scale-[0.96] transition-transform duration-700 ease-out group-hover:scale-105"
+                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                       referrerPolicy="no-referrer"
                     />
 
