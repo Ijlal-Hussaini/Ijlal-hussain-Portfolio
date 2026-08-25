@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
 
           {/* Column 3: Navigation and Socials */}
-          <div className="flex flex-col space-y-4 md:items-end">
+          <div className="flex flex-col space-y-4 items-start md:items-end">
             <span className="font-display font-semibold text-sm text-text-sub uppercase tracking-wider">
               Social Channels
             </span>
@@ -59,7 +59,7 @@ export default function Footer() {
                 href={personalInfo.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-card border border-white/5 text-text-sub hover:text-cyan-bright hover:border-cyan-glow/30 transition-all duration-200"
+                className="p-2.5 rounded-xl bg-card border border-white/5 text-text-sub hover:text-cyan-bright hover:border-cyan-glow/30 transition-all duration-200"
                 title="GitHub"
               >
                 <Github className="w-4 h-4" />
@@ -69,7 +69,7 @@ export default function Footer() {
                 href={personalInfo.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-card border border-white/5 text-text-sub hover:text-purple-bright hover:border-purple-glow/30 transition-all duration-200"
+                className="p-2.5 rounded-xl bg-card border border-white/5 text-text-sub hover:text-purple-bright hover:border-purple-glow/30 transition-all duration-200"
                 title="LinkedIn"
               >
                 <Linkedin className="w-4 h-4" />
@@ -79,7 +79,7 @@ export default function Footer() {
                 href={`https://wa.me/${personalInfo.phone.replace(/[^0-9]/g, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-lg bg-card border border-white/5 text-text-sub hover:text-emerald-400 hover:border-emerald-500/30 transition-all duration-200"
+                className="p-2.5 rounded-xl bg-card border border-white/5 text-text-sub hover:text-emerald-400 hover:border-emerald-500/30 transition-all duration-200"
                 title="WhatsApp Chat"
               >
                 <WhatsAppIcon className="w-4 h-4" />
@@ -87,15 +87,18 @@ export default function Footer() {
               <a
                 id="footer-mail"
                 href={`mailto:${personalInfo.email}`}
-                className="p-2.5 rounded-lg bg-card border border-white/5 text-text-sub hover:text-cyan-bright hover:border-cyan-glow/30 transition-all duration-200"
+                className="p-2.5 rounded-xl bg-card border border-white/5 text-text-sub hover:text-cyan-bright hover:border-cyan-glow/30 transition-all duration-200"
                 title="Email"
               >
                 <Mail className="w-4 h-4" />
               </a>
             </div>
-            <div className="text-right">
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-white/5 text-green-accent">
-                ● Available for Global Remote Work
+            
+            {/* Status Badge - Responsively aligned */}
+            <div className="w-full flex items-center justify-start md:justify-end pt-1">
+              <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-subtle" />
+                <span>Available for Global Remote Work</span>
               </span>
             </div>
           </div>
