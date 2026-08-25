@@ -84,7 +84,7 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                 <img
                   src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
                   alt={personalInfo.name}
-                  className="w-full h-full object-cover rounded-full"
+                  className="w-full h-full object-cover object-top rounded-full"
                 />
               </div>
               <div className="flex flex-col">
@@ -258,7 +258,7 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                       <img
                         src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
                         alt={personalInfo.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                       />
                     </div>
                     <div className="flex flex-col text-left">

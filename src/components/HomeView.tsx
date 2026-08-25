@@ -216,12 +216,12 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               <div className="relative w-full h-full rounded-full overflow-hidden bg-card flex flex-col items-center justify-center">
                 {personalInfo.photoUrl && !imageError ? (
                   <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                    {/* Real Profile Image - customized object position for beautiful face alignment */}
+                    {/* Real Profile Image - customized object position for beautiful face alignment with full headroom */}
                     <img
                       src={personalInfo.photoUrl}
                       alt={personalInfo.name}
                       onError={() => setImageError(true)}
-                      className="w-full h-full object-cover object-[center_12%] transition-transform duration-700 ease-out group-hover:scale-110"
+                      className="w-full h-full object-cover object-top scale-[0.96] transition-transform duration-700 ease-out group-hover:scale-105"
                       referrerPolicy="no-referrer"
                     />
 
