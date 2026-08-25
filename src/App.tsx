@@ -16,8 +16,48 @@ import ContactView from "./components/ContactView";
 
 export default function App() {
   const tabs = ["Home", "About", "Projects", "Certifications", "Contact"];
-  const [activeTab, setActiveTab] = useState<string>("Home");
+
+  // Resolve initial tab from browser URL hash (e.g. #about, #projects)
+  const getTabFromHash = (): string => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "").trim().toLowerCase();
+      const matched = tabs.find((t) => t.toLowerCase() === hash);
+      if (matched) return matched;
+    }
+    return "Home";
+  };
+
+  const [activeTab, setActiveTabState] = useState<string>(getTabFromHash);
   const [isScrollVisible, setIsScrollVisible] = useState<boolean>(false);
+
+  // Set active tab and keep URL hash synchronized
+  const setActiveTab = (tab: string) => {
+    setActiveTabState(tab);
+    if (typeof window !== "undefined") {
+      if (tab === "Home") {
+        if (window.location.hash) {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        }
+      } else {
+        window.location.hash = tab.toLowerCase();
+      }
+    }
+  };
+
+  // Synchronize state when user clicks browser Back/Forward or hash changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      const current = getTabFromHash();
+      setActiveTabState(current);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    window.addEventListener("popstate", handleHashChange);
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+      window.removeEventListener("popstate", handleHashChange);
+    };
+  }, []);
 
   // Monitor page scroll to toggle the scroll-to-top button
   useEffect(() => {
