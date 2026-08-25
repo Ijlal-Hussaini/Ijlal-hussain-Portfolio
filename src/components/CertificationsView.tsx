@@ -145,11 +145,13 @@ export default function CertificationsView() {
                     <img 
                       src={cert.imageUrl} 
                       alt={cert.title} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out" 
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090910]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-3">
-                      <span className="font-sans text-[9px] text-cyan-bright font-semibold tracking-wider uppercase px-2.5 py-1 rounded-md bg-[#090910]/95 backdrop-blur-sm border border-cyan-glow/20">
+                    <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-3">
+                      <span className="font-sans text-[9px] text-cyan-bright font-semibold tracking-wider uppercase px-2.5 py-1 rounded-md bg-card/95 backdrop-blur-sm border border-cyan-glow/20 shadow-md">
                         Expand Credential
                       </span>
                     </div>
@@ -260,7 +262,7 @@ export default function CertificationsView() {
                       {selectedCert.imageUrl ? (
                         <div 
                           onClick={() => setIsZoomed(true)}
-                          className="relative group rounded-2xl overflow-hidden bg-[#090910] border border-white/10 flex items-center justify-center shadow-xl shadow-black/40 cursor-zoom-in min-h-[250px] md:min-h-[380px] max-h-[480px] aspect-[16/10] w-full"
+                          className="relative group rounded-2xl overflow-hidden bg-card2 border border-white/10 flex items-center justify-center shadow-xl cursor-zoom-in min-h-[250px] md:min-h-[380px] max-h-[480px] aspect-[16/10] w-full"
                         >
                           <img 
                             src={selectedCert.imageUrl} 
@@ -269,7 +271,7 @@ export default function CertificationsView() {
                             referrerPolicy="no-referrer"
                           />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="font-sans text-xs text-white font-semibold bg-[#090910]/95 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-cyan-glow/30 flex items-center space-x-2">
+                            <span className="font-sans text-xs text-text-main font-semibold bg-card/95 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-cyan-glow/30 shadow-lg flex items-center space-x-2">
                               <ZoomIn className="w-4 h-4 text-cyan-bright" />
                               <span>Click to Expand View</span>
                             </span>

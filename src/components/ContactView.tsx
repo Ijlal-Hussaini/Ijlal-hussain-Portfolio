@@ -34,11 +34,8 @@ export default function ContactView() {
   };
 
   // Live local time calculation (Gilgit, Pakistan Standard Time - UTC+5)
-  const [localTime, setLocalTime] = useState("");
-
-  useEffect(() => {
-    const updateTime = () => {
-      // Create a date in UTC and convert to PKT (UTC+5)
+  const getPktTime = () => {
+    try {
       const now = new Date();
       const utc = now.getTime() + now.getTimezoneOffset() * 60000;
       const pktDate = new Date(utc + 3600000 * 5);
@@ -49,11 +46,21 @@ export default function ContactView() {
       const displayHours = hours % 12 || 12;
       const displayMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
-      setLocalTime(`${displayHours}:${displayMinutes} ${ampm} PKT`);
+      return `${displayHours}:${displayMinutes} ${ampm} PKT`;
+    } catch {
+      return "Active (UTC+5)";
+    }
+  };
+
+  const [localTime, setLocalTime] = useState(getPktTime);
+
+  useEffect(() => {
+    const updateTime = () => {
+      setLocalTime(getPktTime());
     };
 
     updateTime();
-    const interval = setInterval(updateTime, 60000);
+    const interval = setInterval(updateTime, 30000);
     return () => clearInterval(interval);
   }, []);
 

@@ -81,11 +81,14 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
               className="flex items-center space-x-2 text-left group cursor-pointer"
             >
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-bright to-purple-bright p-[1px] shadow-md group-hover:scale-105 transition-all duration-300 overflow-hidden">
-                <img
-                  src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
-                  alt={personalInfo.name}
-                  className="w-full h-full object-cover object-top rounded-full"
-                />
+                <picture className="w-full h-full">
+                  <source srcSet="/assets/images/profile_photo.webp" type="image/webp" />
+                  <img
+                    src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
+                    alt={personalInfo.name}
+                    className="w-full h-full object-cover object-top rounded-full"
+                  />
+                </picture>
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center space-x-1.5">
@@ -255,11 +258,14 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                 <div className="flex items-center justify-between pb-4 border-b border-white/10">
                   <div className="flex items-center space-x-2.5">
                     <div className="w-9 h-9 rounded-full overflow-hidden border border-cyan-bright/40 shadow-sm">
-                      <img
-                        src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
-                        alt={personalInfo.name}
-                        className="w-full h-full object-cover object-top"
-                      />
+                      <picture className="w-full h-full">
+                        <source srcSet="/assets/images/profile_photo.webp" type="image/webp" />
+                        <img
+                          src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
+                          alt={personalInfo.name}
+                          className="w-full h-full object-cover object-top"
+                        />
+                      </picture>
                     </div>
                     <div className="flex flex-col text-left">
                       <span className="font-display font-bold text-sm text-text-main">

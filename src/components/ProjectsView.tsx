@@ -186,6 +186,8 @@ export default function ProjectsView() {
                   <img
                     src={project.coverImage || `/assets/projects/${project.id}/cover.png`}
                     alt={project.title}
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
@@ -349,6 +351,8 @@ export default function ProjectsView() {
                           <img
                             src={img.url}
                             alt={img.title}
+                            loading="lazy"
+                            decoding="async"
                             referrerPolicy="no-referrer"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             onError={(e) => {

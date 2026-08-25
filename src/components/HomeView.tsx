@@ -216,14 +216,20 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               <div className="relative w-full h-full rounded-full overflow-hidden bg-card flex flex-col items-center justify-center">
                 {personalInfo.photoUrl && !imageError ? (
                   <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                    {/* Real Profile Image - customized object position for beautiful face alignment with full headroom */}
-                    <img
-                      src={personalInfo.photoUrl}
-                      alt={personalInfo.name}
-                      onError={() => setImageError(true)}
-                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
+                    {/* Real Profile Image - customized object position with instant webp load & full headroom */}
+                    <picture className="w-full h-full">
+                      <source srcSet="/assets/images/profile_photo.webp" type="image/webp" />
+                      <img
+                        src={personalInfo.photoUrl || "/assets/images/profile_photo.png"}
+                        alt={personalInfo.name}
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
+                        onError={() => setImageError(true)}
+                        className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                    </picture>
 
                     {/* Scanner horizontal line animation */}
                     <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-bright to-transparent animate-scanner opacity-70 pointer-events-none" />
@@ -245,7 +251,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                     
                     {/* Floating Central Core Visual */}
                     <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-cyan-bright to-purple-bright p-[1.5px] shadow-lg shadow-purple-glow/20 animate-float">
-                      <div className="w-full h-full bg-[#05050a] rounded-full flex items-center justify-center overflow-hidden">
+                      <div className="w-full h-full bg-card rounded-full flex items-center justify-center overflow-hidden">
                         <span className="font-display font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-bright to-purple-bright">
                           IH
                         </span>
