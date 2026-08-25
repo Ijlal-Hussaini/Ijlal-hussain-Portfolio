@@ -84,7 +84,7 @@ export default function AboutView() {
 
           <p className="font-sans text-sm text-text-sub leading-relaxed">
             I specialize in orchestrating advanced Generative AI architectures, including Multi-Agent systems 
-            using **LangGraph** and RAG-based search engines. My core development process centers on clean code architecture, 
+            using <strong className="text-text-main font-semibold">LangGraph</strong> and RAG-based search engines. My core development process centers on clean code architecture, 
             strict state-control, and continuous testing to build systems that scale gracefully.
           </p>
 

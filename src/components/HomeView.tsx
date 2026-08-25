@@ -369,7 +369,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               Generative AI & Agentic Systems
             </h3>
             <p className="font-sans text-xs text-text-sub leading-relaxed">
-              Constructing autonomous AI workflows using **LangChain** and **LangGraph**, designing RAG pipelines, LLM fine-tuning schemas, and prompt orchestration templates.
+              Constructing autonomous AI workflows using <strong className="text-text-main font-semibold">LangChain</strong> and <strong className="text-text-main font-semibold">LangGraph</strong>, designing RAG pipelines, LLM fine-tuning schemas, and prompt orchestration templates.
             </p>
           </div>
 
@@ -381,7 +381,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               MERN Stack Architectures
             </h3>
             <p className="font-sans text-xs text-text-sub leading-relaxed">
-              Writing scalable web backends with **Node.js** and **Express.js**, modeling flexible unstructured schemas in **MongoDB**, and developing smooth responsive React UI interfaces.
+              Writing scalable web backends with <strong className="text-text-main font-semibold">Node.js</strong> and <strong className="text-text-main font-semibold">Express.js</strong>, modeling flexible unstructured schemas in <strong className="text-text-main font-semibold">MongoDB</strong>, and developing smooth responsive React UI interfaces.
             </p>
           </div>
 
@@ -393,7 +393,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               Native Android Development
             </h3>
             <p className="font-sans text-xs text-text-sub leading-relaxed">
-              Developing highly integrated Android client apps in **Java** and **Flutter** utilizing modern UI principles, background service tracking, and offline persistence.
+              Developing highly integrated Android client apps in <strong className="text-text-main font-semibold">Java</strong> and <strong className="text-text-main font-semibold">Flutter</strong> utilizing modern UI principles, background service tracking, and offline persistence.
             </p>
           </div>
         </div>
