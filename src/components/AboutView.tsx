@@ -75,14 +75,14 @@ export default function AboutView() {
             </h1>
           </div>
 
-          <p className="font-sans text-sm text-text-sub leading-relaxed">
+          <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed text-justify">
             I'm a meticulous Software Engineer based in Pakistan. From a young age, I was fascinated 
             by the power of computers to transform ideas into tangible realities. At NUML Islamabad, 
             I channeled this interest into software development, focusing heavily on modern full-stack web architectures, 
             machine learning interfaces, and responsive mobile native application suites.
           </p>
 
-          <p className="font-sans text-sm text-text-sub leading-relaxed">
+          <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed text-justify">
             I specialize in orchestrating advanced Generative AI architectures, including Multi-Agent systems 
             using <strong className="text-text-main font-semibold">LangGraph</strong> and RAG-based search engines. My core development process centers on clean code architecture, 
             strict state-control, and continuous testing to build systems that scale gracefully.
@@ -172,10 +172,11 @@ export default function AboutView() {
                   <span className="text-text-muted">{exp.location}</span>
                 </div>
                 
-                <ul className="list-disc list-inside space-y-1.5 font-sans text-xs text-text-sub leading-relaxed max-w-4xl">
+                <ul className="space-y-2 font-sans text-xs text-text-sub leading-relaxed max-w-4xl">
                   {exp.highlights.map((h, i) => (
-                    <li key={i} className="pl-1">
-                      <span className="text-text-sub">{h}</span>
+                    <li key={i} className="flex items-start space-x-2 text-justify">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-bright/60 mt-1.5 shrink-0" />
+                      <span className="text-text-sub flex-1">{h}</span>
                     </li>
                   ))}
                 </ul>

@@ -238,7 +238,7 @@ export default function ProjectsView() {
                       </a>
                     </div>
 
-                    <p className="font-sans text-xs text-text-muted leading-relaxed line-clamp-3">
+                    <p className="font-sans text-xs text-text-muted leading-relaxed line-clamp-3 text-justify">
                       {project.description}
                     </p>
                   </div>
@@ -308,7 +308,7 @@ export default function ProjectsView() {
                   <h2 className="font-display font-bold text-2xl sm:text-3xl text-text-main">
                     {selectedProject.title}
                   </h2>
-                  <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed border-l-2 border-cyan-bright pl-4 py-1 bg-white/[0.02]">
+                  <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed border-l-2 border-cyan-bright pl-4 py-1 bg-white/[0.02] text-justify">
                     {selectedProject.description}
                   </p>
                 </div>

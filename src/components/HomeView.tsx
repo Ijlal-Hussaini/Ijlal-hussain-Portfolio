@@ -175,7 +175,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </motion.div>
           </div>
 
-          <motion.p variants={itemVariants} className="font-sans text-sm sm:text-base text-text-sub leading-relaxed max-w-xl">
+          <motion.p variants={itemVariants} className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed max-w-xl text-justify">
             {personalInfo.bio}
           </motion.p>
 
@@ -368,7 +368,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <h3 className="font-display font-semibold text-base text-text-main">
               Generative AI & Agentic Systems
             </h3>
-            <p className="font-sans text-xs text-text-sub leading-relaxed">
+            <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Constructing autonomous AI workflows using <strong className="text-text-main font-semibold">LangChain</strong> and <strong className="text-text-main font-semibold">LangGraph</strong>, designing RAG pipelines, LLM fine-tuning schemas, and prompt orchestration templates.
             </p>
           </div>
@@ -380,7 +380,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <h3 className="font-display font-semibold text-base text-text-main">
               MERN Stack Architectures
             </h3>
-            <p className="font-sans text-xs text-text-sub leading-relaxed">
+            <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Writing scalable web backends with <strong className="text-text-main font-semibold">Node.js</strong> and <strong className="text-text-main font-semibold">Express.js</strong>, modeling flexible unstructured schemas in <strong className="text-text-main font-semibold">MongoDB</strong>, and developing smooth responsive React UI interfaces.
             </p>
           </div>
@@ -392,7 +392,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <h3 className="font-display font-semibold text-base text-text-main">
               Native Android Development
             </h3>
-            <p className="font-sans text-xs text-text-sub leading-relaxed">
+            <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Developing highly integrated Android client apps in <strong className="text-text-main font-semibold">Java</strong> and <strong className="text-text-main font-semibold">Flutter</strong> utilizing modern UI principles, background service tracking, and offline persistence.
             </p>
           </div>

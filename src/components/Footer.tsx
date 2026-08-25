@@ -21,7 +21,7 @@ export default function Footer() {
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-bright animate-pulse-subtle" />
             </div>
-            <p className="font-sans text-xs text-text-muted leading-relaxed max-w-sm">
+            <p className="font-sans text-xs text-text-muted leading-relaxed max-w-sm text-justify">
               Software Engineering Graduate from NUML Islamabad specializing in Generative AI pipelines, 
               custom agent workflows, high-performance web backends, and responsive Android applications.
             </p>
