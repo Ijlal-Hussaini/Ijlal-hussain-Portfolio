@@ -228,16 +228,30 @@ export default function ProjectsView() {
                         {project.title}
                       </h3>
                       
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="p-2 rounded-xl text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all flex-shrink-0"
-                        title="View Source Code on GitHub"
-                      >
-                        <Github className="w-4 h-4" />
-                      </a>
+                      <div className="flex items-center space-x-1 flex-shrink-0">
+                        {project.demo && (
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-2 rounded-xl text-cyan-bright hover:bg-cyan-bright/10 transition-all"
+                            title="Open Live Website Demo"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        )}
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="p-2 rounded-xl text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all"
+                          title="View Source Code on GitHub"
+                        >
+                          <Github className="w-4 h-4" />
+                        </a>
+                      </div>
                     </div>
 
                     <p className="font-sans text-xs text-text-muted leading-relaxed line-clamp-3 text-justify">
@@ -418,11 +432,22 @@ export default function ProjectsView() {
                   </div>
 
                   <div className="flex flex-wrap gap-4 pt-4">
+                    {selectedProject.demo && (
+                      <a
+                        href={selectedProject.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 font-sans font-bold text-xs uppercase tracking-wider btn-glow-cyan shadow-md shadow-cyan-glow/10 transition-all hover:opacity-95"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Launch Live Website</span>
+                      </a>
+                    )}
                     <a
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-text-main font-sans font-semibold text-xs transition-colors border border-white/10"
+                      className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-text-main font-sans font-semibold text-xs transition-colors border border-white/10"
                     >
                       <Github className="w-4 h-4" />
                       <span>View GitHub Repository</span>

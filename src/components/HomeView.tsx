@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Code, Cpu, Shield, BrainCircuit, ExternalLink, Award } from "lucide-react";
+import { ArrowRight, Code, Cpu, Shield, BrainCircuit, ExternalLink, Award, Github } from "lucide-react";
 import { motion, useInView } from "motion/react";
 import { personalInfo, projectsData, skillsData } from "../data";
 
@@ -447,15 +447,28 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-semibold bg-white/5 text-purple-bright">
                     {project.category}
                   </span>
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-colors"
-                    title="View Source on GitHub"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
+                  <div className="flex items-center space-x-1">
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg text-cyan-bright hover:bg-cyan-bright/10 transition-colors"
+                        title="Open Live Website Demo"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-colors"
+                      title="View Source on GitHub"
+                    >
+                      <Github className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
 
                 <div className="space-y-2">

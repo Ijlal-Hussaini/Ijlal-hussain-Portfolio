@@ -331,6 +331,7 @@ export const projectsData: Project[] = [
       "Full interactive RAG chat drawer enabling grounded natural language querying over parsed candidate data"
     ],
     github: "https://github.com/Ijlal-Hussaini/Resume_IQ",
+    demo: "https://github.com/Ijlal-Hussaini/Resume_IQ",
     description: "Production-grade, field-agnostic career intelligence platform powered by a 7-node LangGraph state machine, local RAG retrieval with grounded citations, multi-provider LLM orchestration (Groq Cloud AI + Gemini failover), and a modern Liquid Glass Next.js 16 frontend.",
     imageUrl: "resumeiq",
     coverImage: "/assets/projects/resumeiq/Home.png",
@@ -387,6 +388,7 @@ export const projectsData: Project[] = [
       "Installable Progressive Web App (PWA) with responsive slide-out side drawer and body scroll locking"
     ],
     github: "https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio",
+    demo: "https://ijlalhussain.vercel.app/",
     description: "Production-grade personal digital portfolio engineered with React 19, TypeScript, Vite 6, and Tailwind CSS v4. Features high-density glassmorphism, responsive side-drawer navigation, hash-based URL routing, interactive credential verification, and sub-second asset delivery on Vercel Global Edge.",
     imageUrl: "portfolio",
     coverImage: "/assets/projects/portfolio/01_home_view.png",
