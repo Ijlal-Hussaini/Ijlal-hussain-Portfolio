@@ -375,32 +375,51 @@ export const projectsData: Project[] = [
   },
   {
     id: "portfolio",
-    title: "Portfolio — Modern Personal Website",
+    title: "Developer Portfolio — High-Performance Engineering Platform",
     category: "Web",
-    tech: ["HTML5", "Tailwind CSS v4", "React 19", "Motion", "Lucide Icons"],
+    tech: ["React 19", "TypeScript", "Vite 6", "Tailwind CSS v4", "Motion", "Web3Forms", "PWA"],
     features: [
-      "Responsive fluid layouts tailored for high-density monitors and mobile browsers",
-      "Glassmorphic aesthetic matching custom cosmic design system constraints",
-      "Custom state-based micro-routing with smooth page transition animations",
-      "Integrated dynamic PDF Viewer mockups",
-      "Fully responsive navigation, contact verification, and localized performance"
+      "Sub-second page loads with zero render-blocking CSS, preloaded WebP images, and high-performance bundle optimization",
+      "Persistent URL Hash routing (#about, #projects, #certifications, #contact) with complete page reload state preservation",
+      "Adaptive Cosmic Dark & Crisp Light themes with seamless real-time toggle and localized preference caching",
+      "Interactive Verified Credentials Ledger with instant PDF document inspector and 1-click downloads",
+      "Real-time client-side message dispatch powered by Web3Forms API with instant local PKT time ticker",
+      "Installable Progressive Web App (PWA) with responsive slide-out side drawer and body scroll locking"
     ],
-    github: "https://github.com/Ijlal-Hussaini",
-    description: "The premium personal digital home of software engineer Ijlal Hussain. This application features responsive glassmorphic cards, custom typewriter titles, dynamic project category filtration, and deep smooth transitions powered by modern React 19 and Tailwind CSS v4.",
+    github: "https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio",
+    description: "Production-grade personal digital portfolio engineered with React 19, TypeScript, Vite 6, and Tailwind CSS v4. Features high-density glassmorphism, responsive side-drawer navigation, hash-based URL routing, interactive credential verification, and sub-second asset delivery on Vercel Global Edge.",
     imageUrl: "portfolio",
-    coverImage: "/assets/projects/portfolio/cover.png",
+    coverImage: "/assets/projects/portfolio/01_home_view.png",
     images: [
       {
         seq: 1,
-        title: "1. Desktop Portfolio Showcase",
-        url: "/assets/projects/portfolio/1.png",
-        caption: "Glassmorphic hero section and dynamic category filtration grid."
+        title: "1. Home & Hero Stage",
+        url: "/assets/projects/portfolio/01_home_view.png",
+        caption: "Glassmorphic hero section featuring dynamic typewriter titles, key architectural pillars, and quick work showcase."
       },
       {
         seq: 2,
-        title: "2. Responsive Component Architecture",
-        url: "/assets/projects/portfolio/2.png",
-        caption: "Mobile drawer navigation, interactive certifications, and verified contact widgets."
+        title: "2. About the Developer & Career Timeline",
+        url: "/assets/projects/portfolio/02_about_view.png",
+        caption: "Interactive career ascent timeline, verified education credentials (NUML 3.96 CGPA), and categorized skillset pills."
+      },
+      {
+        seq: 3,
+        title: "3. Project Showcase & Mobile UI Gallery",
+        url: "/assets/projects/portfolio/03_projects_view.png",
+        caption: "Multi-field search, category filtration, deep-dive modal inspections, and sequential screenshot lightboxes."
+      },
+      {
+        seq: 4,
+        title: "4. Verified Credentials Ledger",
+        url: "/assets/projects/portfolio/04_certifications_view.png",
+        caption: "Dynamic accreditation ledger with 1-click signed PDF certificate inspections and download triggers."
+      },
+      {
+        seq: 5,
+        title: "5. Direct Communications & Live Gateway",
+        url: "/assets/projects/portfolio/05_contact_view.png",
+        caption: "Real-time Web3Forms email pipeline, live local PKT time ticker, and direct WhatsApp contact link."
       }
     ]
   }
