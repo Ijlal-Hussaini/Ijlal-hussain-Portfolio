@@ -381,25 +381,24 @@ export default function CertificationsView() {
                             Verifying Academic Records...
                           </div>
                         )}
-                        {selectedCert.credentialId ? (
+                        {selectedCert.id === "cert4" || selectedCert.id === "cert5" ? (
                           <a
-                            href={selectedCert.id === "cert4" || selectedCert.id === "cert5" 
-                              ? `https://digiskills.pk/verify/` 
-                              : `https://github.com/Ijlal-Hussaini`
-                            }
+                            href="https://digiskills.pk/verify/"
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-text-main font-sans font-semibold text-xs transition-colors cursor-pointer"
+                            title="Verify credential on DigiSkills official portal"
                           >
                             <ShieldCheck className="w-4 h-4 text-purple-bright" />
                             <span>Verify Live</span>
                           </a>
                         ) : (
                           <button
-                            onClick={() => alert(`This certification is verified via institutional record and does not have a live public verification database. Please view/download the signed PDF transcript.`)}
-                            className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-text-muted font-sans font-semibold text-xs transition-colors cursor-pointer"
+                            type="button"
+                            className="inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-sans font-semibold text-xs transition-colors cursor-default"
+                            title="Verified Institutional Credential"
                           >
-                            <ShieldCheck className="w-4 h-4 text-text-muted" />
+                            <ShieldCheck className="w-4 h-4 text-emerald-400" />
                             <span>Verified</span>
                           </button>
                         )}
