@@ -333,19 +333,43 @@ export const projectsData: Project[] = [
     github: "https://github.com/Ijlal-Hussaini/Resume_IQ",
     description: "Production-grade, field-agnostic career intelligence platform powered by a 7-node LangGraph state machine, local RAG retrieval with grounded citations, multi-provider LLM orchestration (Groq Cloud AI + Gemini failover), and a modern Liquid Glass Next.js 16 frontend.",
     imageUrl: "resumeiq",
-    coverImage: "/assets/projects/resumeiq/cover.png",
+    coverImage: "/assets/projects/resumeiq/Home.png",
     images: [
       {
         seq: 1,
-        title: "1. ResumeIQ Dashboard & Agent Workflow",
-        url: "/assets/projects/resumeiq/1.png",
-        caption: "Main career intelligence workspace featuring 7-node LangGraph execution status, telemetry metrics, and persona selector."
+        title: "1. Resume Ingestion & Target Criteria Workspace",
+        url: "/assets/projects/resumeiq/Home.png",
+        caption: "Main landing workspace featuring multi-format drag-and-drop ingestion (PDF, DOCX, TXT, OCR) and 1-click industry benchmark personas."
       },
       {
         seq: 2,
-        title: "2. Grounded RAG Chat & Skill Gap Matrix",
-        url: "/assets/projects/resumeiq/2.png",
-        caption: "Interactive RAG drawer with grounded source citations, ATS compliance auditor, and multi-dimension match scoring."
+        title: "2. Multi-Dimension Match Score & Skill Gap Matrix",
+        url: "/assets/projects/resumeiq/Match_Intelligence.png",
+        caption: "Weighted match intelligence gauge (Skills, Seniority, Domain, Education) with verified qualifications versus critical missing requirements."
+      },
+      {
+        seq: 3,
+        title: "3. Comprehensive ATS Compliance & Machine Readability Audit",
+        url: "/assets/projects/resumeiq/ATS_Audit.png",
+        caption: "In-depth ATS parseability score (66/100) evaluating contact headers, active voice verbs, keyword gaps, standard headings, and degree formats."
+      },
+      {
+        seq: 4,
+        title: "4. Google XYZ Bullet Rewrites & Tailored Interview Prep",
+        url: "/assets/projects/resumeiq/Update_Suggestions.png",
+        caption: "High-impact before/after bullet optimization using Google XYZ formula (Accomplished [X], measured by [Y], by doing [Z]) with tailored mock questions."
+      },
+      {
+        seq: 5,
+        title: "5. Grounded RAG Chat with Direct Section Citations",
+        url: "/assets/projects/resumeiq/RAG_Chat.png",
+        caption: "Zero-hallucination conversational interface answering queries with direct source text snippets and cosine similarity confidence scores."
+      },
+      {
+        seq: 6,
+        title: "6. 7-Node LangGraph State Machine Execution Logs",
+        url: "/assets/projects/resumeiq/Pipeline_Logs.png",
+        caption: "Real-time node telemetry tracking Structured Extraction, Data Validation, JD Decomposition, RAG Matching, Gap Analysis, ATS Audit, and XYZ Synthesis."
       }
     ]
   },
