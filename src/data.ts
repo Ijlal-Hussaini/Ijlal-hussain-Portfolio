@@ -318,33 +318,34 @@ export const projectsData: Project[] = [
     ]
   },
   {
-    id: "cvparser",
-    title: "CV Parser — NLP Resume Analyzer",
+    id: "resumeiq",
+    title: "ResumeIQ — AI Career Intelligence Platform",
     category: "AI/ML",
-    tech: ["Python", "NLP", "spaCy", "JSON Schema"],
+    tech: ["LangGraph", "FastAPI", "Next.js 16", "Groq Cloud", "Gemini AI", "RAG", "Pydantic v2", "Tailwind CSS v4"],
     features: [
-      "Named Entity Recognition (NER) for high-accuracy contact, experience, and education extraction",
-      "Custom skill taxonomy classification and semantic tagging",
-      "Standardized, clean, structured JSON schema output",
-      "Automated PDF & Word parsing engine with clean text preprocessing",
-      "Candidate matching algorithms based on extracted skills profiles"
+      "7-node cyclic LangGraph agentic workflow for structured resume decomposition and multi-step extraction",
+      "Local RAG citation engine with sentence-transformer embeddings and grounded sub-10ms source lookups",
+      "Dual LLM orchestration pairing ultra-low latency Groq Cloud AI with automatic Google Gemini failover",
+      "Field-agnostic intelligence handling Tech, Healthcare, Marketing, and Engineering domain profiles",
+      "Interactive Match Scoring gauge, ATS compliance auditor, and Google XYZ bullet point rewrites",
+      "Full interactive RAG chat drawer enabling grounded natural language querying over parsed candidate data"
     ],
-    github: "https://github.com/Ijlal-Hussaini",
-    description: "An AI-powered document parser specializing in resume analysis. Built using python Natural Language Processing (NLP) toolkits, it converts unformatted PDF/DOCX resumes into highly structured data files ready for automated candidate tracking systems.",
-    imageUrl: "cvparser",
-    coverImage: "/assets/projects/cvparser/cover.png",
+    github: "https://github.com/Ijlal-Hussaini/Resume_IQ",
+    description: "Production-grade, field-agnostic career intelligence platform powered by a 7-node LangGraph state machine, local RAG retrieval with grounded citations, multi-provider LLM orchestration (Groq Cloud AI + Gemini failover), and a modern Liquid Glass Next.js 16 frontend.",
+    imageUrl: "resumeiq",
+    coverImage: "/assets/projects/resumeiq/cover.png",
     images: [
       {
         seq: 1,
-        title: "1. NLP Entity Extraction Architecture",
-        url: "/assets/projects/cvparser/1.png",
-        caption: "Visual breakdown showing raw text parsing converted to structured JSON schemas."
+        title: "1. ResumeIQ Dashboard & Agent Workflow",
+        url: "/assets/projects/resumeiq/1.png",
+        caption: "Main career intelligence workspace featuring 7-node LangGraph execution status, telemetry metrics, and persona selector."
       },
       {
         seq: 2,
-        title: "2. Skill Classification Matrix",
-        url: "/assets/projects/cvparser/2.png",
-        caption: "Semantic tagging engine identifying skills, educational history, and work experience."
+        title: "2. Grounded RAG Chat & Skill Gap Matrix",
+        url: "/assets/projects/resumeiq/2.png",
+        caption: "Interactive RAG drawer with grounded source citations, ATS compliance auditor, and multi-dimension match scoring."
       }
     ]
   },
