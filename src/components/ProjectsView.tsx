@@ -228,30 +228,16 @@ export default function ProjectsView() {
                         {project.title}
                       </h3>
                       
-                      <div className="flex items-center space-x-1 flex-shrink-0">
-                        {project.demo && (
-                          <a
-                            href={project.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 rounded-xl text-cyan-bright hover:bg-cyan-bright/10 transition-all"
-                            title="Open Live Website Demo"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-2 rounded-xl text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all"
-                          title="View Source Code on GitHub"
-                        >
-                          <Github className="w-4 h-4" />
-                        </a>
-                      </div>
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-2 rounded-xl text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all flex-shrink-0"
+                        title="View Source Code on GitHub"
+                      >
+                        <Github className="w-4 h-4" />
+                      </a>
                     </div>
 
                     <p className="font-sans text-xs text-text-muted leading-relaxed line-clamp-3 text-justify">
@@ -259,7 +245,7 @@ export default function ProjectsView() {
                     </p>
                   </div>
 
-                  {/* TECH STACK & FOOTER LINK */}
+                  {/* TECH STACK & FOOTER LINKS */}
                   <div className="space-y-3 pt-4 border-t border-white/5">
                     <div className="flex flex-wrap gap-1.5">
                       {project.tech.map((t) => (
@@ -272,9 +258,25 @@ export default function ProjectsView() {
                       ))}
                     </div>
                     
-                    <div className="flex items-center justify-between text-[11px] pt-1 font-sans font-medium text-cyan-bright group-hover:translate-x-1 transition-transform">
-                      <span>View Project Details</span>
-                      <span>→</span>
+                    <div className="flex items-center justify-between text-xs pt-1.5">
+                      <span className="font-sans font-medium text-cyan-bright group-hover:translate-x-1 transition-transform flex items-center space-x-1">
+                        <span>View Project Details</span>
+                        <span>→</span>
+                      </span>
+
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/25 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
+                          title="Open Live Website in New Tab"
+                        >
+                          <span>Live Project</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
