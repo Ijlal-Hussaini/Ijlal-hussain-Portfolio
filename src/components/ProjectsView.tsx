@@ -223,10 +223,33 @@ export default function ProjectsView() {
                 {/* CARD BODY CONTENT */}
                 <div className="p-6 space-y-4 flex-1 flex flex-col justify-between text-left">
                   <div className="space-y-2">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start justify-between gap-3">
                       <h3 className="font-display font-bold text-xl text-text-main group-hover:text-cyan-bright transition-colors">
                         {project.title}
                       </h3>
+
+                      <div className="flex items-center space-x-1 flex-shrink-0">
+                        <a
+                          href={project.demo || project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all"
+                          title="Open Live Website"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all"
+                          title="View Source Code on GitHub"
+                        >
+                          <Github className="w-4 h-4" />
+                        </a>
+                      </div>
                     </div>
 
                     <p className="font-sans text-xs text-text-muted leading-relaxed line-clamp-3 text-justify">
@@ -260,29 +283,17 @@ export default function ProjectsView() {
                         <span>View on GitHub</span>
                       </a>
 
-                      {project.demo ? (
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/30 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
-                          title="Open Live Website in New Tab"
-                        >
-                          <span>Live Project</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => setSelectedProject(project)}
-                          className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg text-text-muted hover:text-cyan-bright font-sans font-medium text-[11px] transition-colors cursor-pointer"
-                          title="Inspect Project Screenshots & Write-up"
-                        >
-                          <span>Screenshots</span>
-                          <Maximize2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+                      <a
+                        href={project.demo || project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/30 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
+                        title="Open Live Website in New Tab"
+                      >
+                        <span>Live Project</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
                     </div>
                   </div>
                 </div>
