@@ -227,17 +227,6 @@ export default function ProjectsView() {
                       <h3 className="font-display font-bold text-xl text-text-main group-hover:text-cyan-bright transition-colors">
                         {project.title}
                       </h3>
-                      
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="p-2 rounded-xl text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all flex-shrink-0"
-                        title="View Source Code on GitHub"
-                      >
-                        <Github className="w-4 h-4" />
-                      </a>
                     </div>
 
                     <p className="font-sans text-xs text-text-muted leading-relaxed line-clamp-3 text-justify">
@@ -245,7 +234,7 @@ export default function ProjectsView() {
                     </p>
                   </div>
 
-                  {/* TECH STACK & FOOTER LINKS */}
+                  {/* TECH STACK & FOOTER BUTTONS */}
                   <div className="space-y-3 pt-4 border-t border-white/5">
                     <div className="flex flex-wrap gap-1.5">
                       {project.tech.map((t) => (
@@ -258,24 +247,41 @@ export default function ProjectsView() {
                       ))}
                     </div>
                     
-                    <div className="flex items-center justify-between text-xs pt-1.5">
-                      <span className="font-sans font-medium text-cyan-bright group-hover:translate-x-1 transition-transform flex items-center space-x-1">
-                        <span>View Project Details</span>
-                        <span>→</span>
-                      </span>
+                    <div className="flex items-center justify-between gap-2 pt-2">
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-text-main hover:text-cyan-bright font-sans font-semibold text-[11px] border border-white/10 transition-all cursor-pointer"
+                        title="View Source Code on GitHub"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                        <span>View on GitHub</span>
+                      </a>
 
-                      {project.demo && (
+                      {project.demo ? (
                         <a
                           href={project.demo}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/25 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
+                          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/30 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
                           title="Open Live Website in New Tab"
                         >
                           <span>Live Project</span>
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedProject(project)}
+                          className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg text-text-muted hover:text-cyan-bright font-sans font-medium text-[11px] transition-colors cursor-pointer"
+                          title="Inspect Project Screenshots & Write-up"
+                        >
+                          <span>Screenshots</span>
+                          <Maximize2 className="w-3.5 h-3.5" />
+                        </button>
                       )}
                     </div>
                   </div>
