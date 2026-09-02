@@ -156,8 +156,8 @@ To run this portfolio locally on your machine:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Ijlal-Hussaini/ijlal-hussaini.github.io.git
-cd ijlal-hussaini.github.io
+git clone https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio.git
+cd Ijlal-hussain-Portfolio
 
 # 2. Install project dependencies
 npm install
