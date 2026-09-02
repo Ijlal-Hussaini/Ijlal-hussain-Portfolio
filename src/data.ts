@@ -385,9 +385,12 @@ export const certificationsData: Certification[] = [
   {
     id: "cert1",
     title: "Generative AI & Machine Learning",
-    organization: "Adan Institute · NAVTTC Certified",
+    organization: "NAVTTC · Adan Institute of Technology",
     period: "Sep – Dec 2025",
-    status: "Pending"
+    credentialId: "I-25-1082873",
+    status: "Completed",
+    pdfUrl: "/assets/certifications/NAVTTC_Generative_AI_Machine_Learning_Certificate.pdf",
+    imageUrl: "/assets/certifications/Generative_AI_Machine_Learning.png"
   },
   {
     id: "cert2",
