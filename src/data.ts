@@ -155,7 +155,7 @@ export const experienceData: Experience[] = [
     role: "AI Development Intern",
     company: "Kartoa Technologies, Islamabad",
     location: "Islamabad, Pakistan (Remote/Onsite hybrid)",
-    period: "Aug 2025 - Nov 2025",
+    period: "Jan 2026 - Mar 2026",
     highlights: [
       "Developed advanced AI solutions utilizing Python, Machine Learning, and Generative AI technologies.",
       "Built production-ready Retrieval-Augmented Generation (RAG) systems and sophisticated agentic workflows using LangChain and LangGraph.",
@@ -396,7 +396,7 @@ export const certificationsData: Certification[] = [
     id: "cert2",
     title: "AI Development Internship",
     organization: "Kartoa Technologies",
-    period: "Aug – Nov 2025",
+    period: "Jan – Mar 2026",
     status: "Completed",
     pdfUrl: "/assets/certifications/Ijlal_Hussain_AI_Internship_letter.pdf",
     imageUrl: "/assets/certifications/AI_Development_Internship.png"
