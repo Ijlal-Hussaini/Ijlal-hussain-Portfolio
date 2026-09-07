@@ -110,16 +110,16 @@ export default function AboutView() {
           </h3>
           <ul className="space-y-4 font-mono text-xs">
             <li className="flex justify-between">
-              <span className="text-text-muted">University:</span>
+              <span className="text-text-muted">Graduation:</span>
               <span className="text-text-main text-right">{personalInfo.university}</span>
             </li>
             <li className="flex justify-between">
               <span className="text-text-muted">Academic CGPA:</span>
-              <span className="text-cyan-bright font-bold">{personalInfo.cgpa} / 4.0</span>
+              <span className="text-cyan-bright font-bold">{personalInfo.cgpa}</span>
             </li>
             <li className="flex justify-between">
               <span className="text-text-muted">Core Scope:</span>
-              <span className="text-text-main text-right">Generative AI, MERN, Java</span>
+              <span className="text-text-main text-right">Gen AI, MERN, Android App Development</span>
             </li>
             <li className="flex justify-between">
               <span className="text-text-muted">Origin:</span>
@@ -127,7 +127,7 @@ export default function AboutView() {
             </li>
             <li className="flex justify-between">
               <span className="text-text-muted">Primary Language:</span>
-              <span className="text-text-main text-right">Urdu & English</span>
+              <span className="text-text-main text-right">Urdu</span>
             </li>
           </ul>
         </div>

@@ -80,7 +80,7 @@ export const personalInfo: PersonalInfo = {
   linkedin: "https://linkedin.com/in/ijlal-hussain786",
   github: "https://github.com/Ijlal-Hussaini",
   university: "NUML Islamabad",
-  cgpa: "3.96/4.0",
+  cgpa: "3.96 / 4.0",
   photoUrl: "/assets/images/profile_photo.png",
   resumeUrl: "/Ijlal_Hussain_CV.pdf"
 };
