@@ -102,7 +102,7 @@
 |:---|:---|:---|:---|
 | **ResumeIQ** | `AI/ML` | 7-Node LangGraph Agent, Local RAG, Groq Cloud, FastAPI, Next.js 16 | 🌐 [Live App](https://resumeiq-cvparser.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Resume_IQ) |
 | **SafeZone** | `Mobile` | Native Android, Java, Firebase Realtime DB, Geofencing, Material Design | 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Safe-Zone-Kid-Friendly-Internet-and-App-Monitoring) |
-| **Blog Factory** | `AI/ML` | LangGraph Multi-Agent Team, Tavily AI Search, Markdown Synthesizer | 🐙 [GitHub](https://github.com/Ijlal-Hussaini/technical-blog-factory) |
+| **Technical Blog Factory** | `AI/ML` | 3-Agent LangGraph Studio, Tavily Fact-Checking, Gemini 2.5, FastAPI | 🌐 [Live App](https://technical-blog-factory.onrender.com/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/technical-blog-factory) |
 | **Developer Portfolio** | `Web` | React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion, PWA | 🌐 [Live Site](https://ijlalhussain.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio) |
 
 ---

@@ -276,44 +276,58 @@ export const projectsData: Project[] = [
   },
   {
     id: "blogfactory",
-    title: "Blog Factory — AI Blog Generator",
+    title: "Technical Blog Post Factory — Multi-Agent AI Studio",
     category: "AI/ML",
-    tech: ["Python", "LangChain", "LangGraph", "Tavily AI", "LLMs"],
+    tech: ["Python", "FastAPI", "LangGraph", "LangChain", "Gemini 2.5 Flash", "Groq Cloud", "Tavily AI", "Pydantic v2"],
     features: [
-      "Fully autonomous writing and research pipeline orchestrated by LangGraph",
-      "Real-time web search and content verification with Tavily integration",
-      "Multi-agent architecture with critique, revision, and refinement loops",
-      "Dynamic code injection and Markdown formatting with syntactic correctness checks",
-      "Flexible output structuring for modern static-site engines"
+      "Autonomous 3-agent LangGraph cyclic workflow orchestrating Content Writer, Technical Reviewer, and Code Generator",
+      "Live web fact-checking powered by Tavily Search API cross-referencing claims against official technical documentation",
+      "Strict peer review iterations (1 to 3 cycles) with dedicated critique passes and automated revision refinement",
+      "Intelligent code detection and syntax-verified runnable snippet embedding for programming topics",
+      "Upfront phonotactic topic guardrail engine blocking keyboard mash, pure numbers, and generic test placeholders",
+      "One-click vector PDF generation with custom styling via jsPDF, Markdown copy, and real-time agent thought telemetry"
     ],
     github: "https://github.com/Ijlal-Hussaini/technical-blog-factory",
-    description: "An advanced, fully autonomous technical blog publishing engine powered by modern LLMs. It uses a graph-based multi-agent architecture where specialist agents research, draft, cross-reference, and refine content to deliver production-ready, deeply informative articles with zero human intervention.",
+    demo: "https://technical-blog-factory.onrender.com/",
+    description: "Enterprise-ready autonomous multi-agent technical blog publishing engine engineered with LangGraph, FastAPI, Google Gemini 2.5 Flash, and Groq Cloud fallback. Features live Tavily web fact-checking, strict iterative peer review loops, syntax-verified code generation, upfront topic guardrails, and one-click vector PDF exports.",
     imageUrl: "blogfactory",
     coverImage: "/assets/projects/blogfactory/Home.png",
     images: [
       {
         seq: 1,
-        title: "1. Technical Blog Factory Home Dashboard",
+        title: "1. Workspace & Topic Configuration",
         url: "/assets/projects/blogfactory/Home.png",
-        caption: "Main application workspace displaying saved technical posts, AI creation triggers, and article analytics."
+        caption: "Main studio workspace featuring target audience selection, review iteration controls (1-3 cycles), and persistent chat history."
       },
       {
         seq: 2,
-        title: "2. Generating New Blog Post",
-        url: "/assets/projects/blogfactory/Generating New Blog Post.png",
-        caption: "Autonomous multi-agent LangGraph workflow running live research, web search synthesis, and section drafting."
+        title: "2. Real-Time Multi-Agent Generation Workflow",
+        url: "/assets/projects/blogfactory/Generating_Blog.png",
+        caption: "Active LangGraph state machine tracking real-time node execution from topic ingestion through drafting passes."
       },
       {
         seq: 3,
-        title: "3. Blog Post Generated",
-        url: "/assets/projects/blogfactory/Blog Post Generated.png",
-        caption: "Fully rendered blog article with Markdown formatting, structured headings, and technical breakdown."
+        title: "3. Technical Reviewer & Live Fact-Checking",
+        url: "/assets/projects/blogfactory/Peer_Reviewer.png",
+        caption: "Technical Reviewer agent feedback logs cross-referencing technical claims against live official documentation via Tavily API."
       },
       {
         seq: 4,
-        title: "4. Added Code Snippet",
-        url: "/assets/projects/blogfactory/Added Code Snippet.png",
-        caption: "Live code injection with syntax highlighting and verification integrated directly into technical tutorials."
+        title: "4. Syntax-Verified Code Snippet Injection",
+        url: "/assets/projects/blogfactory/Added_Code_Snippets.png",
+        caption: "Intelligent code generator detecting coding keywords and embedding syntax-verified, runnable snippets with explanations."
+      },
+      {
+        seq: 5,
+        title: "5. Publication-Ready Formatted Content",
+        url: "/assets/projects/blogfactory/Blog_Content.png",
+        caption: "Rendered blog post showcasing clear typography, bold section headings, structured code blocks, and key takeaways."
+      },
+      {
+        seq: 6,
+        title: "6. Finalized Article & Multi-Format Export",
+        url: "/assets/projects/blogfactory/Blog_Generated_Download.png",
+        caption: "Complete blog post ready for one-click vector PDF download, raw Markdown copying, and chat history archival."
       }
     ]
   },
