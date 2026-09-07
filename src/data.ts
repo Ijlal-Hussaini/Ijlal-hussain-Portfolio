@@ -15,7 +15,7 @@ export interface PersonalInfo {
 
 export interface SkillCategory {
   category: string;
-  skills: { name: string; level?: string }[];
+  skills: { name: string; level?: string; percent?: number }[];
 }
 
 export interface Experience {
@@ -89,63 +89,58 @@ export const skillsData: SkillCategory[] = [
   {
     category: "Generative AI & ML",
     skills: [
-      { name: "Python", level: "Expert" },
-      { name: "LangChain", level: "Advanced" },
-      { name: "LangGraph", level: "Advanced" },
-      { name: "RAG Development", level: "Advanced" },
-      { name: "AI Agents", level: "Advanced" },
-      { name: "LLMs", level: "Advanced" },
-      { name: "Prompt Engineering", level: "Expert" },
-      { name: "Tavily AI", level: "Intermediate" }
-    ]
-  },
-  {
-    category: "Web Development",
-    skills: [
-      { name: "React.js", level: "Advanced" },
-      { name: "Node.js", level: "Advanced" },
-      { name: "Express.js", level: "Advanced" },
-      { name: "MongoDB", level: "Advanced" },
-      { name: "HTML/CSS/JS", level: "Expert" },
-      { name: "REST APIs", level: "Advanced" }
+      { name: "Python (AI & ML)", level: "88%", percent: 88 },
+      { name: "LangGraph (State Graphs & Multi-Agents)", level: "86%", percent: 86 },
+      { name: "LangChain & RAG Pipelines", level: "84%", percent: 84 },
+      { name: "Prompt Engineering & Guardrails", level: "85%", percent: 85 },
+      { name: "Vector Embeddings & Retrieval", level: "80%", percent: 80 },
+      { name: "FastAPI (AI Microservices)", level: "82%", percent: 82 }
     ]
   },
   {
     category: "Android Development",
     skills: [
-      { name: "Android (Java)", level: "Expert" },
-      { name: "Flutter", level: "Intermediate" },
-      { name: "Firebase", level: "Advanced" },
-      { name: "Material Design", level: "Advanced" },
-      { name: "Android Studio", level: "Expert" }
+      { name: "Android SDK (Java)", level: "88%", percent: 88 },
+      { name: "Android Studio & Architecture", level: "85%", percent: 85 },
+      { name: "Firebase (Realtime DB & Auth)", level: "84%", percent: 84 },
+      { name: "Material Design UI", level: "80%", percent: 80 },
+      { name: "Flutter & Dart", level: "55%", percent: 55 }
+    ]
+  },
+  {
+    category: "Web Development",
+    skills: [
+      { name: "React 19 & TypeScript", level: "80%", percent: 80 },
+      { name: "JavaScript (ES6+)", level: "84%", percent: 84 },
+      { name: "HTML5 & Tailwind CSS", level: "86%", percent: 86 },
+      { name: "Node.js & Express.js", level: "74%", percent: 74 },
+      { name: "MongoDB & REST APIs", level: "76%", percent: 76 }
     ]
   },
   {
     category: "Software Engineering",
     skills: [
-      { name: "Requirements Engineering", level: "Expert" },
-      { name: "System Design", level: "Advanced" },
-      { name: "SRS / BRD", level: "Expert" },
-      { name: "Use Case Modeling", level: "Expert" },
-      { name: "Software Testing", level: "Advanced" }
+      { name: "Requirements Engineering (SRS / BRD)", level: "88%", percent: 88 },
+      { name: "Use Case Modeling & UML", level: "82%", percent: 82 },
+      { name: "System Design & Architecture", level: "76%", percent: 76 },
+      { name: "Software QA & Testing", level: "74%", percent: 74 }
     ]
   },
   {
     category: "Tools & Platforms",
     skills: [
-      { name: "Git & GitHub", level: "Expert" },
-      { name: "VS Code", level: "Expert" },
-      { name: "Figma", level: "Advanced" },
-      { name: "Firebase Dashboard", level: "Advanced" },
-      { name: "MS Office", level: "Expert" }
+      { name: "Git & GitHub", level: "86%", percent: 86 },
+      { name: "VS Code", level: "88%", percent: 88 },
+      { name: "Postman (API Testing)", level: "78%", percent: 78 },
+      { name: "Figma (UI/UX Prototyping)", level: "72%", percent: 72 }
     ]
   },
   {
     category: "Languages",
     skills: [
-      { name: "English", level: "Independent / Professional" },
-      { name: "Urdu", level: "Native" },
-      { name: "Brushaski", level: "Mother Tongue" }
+      { name: "English", level: "Professional", percent: 85 },
+      { name: "Urdu", level: "Native", percent: 100 },
+      { name: "Brushaski", level: "Mother Tongue", percent: 100 }
     ]
   }
 ];

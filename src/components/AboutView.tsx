@@ -6,23 +6,26 @@ import { personalInfo, skillsData, experienceData, educationData } from "../data
 export default function AboutView() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  const getSkillProficiency = (level: string) => {
-    switch (level.toLowerCase()) {
-      case "expert":
-        return { percent: 95, color: "from-cyan-bright to-blue-500", label: "95%" };
-      case "advanced":
-        return { percent: 80, color: "from-purple-bright to-indigo-500", label: "80%" };
-      case "intermediate":
-        return { percent: 60, color: "from-amber-400 to-orange-500", label: "60%" };
-      case "independent / professional":
-        return { percent: 85, color: "from-purple-bright to-cyan-bright", label: "Professional" };
-      case "native":
-        return { percent: 100, color: "from-cyan-bright to-green-accent", label: "Native" };
-      case "mother tongue":
-        return { percent: 100, color: "from-cyan-bright to-green-accent", label: "Mother Tongue" };
-      default:
-        return { percent: 75, color: "from-cyan-bright to-purple-bright", label: "75%" };
+  const getSkillProficiency = (level?: string, customPercent?: number) => {
+    const percent = customPercent !== undefined
+      ? customPercent
+      : (level?.endsWith("%") ? parseInt(level) : 75);
+
+    let color = "from-cyan-bright to-blue-500";
+    if (percent >= 85) color = "from-cyan-bright to-blue-500";
+    else if (percent >= 75) color = "from-purple-bright to-indigo-500";
+    else if (percent >= 65) color = "from-cyan-bright to-purple-bright";
+    else color = "from-amber-400 to-orange-500";
+
+    if (level?.toLowerCase() === "native" || level?.toLowerCase() === "mother tongue") {
+      color = "from-cyan-bright to-green-accent";
     }
+
+    return {
+      percent,
+      color,
+      label: level || `${percent}%`
+    };
   };
 
   const categories = ["All", ...skillsData.map((s) => s.category)];
@@ -286,7 +289,7 @@ export default function AboutView() {
                 </h3>
                 <div className="space-y-3.5 w-full">
                   {cat.skills.map((skill, sIdx) => {
-                    const prof = getSkillProficiency(skill.level || "");
+                    const prof = getSkillProficiency(skill.level, skill.percent);
                     return (
                       <div
                         key={sIdx}
