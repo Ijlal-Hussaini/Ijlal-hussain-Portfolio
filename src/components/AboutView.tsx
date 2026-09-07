@@ -39,8 +39,8 @@ export default function AboutView() {
     },
     {
       icon: <Award className="w-5 h-5 text-purple-bright" />,
-      title: "Gold Medal Pace",
-      text: "Maintained a near-perfect academic track with an exceptional 3.96 / 4.0 CGPA at NUML."
+      title: "Academic Distinction",
+      text: "Maintained an exceptional 3.96 / 4.0 CGPA at NUML, demonstrating consistent academic and technical excellence."
     },
     {
       icon: <Languages className="w-5 h-5 text-green-accent" />,
