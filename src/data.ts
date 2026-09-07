@@ -138,7 +138,7 @@ export const skillsData: SkillCategory[] = [
   {
     category: "Languages",
     skills: [
-      { name: "English", level: "Professional", percent: 85 },
+      { name: "English", level: "Professional", percent: 70 },
       { name: "Urdu", level: "Native", percent: 100 },
       { name: "Brushaski", level: "Mother Tongue", percent: 100 }
     ]
