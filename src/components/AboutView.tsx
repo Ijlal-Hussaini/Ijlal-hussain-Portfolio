@@ -104,30 +104,30 @@ export default function AboutView() {
         </div>
 
         {/* Quick contact card */}
-        <div className="w-full md:w-80 glass rounded-2xl p-6 space-y-6 border border-white/10">
+        <div className="w-full md:w-88 lg:w-96 glass rounded-2xl p-6 space-y-6 border border-white/10 flex-shrink-0">
           <h3 className="font-display font-semibold text-sm text-text-main uppercase tracking-wider border-b border-white/5 pb-2">
             Professional Profile
           </h3>
           <ul className="space-y-4 font-mono text-xs">
-            <li className="flex justify-between">
+            <li className="flex justify-between items-center whitespace-nowrap">
               <span className="text-text-muted">Graduation:</span>
-              <span className="text-text-main text-right">{personalInfo.university}</span>
+              <span className="text-text-main font-medium">NUML Islamabad</span>
             </li>
-            <li className="flex justify-between">
+            <li className="flex justify-between items-center whitespace-nowrap">
               <span className="text-text-muted">Academic CGPA:</span>
-              <span className="text-cyan-bright font-bold">{personalInfo.cgpa}</span>
+              <span className="text-cyan-bright font-bold">3.96 / 4.0</span>
             </li>
-            <li className="flex justify-between">
+            <li className="flex justify-between items-center whitespace-nowrap">
               <span className="text-text-muted">Core Scope:</span>
-              <span className="text-text-main text-right">Gen AI, MERN, Android App Development</span>
+              <span className="text-text-main font-medium">Gen AI, MERN, Android</span>
             </li>
-            <li className="flex justify-between">
+            <li className="flex justify-between items-center whitespace-nowrap">
               <span className="text-text-muted">Origin:</span>
-              <span className="text-text-main text-right">Gilgit, Pakistan</span>
+              <span className="text-text-main font-medium">Gilgit, Pakistan</span>
             </li>
-            <li className="flex justify-between">
+            <li className="flex justify-between items-center whitespace-nowrap">
               <span className="text-text-muted">Primary Language:</span>
-              <span className="text-text-main text-right">Urdu</span>
+              <span className="text-text-main font-medium">Urdu & English</span>
             </li>
           </ul>
         </div>
