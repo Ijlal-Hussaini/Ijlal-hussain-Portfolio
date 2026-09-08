@@ -307,7 +307,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       (hasWord("project") || hasWord("prokjec") || hasWord("prjec") || hasWord("built") || hasWord("many") || hasWord("developed") || contains("how many"))
     ) {
       return {
-        text: `📱 **Android & Mobile Projects (1 Featured App):**\n\n• **Safe Zone — Parental Control App (NUML FYP Lead)**\nHigh-fidelity native Android application built in Java with Firebase Realtime Database & Auth. Features real-time GPS geofencing, remote screen lock, content filtering, and 11 verified sequential UI screens in the gallery.`,
+        text: `📱 **Android & Mobile Projects (1 Featured App):**\n\n• **Safe Zone — Parental Control App (NUML FYP Lead)**\nHigh-fidelity native Android application built in Java with Firebase Realtime Database & Auth. Features real-time GPS geofencing, remote screen lock, content filtering, and 15 verified sequential light-themed UI screens in the gallery.`,
         actionLink: { label: "Inspect SafeZone Android App", tab: "Projects" }
       };
     }
@@ -546,7 +546,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     if (hasWord("safezone", 2) || (hasWord("safe", 1) && hasWord("zone", 1)) || hasWord("parental", 2) || hasWord("geofence", 2) || hasWord("fyp", 0)) {
       const proj = projectsData.find((p) => p.id === "safezone");
       return {
-        text: `📱 **SafeZone — Parental Control Android App (FYP):**\n${proj?.description || "High-fidelity Android parental control system."}\n\n**Key Highlights:**\n• Developed as NUML Final Year Project (FYP) team lead\n• Native Android (Java) with **Firebase Realtime Database & Auth**\n• Real-time GPS geofencing & live location tracking\n• Remote lock & app usage screen time schedulers\n• 11 sequential verified UI screens in gallery`,
+        text: `📱 **SafeZone — Parental Control Android App (FYP):**\n${proj?.description || "High-fidelity Android parental control system."}\n\n**Key Highlights:**\n• Developed as NUML Final Year Project (FYP) team lead\n• Native Android (Java) with **Firebase Realtime Database & Auth**\n• Real-time GPS geofencing & live location tracking\n• Remote lock & app usage screen time schedulers\n• 15 sequential verified light-themed UI screens in gallery`,
         actionLink: { label: "Inspect SafeZone Android App", tab: "Projects" }
       };
     }

@@ -136,7 +136,7 @@ ijlal-hussain-portfolio/
 │   ├── assets/
 │   │   ├── certifications/        # Authentic vector certificate PDFs and thumbnails (6 Total)
 │   │   ├── images/                # Next-gen WebP & PNG profile photos, OG preview
-│   │   └── projects/              # Sequential project UI screenshots (1-11)
+│   │   └── projects/              # Sequential project UI screenshots (SafeZone 1-15, ResumeIQ, BlogFactory, Portfolio)
 │   ├── icons/                     # PWA maskable application icons (192px, 512px)
 │   ├── Ijlal_Hussain_CV.pdf       # Official resume document
 │   └── manifest.json              # Web App Manifest specification

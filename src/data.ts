@@ -199,73 +199,97 @@ export const projectsData: Project[] = [
     github: "https://github.com/Ijlal-Hussaini/Safe-Zone-Kid-Friendly-Internet-and-App-Monitoring",
     description: "Safe Zone is a complete high-fidelity parental control Android system designed to curate a safer digital space for children. Developed as my Final Year Project (FYP) at NUML, the system splits into a parent dashboard and a child monitor, synchronizing instantly using Firebase cloud endpoints.",
     imageUrl: "SafeZone",
-    coverImage: "/assets/projects/SafeZone/screenshot2.jpeg",
+    coverImage: "/assets/projects/SafeZone/02_Parent_Dashboard.jpeg",
     images: [
       {
         seq: 1,
-        title: "1. Parent Authentication & Login",
-        url: "/assets/projects/SafeZone/screenshot2.jpeg",
-        caption: "Secure login interface supporting Firebase Auth, remember me session persistence, and password recovery."
+        title: "1. Authentication & Onboarding",
+        url: "/assets/projects/SafeZone/01_Login_Signup.jpeg",
+        caption: "Secure login and registration interface supporting Firebase Authentication, password recovery, and role selection."
       },
       {
         seq: 2,
-        title: "2. Parent Multi-Device Dashboard",
-        url: "/assets/projects/SafeZone/screenshot3.jpeg",
-        caption: "Centralized parent hub showing linked children with real-time status indicators and child management controls."
+        title: "2. Parent Multi-Child Dashboard",
+        url: "/assets/projects/SafeZone/02_Parent_Dashboard.jpeg",
+        caption: "Centralized parent hub showcasing linked children with real-time status, quick controls, and monitoring shortcuts."
       },
       {
         seq: 3,
-        title: "3. Child Supervision & Monitoring Panel",
-        url: "/assets/projects/SafeZone/screenshot4.jpeg",
-        caption: "Parent supervision panel granting access to Activity Logs, Screen Time Limits, Content Filtering, and Live Location."
+        title: "3. Child Device Pairing & Setup",
+        url: "/assets/projects/SafeZone/03_Adding_Child.jpeg",
+        caption: "Seamless device pairing wizard utilizing unique QR codes and pairing PINs for instant child account linking."
       },
       {
         seq: 4,
-        title: "4. Screen Time Management & Rules",
-        url: "/assets/projects/SafeZone/screenshot5.jpeg",
-        caption: "Interactive configuration for daily hour and minute caps with exception list for whitelisted apps."
+        title: "4. Real-Time Child Monitoring Panel",
+        url: "/assets/projects/SafeZone/04_Child_Monitoring.jpeg",
+        caption: "Supervision console providing immediate access to Activity Logs, Screen Time Limits, Web Filtering, and Live Location."
       },
       {
         seq: 5,
-        title: "5. Detailed App Usage Activity Logs",
-        url: "/assets/projects/SafeZone/screenshot6.jpeg",
-        caption: "Comprehensive application usage breakdown detailing active durations for installed applications."
+        title: "5. Screen Time Limits & Rules",
+        url: "/assets/projects/SafeZone/05_Screen_Time_Management.jpeg",
+        caption: "Daily hour and minute limit scheduler with custom weekday/weekend allocations and app whitelist rules."
       },
       {
         seq: 6,
-        title: "6. Content Filtering & Website Blocking",
-        url: "/assets/projects/SafeZone/screenshot7.jpeg",
-        caption: "Parent control for managing blocked domain list with instant cloud synchronization."
+        title: "6. Request Extra Screen Time",
+        url: "/assets/projects/SafeZone/06_Request_Extra_Time.jpeg",
+        caption: "Interactive prompt allowing children to request additional screen time with real-time push approvals."
       },
       {
         seq: 7,
-        title: "7. Live Geofencing & GPS Tracking",
-        url: "/assets/projects/SafeZone/screenshot8.jpeg",
-        caption: "Interactive map displaying live child GPS coordinates with high precision around defined safe zones."
+        title: "7. Web Content & App Filtering",
+        url: "/assets/projects/SafeZone/07_Content_Filtering.jpeg",
+        caption: "Parental control suite for category-based web filtering, custom domain blocking, and safe search enforcement."
       },
       {
         seq: 8,
-        title: "8. Child Restricted Home Screen",
-        url: "/assets/projects/SafeZone/screenshot9.jpeg",
-        caption: "Child device dashboard showing remaining screen time quota and real-time blocked app/website enforcement."
+        title: "8. App Usage & Activity Analytics",
+        url: "/assets/projects/SafeZone/08_Activity_Logs.jpeg",
+        caption: "Detailed application usage metrics showing exact durations, launch counts, and daily activity trends."
       },
       {
         seq: 9,
-        title: "9. Device Pairing via QR Code",
-        url: "/assets/projects/SafeZone/screenshot10.jpeg",
-        caption: "Step-by-step QR code generation and pairing key verification for instantly linking child devices."
+        title: "9. Live GPS Geolocation Tracking",
+        url: "/assets/projects/SafeZone/09_Location_Tracking.jpeg",
+        caption: "Real-time Google Maps GPS integration tracking child location with configurable safe-zone Geofencing alerts."
       },
       {
         seq: 10,
-        title: "10. Child Profile Settings & Parent Link",
-        url: "/assets/projects/SafeZone/screenshot11.jpeg",
-        caption: "Profile configuration for child account linked directly to the parent account."
+        title: "10. Real-Time Alerts & Security Logs",
+        url: "/assets/projects/SafeZone/10_Alerts_Notifications.jpeg",
+        caption: "Security event feed delivering instant notifications for restricted app access, curfew violations, and geofence breaches."
       },
       {
         seq: 11,
-        title: "11. Child Request Extra Time & System Controls",
-        url: "/assets/projects/SafeZone/screenshot13.jpeg",
-        caption: "Child overlay dialog allowing one-tap requests for extra screen time sent directly to the parent dashboard."
+        title: "11. Child Mode Protected Dashboard",
+        url: "/assets/projects/SafeZone/11_Child_Dashboard.jpeg",
+        caption: "Kid-friendly home screen displaying remaining screen time quota, allowed apps, and parental lock status."
+      },
+      {
+        seq: 12,
+        title: "12. Child Permission & Access Requests",
+        url: "/assets/projects/SafeZone/12_Child_Request_Access.jpeg",
+        caption: "Child request dialog allowing children to ask permission for temporarily restricted apps or new installations."
+      },
+      {
+        seq: 13,
+        title: "13. Child Device Profile & Status",
+        url: "/assets/projects/SafeZone/13_Child_Profile.jpeg",
+        caption: "Child profile management detailing linked device information, battery level, and active protection policies."
+      },
+      {
+        seq: 14,
+        title: "14. Parent Account & Profile Settings",
+        url: "/assets/projects/SafeZone/14_Parent_Profile.jpeg",
+        caption: "Parent credentials management, security PIN configurations, and multi-factor authentication controls."
+      },
+      {
+        seq: 15,
+        title: "15. System Preferences & App Rules",
+        url: "/assets/projects/SafeZone/15_Parent_Settings.jpeg",
+        caption: "Global application configuration for background synchronization, notification thresholds, and emergency SOS contacts."
       }
     ]
   },
