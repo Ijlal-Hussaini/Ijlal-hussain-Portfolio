@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, memo } from "react";
 import {
   Bot,
   Sparkles,
@@ -84,11 +84,11 @@ function hasFuzzyWord(tokens: string[], target: string, maxDist = 2): boolean {
 }
 
 /**
- * Bulletproof Markdown & Rich-Text parser
+ * High-performance Memoized Markdown & Rich-Text parser
  * Converts **bold**, *italic*, `code`, and [label](url) into clean React elements
  * without leaking raw asterisks, stars, or brackets.
  */
-function FormattedMessage({ text }: { text: string }) {
+const FormattedMessage = memo(function FormattedMessage({ text }: { text: string }) {
   const renderInline = (content: string) => {
     // Regex matching: links, inline code, bold, italic
     const regex = /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
@@ -194,7 +194,7 @@ function FormattedMessage({ text }: { text: string }) {
       })}
     </div>
   );
-}
+});
 
 export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AIChatBotProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -745,7 +745,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             style={{ willChange: "transform, opacity" }}
-            className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 z-[90] w-[calc(100vw-1.5rem)] sm:w-[420px] h-[520px] max-h-[80vh] sm:h-[580px] sm:max-h-[85vh] rounded-2xl sm:rounded-3xl bg-card border border-white/10 shadow-2xl backdrop-blur-xl flex flex-col justify-between overflow-hidden text-left text-text-main"
+            className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 z-[90] w-[calc(100vw-1.5rem)] sm:w-[420px] h-[520px] max-h-[80vh] sm:h-[580px] sm:max-h-[85vh] rounded-2xl sm:rounded-3xl bg-card border border-white/10 shadow-2xl flex flex-col justify-between overflow-hidden text-left text-text-main [isolation:isolate]"
           >
             {/* MODAL HEADER */}
             <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-card2/50">
@@ -797,8 +797,11 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
               </div>
             </div>
 
-            {/* MESSAGES SCROLL AREA */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar">
+            {/* MESSAGES SCROLL AREA (Hardware Accelerated, Smooth 60/120fps Scrolling) */}
+            <div
+              className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-3.5 custom-scrollbar overscroll-contain [touch-action:pan-y] [-webkit-overflow-scrolling:touch] [contain:content] [transform:translateZ(0)]"
+              style={{ willChange: "scroll-position" }}
+            >
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -813,9 +816,9 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                   )}
 
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3.5 space-y-2.5 text-xs font-sans leading-relaxed shadow-md ${
+                    className={`max-w-[85%] rounded-2xl p-3.5 space-y-2.5 text-xs font-sans leading-relaxed ${
                       msg.sender === "user"
-                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-tr-none shadow-purple-glow/20"
+                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-tr-none shadow-md shadow-purple-glow/20"
                         : "bg-card2 text-text-main border border-white/10 rounded-tl-none shadow-sm"
                     }`}
                   >
@@ -853,7 +856,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
             {/* QUICK SUGGESTION CHIPS */}
             <div className="px-4 py-2 border-t border-white/5 bg-card2/30">
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar overscroll-contain [touch-action:pan-x] [-webkit-overflow-scrolling:touch]">
                 {quickChips.map((chip, idx) => (
                   <button
                     key={idx}
