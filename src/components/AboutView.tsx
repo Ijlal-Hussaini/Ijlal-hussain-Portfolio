@@ -135,12 +135,12 @@ export default function AboutView() {
         </div>
       </motion.section>
 
-      {/* SECTION 2: EXPERIENCE TIMELINE */}
+      {/* SECTION 2: EXPERIENCE TIMELINE (Replays whenever scrolled into view) */}
       <motion.section
         id="experience-section"
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ amount: 0.15 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
@@ -157,10 +157,10 @@ export default function AboutView() {
           {experienceData.map((exp, index) => (
             <motion.div 
               key={index} 
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -12 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ amount: 0.15 }}
+              transition={{ duration: 0.45, delay: index * 0.1, ease: [0.25, 1, 0.5, 1] }}
               className="relative group"
             >
               {/* Timeline marker icon */}
@@ -198,12 +198,12 @@ export default function AboutView() {
         </div>
       </motion.section>
 
-      {/* SECTION 3: EDUCATION TIMELINE */}
+      {/* SECTION 3: EDUCATION TIMELINE (Replays smoothly every time scrolled into view) */}
       <motion.section
         id="education-section"
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ amount: 0.15 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
@@ -220,10 +220,10 @@ export default function AboutView() {
           {educationData.map((edu, index) => (
             <motion.div 
               key={index} 
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -12 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ amount: 0.15 }}
+              transition={{ duration: 0.45, delay: index * 0.1, ease: [0.25, 1, 0.5, 1] }}
               className="relative group"
             >
               {/* Timeline marker icon */}
@@ -256,7 +256,7 @@ export default function AboutView() {
         id="skills-section"
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ amount: 0.15 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
@@ -319,7 +319,7 @@ export default function AboutView() {
                             {prof.label}
                           </span>
                         </div>
-                        {/* Progress Bar with smooth, gradual dynamic fill */}
+                        {/* Progress Bar with smooth, gradual dynamic fill that replays */}
                         <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
                           <motion.div
                             initial={{ width: 0 }}
@@ -339,12 +339,12 @@ export default function AboutView() {
         </div>
       </motion.section>
 
-      {/* SECTION 5: BENTO GRID FUN FACTS */}
+      {/* SECTION 5: BENTO GRID FUN FACTS (Replays every time scrolled into view) */}
       <motion.section
         id="funfacts-section"
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ amount: 0.15 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
@@ -363,7 +363,7 @@ export default function AboutView() {
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.1 }}
+              viewport={{ amount: 0.15 }}
               transition={{ delay: index * 0.08, duration: 0.4 }}
               className="glass rounded-2xl p-6 space-y-4 border border-white/5 text-left hover:border-white/15 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
