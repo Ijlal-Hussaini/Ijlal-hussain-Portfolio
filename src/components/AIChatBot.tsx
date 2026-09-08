@@ -38,6 +38,103 @@ interface Message {
   timestamp: string;
 }
 
+function FormattedMessage({ text }: { text: string }) {
+  // Parse inline markdown elements: links [text](url), bold **text**, inline code `code`
+  const renderInline = (line: string) => {
+    const regex = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g;
+    const parts = line.split(regex);
+
+    return parts.map((part, index) => {
+      if (!part) return null;
+
+      // Link: [text](url)
+      const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (linkMatch) {
+        return (
+          <a
+            key={index}
+            href={linkMatch[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-cyan-bright hover:underline font-medium break-all"
+          >
+            {linkMatch[1]}
+          </a>
+        );
+      }
+
+      // Bold: **text**
+      const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
+      if (boldMatch) {
+        return (
+          <strong key={index} className="text-white font-bold">
+            {boldMatch[1]}
+          </strong>
+        );
+      }
+
+      // Code: `code`
+      const codeMatch = part.match(/^`([^`]+)`$/);
+      if (codeMatch) {
+        return (
+          <code
+            key={index}
+            className="px-1.5 py-0.5 rounded bg-white/10 text-cyan-bright font-mono text-[11px] border border-white/10"
+          >
+            {codeMatch[1]}
+          </code>
+        );
+      }
+
+      // Plain text
+      return <span key={index}>{part}</span>;
+    });
+  };
+
+  const lines = text.split("\n");
+
+  return (
+    <div className="space-y-1.5 leading-relaxed text-xs">
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={idx} className="h-1" />;
+        }
+
+        // Bullet points: • or - or *
+        if (/^[•\-\*]\s+/.test(trimmed)) {
+          const content = trimmed.replace(/^[•\-\*]\s+/, "");
+          return (
+            <div key={idx} className="flex items-start gap-2 pl-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-bright mt-1.5 flex-shrink-0 shadow-sm shadow-cyan-glow/30" />
+              <div className="flex-1">{renderInline(content)}</div>
+            </div>
+          );
+        }
+
+        // Numbered list: 1. , 2.
+        const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+        if (numMatch) {
+          return (
+            <div key={idx} className="flex items-start gap-2 pl-0.5">
+              <span className="font-mono text-[10px] text-cyan-bright font-bold mt-0.5 flex-shrink-0">
+                {numMatch[1]}.
+              </span>
+              <div className="flex-1">{renderInline(numMatch[2])}</div>
+            </div>
+          );
+        }
+
+        return (
+          <div key={idx}>
+            {renderInline(line)}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AIChatBotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasUnreadPulse, setHasUnreadPulse] = useState(true);
@@ -363,9 +460,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                         : "bg-white/[0.04] text-text-main border border-white/10 rounded-tl-none"
                     }`}
                   >
-                    <div className="whitespace-pre-line prose-invert font-sans">
-                      {msg.text}
-                    </div>
+                    <FormattedMessage text={msg.text} />
 
                     {msg.actionLink && (
                       <button
