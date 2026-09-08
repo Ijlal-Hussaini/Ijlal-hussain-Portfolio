@@ -52,7 +52,7 @@ const TypewriterHero = memo(function TypewriterHero({ roles }: { roles: string[]
   );
 });
 
-// 2. Animated Counter Component (Triggered once with requestAnimationFrame for 60fps smoothness)
+// 2. Animated Counter Component (Smoothly counts from 0 every time scrolled into view)
 const StatCounter = memo(function StatCounter({
   target,
   decimals = 0,
@@ -64,35 +64,46 @@ const StatCounter = memo(function StatCounter({
 }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
+  const isInView = useInView(ref, { amount: 0.3 });
 
   useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 1200;
+    if (!isInView) {
+      setCount(0);
+      return;
+    }
+
+    let animationFrameId: number;
+    const duration = decimals > 0 ? 1200 : 900;
     const startTime = performance.now();
 
     const updateCounter = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      const currentVal = start + (target - start) * easeProgress;
-      setCount(currentVal);
+      
+      if (decimals > 0) {
+        // Smooth linear progression for decimals (0.00 -> 3.96)
+        const currentVal = progress * target;
+        setCount(currentVal);
+      } else {
+        // Clear integer steps from 0 up to target (0, 1, 2, 3, 4...)
+        const currentVal = Math.floor(progress * (target + 0.99));
+        setCount(Math.min(currentVal, target));
+      }
 
       if (progress < 1) {
-        requestAnimationFrame(updateCounter);
+        animationFrameId = requestAnimationFrame(updateCounter);
       } else {
         setCount(target);
       }
     };
 
-    requestAnimationFrame(updateCounter);
-  }, [isInView, target]);
+    animationFrameId = requestAnimationFrame(updateCounter);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isInView, target, decimals]);
 
   return (
     <span ref={ref}>
-      {decimals > 0 ? count.toFixed(decimals) : Math.floor(count)}
+      {decimals > 0 ? count.toFixed(decimals) : count}
       {suffix}
     </span>
   );
