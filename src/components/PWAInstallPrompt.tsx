@@ -107,73 +107,74 @@ export default function PWAInstallPrompt() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, y: -45, x: "-50%", scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, x: "-50%", scale: 1 }}
-          exit={{ opacity: 0, y: -30, x: "-50%", scale: 0.96 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-[999999] w-[calc(100vw-1.5rem)] max-w-lg"
-          style={{ willChange: "transform, opacity" }}
-        >
-          <div className="glass rounded-2xl p-3 sm:p-4 border border-cyan-bright/40 shadow-2xl shadow-cyan-glow/20 bg-card/95 backdrop-blur-xl relative flex items-center justify-between gap-3 text-left">
-            {/* Ambient Background Glow */}
-            <div className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-cyan-glow/15 to-purple-glow/15 rounded-full blur-xl pointer-events-none" />
+        <div className="fixed top-20 sm:top-24 inset-x-0 mx-auto z-40 px-3 sm:px-4 flex justify-center pointer-events-none w-full max-w-lg">
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -15, scale: 0.95 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full pointer-events-auto"
+          >
+            <div className="glass rounded-2xl p-3 sm:p-4 border border-cyan-bright/40 shadow-2xl shadow-cyan-glow/20 bg-card/95 backdrop-blur-xl relative flex items-center justify-between gap-3 text-left">
+              {/* Ambient Background Glow */}
+              <div className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-cyan-glow/15 to-purple-glow/15 rounded-full blur-xl pointer-events-none" />
 
-            {/* Left: App Circular Avatar & Details */}
-            <div className="flex items-center space-x-3 min-w-0 flex-1">
-              <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-cyan-bright/40 shadow-md flex-shrink-0 bg-slate-950">
-                <img
-                  src="/icons/icon-192.png"
-                  alt="Ijlal Hussain App Icon"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <h4 className="font-display font-bold text-xs sm:text-sm text-text-main truncate">
-                    Install Portfolio App
-                  </h4>
-                  <span className="hidden sm:inline-flex items-center px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase rounded bg-cyan-bright/15 text-cyan-bright border border-cyan-bright/30">
-                    Desktop &amp; Mobile
-                  </span>
+              {/* Left: App Circular Avatar & Details */}
+              <div className="flex items-center space-x-3 min-w-0 flex-1">
+                <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-cyan-bright/40 shadow-md flex-shrink-0 bg-slate-950">
+                  <img
+                    src="/icons/icon-192.png"
+                    alt="Ijlal Hussain App Icon"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <p className="font-sans text-[11px] text-text-muted truncate">
-                  Add to Desktop or Android Home Screen
-                </p>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <h4 className="font-display font-bold text-xs sm:text-sm text-text-main truncate">
+                      Install Portfolio App
+                    </h4>
+                    <span className="hidden xs:inline-flex sm:inline-flex items-center px-1.5 py-0.2 text-[9px] font-mono font-bold uppercase rounded bg-cyan-bright/15 text-cyan-bright border border-cyan-bright/30">
+                      Desktop &amp; Mobile
+                    </span>
+                  </div>
+                  <p className="font-sans text-[11px] text-text-muted truncate">
+                    Add to Desktop or Android Home Screen
+                  </p>
+                </div>
+              </div>
+
+              {/* Right: Actions */}
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <button
+                  onClick={handleInstallClick}
+                  className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 font-sans font-bold text-xs shadow-md shadow-cyan-glow/20 hover:opacity-95 transition-all btn-glow-cyan cursor-pointer whitespace-nowrap"
+                >
+                  {isSuccess ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Installed!</span>
+                    </>
+                  ) : (
+                    <>
+                      <DownloadCloud className="w-3.5 h-3.5" />
+                      <span>Install</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={handleDismiss}
+                  className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-text-muted hover:text-text-main transition-colors cursor-pointer border border-white/5"
+                  title="Dismiss"
+                  aria-label="Dismiss install prompt"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
             </div>
-
-            {/* Right: Actions */}
-            <div className="flex items-center space-x-2 flex-shrink-0">
-              <button
-                onClick={handleInstallClick}
-                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 font-sans font-bold text-xs shadow-md shadow-cyan-glow/20 hover:opacity-95 transition-all btn-glow-cyan cursor-pointer whitespace-nowrap"
-              >
-                {isSuccess ? (
-                  <>
-                    <Check className="w-3.5 h-3.5" />
-                    <span>Installed!</span>
-                  </>
-                ) : (
-                  <>
-                    <DownloadCloud className="w-3.5 h-3.5" />
-                    <span>Install</span>
-                  </>
-                )}
-              </button>
-
-              <button
-                onClick={handleDismiss}
-                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-text-muted hover:text-text-main transition-colors cursor-pointer border border-white/5"
-                title="Dismiss"
-                aria-label="Dismiss install prompt"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
