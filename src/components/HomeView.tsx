@@ -64,7 +64,7 @@ const StatCounter = memo(function StatCounter({
 }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { amount: 0.3 });
+  const isInView = useInView(ref, { amount: "some" });
 
   useEffect(() => {
     if (!isInView) {
@@ -268,7 +268,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </motion.div>
       </motion.section>
 
-      {/* SECTION 2: STATS SUMMARY GRID (Gradual Staggered Reveal) */}
+      {/* SECTION 2: STATS SUMMARY GRID (Smooth Reveal on First Open & Every Return) */}
       <section
         id="stats-section"
         className="relative z-10"
@@ -278,7 +278,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
+            viewport={{ amount: "some" }}
             transition={{ duration: 0.5, delay: 0.05, ease: [0.25, 1, 0.5, 1] }}
             className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/30 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -304,7 +304,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
+            viewport={{ amount: "some" }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
             className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/30 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -330,7 +330,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
+            viewport={{ amount: "some" }}
             transition={{ duration: 0.5, delay: 0.25, ease: [0.25, 1, 0.5, 1] }}
             className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/30 hover:-translate-y-1.5 transition-all duration-300"
           >
