@@ -3,17 +3,9 @@ import {
   Bot,
   Sparkles,
   Send,
-  X,
   RotateCcw,
   ArrowUpRight,
-  User,
-  GraduationCap,
-  Briefcase,
-  Award,
-  Layers,
-  PhoneCall,
-  Minimize2,
-  Maximize2
+  Minimize2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -38,11 +30,16 @@ interface Message {
   timestamp: string;
 }
 
+/**
+ * Bulletproof Markdown & Rich-Text parser
+ * Converts **bold**, *italic*, `code`, and [label](url) into clean React elements
+ * without leaking raw asterisks, stars, or brackets.
+ */
 function FormattedMessage({ text }: { text: string }) {
-  // Parse inline markdown elements: links [text](url), bold **text**, inline code `code`
-  const renderInline = (line: string) => {
-    const regex = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g;
-    const parts = line.split(regex);
+  const renderInline = (content: string) => {
+    // Regex matching: links, code, bold, italic
+    const regex = /(\[[^\]]+\]\([^)]+\)|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+    const parts = content.split(regex);
 
     return parts.map((part, index) => {
       if (!part) return null;
@@ -56,20 +53,10 @@ function FormattedMessage({ text }: { text: string }) {
             href={linkMatch[2]}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-cyan-bright hover:underline font-medium break-all"
+            className="text-cyan-bright hover:underline font-semibold"
           >
             {linkMatch[1]}
           </a>
-        );
-      }
-
-      // Bold: **text**
-      const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
-      if (boldMatch) {
-        return (
-          <strong key={index} className="text-white font-bold">
-            {boldMatch[1]}
-          </strong>
         );
       }
 
@@ -86,8 +73,29 @@ function FormattedMessage({ text }: { text: string }) {
         );
       }
 
-      // Plain text
-      return <span key={index}>{part}</span>;
+      // Bold: **text**
+      const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
+      if (boldMatch) {
+        return (
+          <strong key={index} className="text-white font-bold">
+            {boldMatch[1]}
+          </strong>
+        );
+      }
+
+      // Italic: *text*
+      const italicMatch = part.match(/^\*([^*]+)\*$/);
+      if (italicMatch) {
+        return (
+          <span key={index} className="text-text-main font-medium italic">
+            {italicMatch[1]}
+          </span>
+        );
+      }
+
+      // Cleanup any accidental stray asterisks from raw text
+      const cleaned = part.replace(/\*/g, "");
+      return <span key={index}>{cleaned}</span>;
     });
   };
 
@@ -101,18 +109,18 @@ function FormattedMessage({ text }: { text: string }) {
           return <div key={idx} className="h-1" />;
         }
 
-        // Bullet points: • or - or *
+        // Bullet points: •, -, or *
         if (/^[•\-\*]\s+/.test(trimmed)) {
-          const content = trimmed.replace(/^[•\-\*]\s+/, "");
+          const itemText = trimmed.replace(/^[•\-\*]\s+/, "");
           return (
             <div key={idx} className="flex items-start gap-2 pl-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-bright mt-1.5 flex-shrink-0 shadow-sm shadow-cyan-glow/30" />
-              <div className="flex-1">{renderInline(content)}</div>
+              <div className="flex-1">{renderInline(itemText)}</div>
             </div>
           );
         }
 
-        // Numbered list: 1. , 2.
+        // Numbered list: "1. ", "2. "
         const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
         if (numMatch) {
           return (
@@ -144,7 +152,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     {
       id: "welcome",
       sender: "bot",
-      text: `Hello! 👋 I'm Ijlal's AI Assistant. Ask me anything about his AI/ML projects (ResumeIQ, Blog Factory), Android development (SafeZone), 3.96 CGPA at NUML, or work experience!`,
+      text: `Hello! 👋 I'm Ijlal's AI Assistant. Ask me anything about his 4 projects (ResumeIQ, Blog Factory, SafeZone), 3.96 CGPA at NUML, certifications, or experience!`,
       timestamp: "Just now"
     }
   ]);
@@ -165,104 +173,192 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
   }, [isOpen, messages]);
 
   const quickChips = [
-    { label: "🎓 CGPA & Education", query: "What is Ijlal's CGPA and education?" },
-    { label: "🤖 ResumeIQ Platform", query: "Tell me about ResumeIQ project" },
-    { label: "📝 Blog Factory", query: "Tell me about Technical Blog Factory" },
-    { label: "📱 SafeZone App", query: "Tell me about SafeZone parental control app" },
-    { label: "⚡ LangGraph & AI Stack", query: "What experience does Ijlal have with LangGraph and AI?" },
-    { label: "📜 Certifications", query: "What certifications does Ijlal hold?" },
-    { label: "📬 How to Hire / Contact", query: "How can I contact or hire Ijlal?" }
+    { label: "📊 All Projects (4)", query: "How many projects has he built?" },
+    { label: "🎓 CGPA & Education", query: "What is Ijlal's CGPA and degree?" },
+    { label: "📜 Certifications (4)", query: "How many certifications does he have?" },
+    { label: "🤖 ResumeIQ Project", query: "Tell me about ResumeIQ project" },
+    { label: "⚡ LangGraph & AI", query: "What experience does Ijlal have with LangGraph and AI?" },
+    { label: "📍 Where is he from?", query: "Where is Ijlal from?" },
+    { label: "📬 Contact & Hire", query: "How can I contact or hire Ijlal?" }
   ];
 
+  // Helper: Get Current Pakistan Standard Time (PKT)
+  const getPKTTime = (): string => {
+    try {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Karachi",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        weekday: "short"
+      }).format(new Date());
+    } catch {
+      return "UTC+5 (Pakistan Standard Time)";
+    }
+  };
+
+  /**
+   * Natural Language Intent Engine with fuzzy stemming and typo tolerance
+   */
   const generateGroundedResponse = (rawQuery: string): { text: string; actionLink?: { label: string; tab?: string; url?: string } } => {
     const q = rawQuery.toLowerCase().trim();
 
-    // 1. Education / CGPA / University / Academic
-    if (/cgpa|gpa|marks|grade|numl|university|graduat|degree|academic|education|islamabad/.test(q)) {
+    // 1. GIBBERISH / RANDOM CHARACTERS / NONSENSE (e.g. "sada", "1123", "abc", "asdf", "sjifoasidjfosidfj")
+    const isPureDigits = /^\d+$/.test(q);
+    const isRepeatedOrTooShort = q.length <= 4 && !/^(hi|hey|gpa|ai|fyp|numl|job|cv|web|app|java|help)$/.test(q);
+    const lacksVowels = q.length > 5 && !/[aeiouy]/.test(q);
+    const hasLongRandomSequence = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(q);
+
+    if (isPureDigits || (isRepeatedOrTooShort && !/^(hi|hey|bye|yes|no)$/.test(q)) || lacksVowels || hasLongRandomSequence) {
       return {
-        text: `🎓 **Academic Distinction:**\nIjlal graduated from **NUML Islamabad** with a **BS in Software Engineering**, achieving an exceptional **${personalInfo.cgpa} CGPA**.\n\nHe maintained top-tier academic rigor with deep foundations in Algorithms, Software Architecture, and Machine Learning.`,
-        actionLink: { label: "View Academic Timeline & Degree", tab: "About" }
+        text: `I couldn't quite understand that. 🤔 I'm specialized in answering questions about Ijlal's engineering career, projects, and skills.\n\nTry asking:\n• How many projects has he built?\n• What is his CGPA?\n• What is his LangGraph & AI experience?\n• Where is he from?`,
+        actionLink: { label: "Explore All Projects", tab: "Projects" }
       };
     }
 
-    // 2. ResumeIQ
-    if (/resumeiq|resume.*iq|cv.*parser|career.*intelligence|ats|grounded.*rag/.test(q)) {
-      const proj = projectsData.find((p) => p.id === "resumeiq");
+    // 2. GREETINGS & SALUTATIONS ("hello", "hi", "hey", "salam", "assalam", "aoa", "good morning", "good evening")
+    if (/^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|good\s*(morning|afternoon|evening|day))(\s|$|!|\?|\.)/i.test(q) || /^hello\s/i.test(q)) {
       return {
-        text: `🤖 **ResumeIQ — AI Career Intelligence Platform:**\n${proj?.description || "Production-grade career intelligence engine."}\n\n**Key Highlights:**\n• 7-node cyclic **LangGraph** state machine\n• Grounded local RAG retrieval with sentence-transformers\n• Groq Cloud AI + Gemini dual-core failover\n• ATS parseability auditing & Google XYZ bullet rewrites\n• Modern Next.js 16 Liquid Glass frontend`,
-        actionLink: { label: "Inspect ResumeIQ Project & Screens", tab: "Projects" }
+        text: `Hello! 👋 Glad to connect with you!\n\nI can give you instant grounded answers about **Ijlal Hussain's**:\n• **4 Featured Projects** (ResumeIQ, Technical Blog Factory, SafeZone, Portfolio)\n• **Academic Distinction** (${personalInfo.cgpa} CGPA at NUML)\n• **Generative AI & LangGraph** agentic systems\n• **Android App** development\n• **4 Verified Certifications** & work history\n\nWhat would you like to know?`,
+        actionLink: { label: "View About & Skills", tab: "About" }
       };
     }
 
-    // 3. Technical Blog Factory
-    if (/blog|factory|post.*factory|technical.*blog|writer.*agent|peer.*review|tavily/.test(q)) {
-      const proj = projectsData.find((p) => p.id === "blogfactory");
+    // 3. BOT IDENTITY / HOW ARE YOU / CREATOR ("how are you", "who are you", "who made you", "what is your name")
+    if (/how\s+are\s+you|who\s+are\s+you|who\s+made\s+you|what\s+is\s+your\s+name|who\s+created\s+you|what\s+do\s+you\s+do/i.test(q)) {
       return {
-        text: `📝 **Technical Blog Post Factory:**\n${proj?.description || "Multi-agent autonomous publishing studio."}\n\n**Key Highlights:**\n• Autonomous 3-agent **LangGraph 0.3+** cyclic workflow\n• Live web fact-checking via **Tavily AI Search API**\n• Strict iterative peer review loops (1–3 cycles)\n• Automatic syntax-verified runnable code generator\n• Phonotactic upfront topic guardrail engine\n• 1-click vector PDF generation with jsPDF`,
-        actionLink: { label: "Inspect Technical Blog Factory", tab: "Projects" }
+        text: `I'm doing great, thank you! 😊\n\nI am **Ijlal's AI Assistant**, running 100% client-side in your browser. I have full knowledge of Ijlal's software engineering background, projects, academic honors, and tech stack.`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
       };
     }
 
-    // 4. SafeZone
-    if (/safe.*zone|safezone|parent|child|android|fyp|java|firebase|geofenc|monitoring|control/.test(q)) {
-      const proj = projectsData.find((p) => p.id === "safezone");
+    // 4. GRATITUDE & CLOSING ("thanks", "thank you", "great", "awesome", "bye", "goodbye")
+    if (/^(thank|thanks|thank\s+you|awesome|great|cool|perfect|goodbye|bye)(\s|$|!|\.)/i.test(q)) {
       return {
-        text: `📱 **Safe Zone — Parental Control Android App (FYP):**\n${proj?.description || "High-fidelity Android parental control system."}\n\n**Key Highlights:**\n• Developed as NUML Final Year Project (FYP) team lead\n• Native Android (Java) with **Firebase Realtime Database & Auth**\n• Real-time GPS geofencing & live location tracking\n• Remote lock & app usage screen time schedulers\n• 11 sequential verified UI screens in gallery`,
-        actionLink: { label: "Inspect SafeZone Android App", tab: "Projects" }
-      };
-    }
-
-    // 5. Portfolio Website Specs
-    if (/portfolio.*website|tech.*stack.*portfolio|how.*built|react 19|vite|pwa|styling/.test(q)) {
-      return {
-        text: `⚡ **Developer Portfolio Architecture:**\nEngineered with **React 19**, **TypeScript**, **Vite 6**, and **Tailwind CSS v4**.\n\n• Zero render-blocking CSS & WebP compression\n• Persistent Hash routing (\`#projects\`, \`#about\`, \`#certifications\`, \`#contact\`)\n• Installable Progressive Web App (PWA)\n• Web3Forms live email gateway with local PKT time ticker\n• Interactive credentials ledger with signed PDF viewer`,
-        actionLink: { label: "Explore Portfolio Specifications", tab: "Projects" }
-      };
-    }
-
-    // 6. LangGraph / Generative AI / Agentic / RAG
-    if (/langgraph|langchain|rag|agent|generative ai|genai|llm|deepseek|groq|gemini|prompt/.test(q)) {
-      return {
-        text: `⚡ **Generative AI & Agentic Systems Expertise:**\nIjlal has deep hands-on expertise building production agentic systems:\n\n• **LangGraph Multi-Agent Workflows**: State graphs, cyclic loops, Human-in-the-Loop checkpointing, and conditional routing.\n• **RAG Pipelines**: Vector embeddings, sentence-transformers, cosine similarity lookup, and grounded section citations.\n• **Model Orchestration**: Groq Cloud (Llama 3.3, DeepSeek-R1), Google Gemini 2.5 Flash, and OpenAI APIs.\n• **Guardrails & Structured Outputs**: Pydantic v2 schemas and validation filters.`,
-        actionLink: { label: "View AI & ML Skillsets", tab: "About" }
-      };
-    }
-
-    // 7. Certifications & Credentials
-    if (/certif|license|credential|navttc|kartoa.*letter|digiskills|adan/.test(q)) {
-      return {
-        text: `📜 **Verified Institutional Credentials:**\n1. **Generative AI & Machine Learning**: NAVTTC · Adan Institute (Credential ID: I-25-1082873) • Completed\n2. **AI Development Internship Letter**: Kartoa Technologies (Jan – Mar 2026)\n3. **Freelancing**: DigiSkills.pk (Credential ID: G7Y4E-29O2J)\n4. **Creative Writing**: DigiSkills.pk (Credential ID: J778U-1J35L)\n\nAll credentials feature 1-click signed PDF viewers and verification links!`,
-        actionLink: { label: "Inspect Verified Credentials Ledger", tab: "Certifications" }
-      };
-    }
-
-    // 8. Work Experience / Internships
-    if (/experience|intern|kartoa|alberuni|work|job|employment|history|career/.test(q)) {
-      return {
-        text: `💼 **Professional Experience:**\n\n• **AI Development Intern @ Kartoa Technologies** (Jan 2026 – Mar 2026):\nBuilt production RAG systems, LangGraph agentic workflows, and model context optimization.\n\n• **Requirement Engineering Intern @ NUML × Alberuni Tech** (Aug 2025 – Oct 2025):\nAuthored client SRS/BRD technical documentation and structured Use Case diagrams.\n\n• **Android Developer FYP Lead @ NUML** (Mar 2025 – Dec 2025):\nLed development of SafeZone parental monitoring Android application.`,
-        actionLink: { label: "View Experience Timeline", tab: "About" }
-      };
-    }
-
-    // 9. Contact / Hire / Reach out
-    if (/contact|hire|email|phone|whatsapp|linkedin|reach|call|message|location|gilgit/.test(q)) {
-      return {
-        text: `📬 **Let's Connect & Collaborate!**\n\n• **Email**: \`${personalInfo.email}\`\n• **WhatsApp**: \`${personalInfo.phone}\`\n• **LinkedIn**: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})\n• **Location**: ${personalInfo.location}\n\nIjlal is actively available for AI engineering roles, full-stack development, and internships!`,
+        text: `You're very welcome! 😊 If you have any more questions or want to discuss opportunities with Ijlal, feel free to reach out directly through the contact page!`,
         actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
 
-    // 10. General Skills / Stack
-    if (/skill|stack|technolog|tool|python|java|react|node|javascript|flutter/.test(q)) {
+    // 5. LOCATION / WHERE IS HE FROM ("where is he from", "where is ijlal", "where does he live", "location", "city", "gilgit", "pakistan")
+    if (/where.*(from|live|ijlal|he|located|based)|location|city|country|hometown|gilgit|pakistan/i.test(q)) {
       return {
-        text: `🛠️ **Ijlal's Core Engineering Toolbox:**\n\n• **Generative AI & ML**: Python (88%), LangGraph (86%), LangChain & RAG (84%), Prompt Engineering (85%), FastAPI (82%)\n• **Android**: Java SDK (88%), Android Studio (85%), Firebase (84%), Material Design (80%), Flutter (55%)\n• **Web & Full-Stack**: React 19 & TypeScript (80%), JS ES6+ (84%), Tailwind CSS (86%), Node & Express (74%), MongoDB (76%)\n• **Software Engineering**: Requirements SRS/BRD (88%), System Design (76%), Git & GitHub (86%)`,
+        text: `📍 **Location & Background:**\nIjlal is originally from the beautiful region of **Gilgit, Pakistan** 🏔️.\n\nHe completed his Software Engineering degree at **NUML in Islamabad** and is actively open to **remote global roles** as well as on-site positions in Islamabad/Pakistan.`,
+        actionLink: { label: "Contact Ijlal", tab: "Contact" }
+      };
+    }
+
+    // 6. CURRENT TIME / TIMEZONE ("what time is it", "timezone", "pkt", "pakistan time", "what time is there")
+    if (/time.*(is\s+it|there|now|zone|current)|timezone|pkt|pakistan\s+time/i.test(q)) {
+      const pkt = getPKTTime();
+      return {
+        text: `🕒 **Current Local Time:**\nIt is currently **${pkt} PKT (UTC+5)** in Pakistan where Ijlal is located.\n\nYou can send him a message anytime via email or WhatsApp, and he will get back to you promptly!`,
+        actionLink: { label: "Send a Message", tab: "Contact" }
+      };
+    }
+
+    // 7. PROJECT COUNTS & SUMMARY ("how many projects", "how many project di he", "list projects", "projects count", "what projects")
+    if (/how\s+many\s+project|project.*count|number\s+of\s+project|total\s+project|list.*project|all\s+project|show.*project|what\s+project/i.test(q)) {
+      return {
+        text: `📊 **Project Portfolio (4 Featured Projects):**\nIjlal has developed **4 featured engineering projects** across AI, Mobile, and Web:\n\n1. **ResumeIQ** (AI/ML) — 7-node LangGraph cyclic agent with grounded local RAG retrieval & Groq/Gemini failover\n2. **Technical Blog Factory** (AI/ML) — Autonomous 3-agent writing studio with Tavily live web research & code verification\n3. **SafeZone** (Mobile) — NUML FYP Parental Control Android App with GPS geofencing & Firebase\n4. **Interactive Developer Portfolio** (Web) — High-performance React 19, TypeScript, and Tailwind CSS PWA\n\nClick below to inspect full architectural details, live demos, and screenshot galleries!`,
+        actionLink: { label: "Explore All 4 Projects", tab: "Projects" }
+      };
+    }
+
+    // 8. CERTIFICATION COUNTS & SUMMARY ("how many certificates", "how many certification", "list certificates", "credentials")
+    if (/how\s+many\s+certif|certif.*count|number\s+of\s+certif|total\s+certif|list.*certif|all\s+certif|show.*certif|what\s+certif|credential/i.test(q)) {
+      return {
+        text: `📜 **Verified Institutional Credentials (4 Total):**\nIjlal holds **4 verified certifications & credentials**:\n\n1. **Generative AI & Machine Learning** — NAVTTC · Adan Institute (ID: I-25-1082873)\n2. **AI Development Internship Letter** — Kartoa Technologies (Jan – Mar 2026)\n3. **Freelancing** — DigiSkills.pk (ID: G7Y4E-29O2J)\n4. **Creative Writing** — DigiSkills.pk (ID: J778U-1J35L)\n\nAll credentials feature 1-click signed PDF viewers and verifiable IDs in his ledger!`,
+        actionLink: { label: "Inspect Verified Ledger", tab: "Certifications" }
+      };
+    }
+
+    // 9. RESUMEIQ (Deep Dive)
+    if (/resumeiq|resume.*iq|ats|cv.*parser|career.*intelligence/i.test(q)) {
+      const proj = projectsData.find((p) => p.id === "resumeiq");
+      return {
+        text: `🤖 **ResumeIQ — AI Career Intelligence Platform:**\n${proj?.description || "Production-grade career intelligence engine."}\n\n**Technical Highlights:**\n• 7-node cyclic **LangGraph** state machine\n• Grounded local RAG retrieval with sentence-transformers\n• Groq Cloud AI + Gemini dual-core failover\n• ATS parseability auditing & Google XYZ bullet rewrites\n• Modern Next.js 16 Liquid Glass frontend`,
+        actionLink: { label: "Inspect ResumeIQ Project", tab: "Projects" }
+      };
+    }
+
+    // 10. TECHNICAL BLOG FACTORY (Deep Dive)
+    if (/blog|factory|post.*factory|technical.*blog|writer.*agent|peer.*review|tavily/i.test(q)) {
+      const proj = projectsData.find((p) => p.id === "blogfactory");
+      return {
+        text: `📝 **Technical Blog Post Factory:**\n${proj?.description || "Multi-agent autonomous publishing studio."}\n\n**Technical Highlights:**\n• Autonomous 3-agent **LangGraph 0.3+** cyclic workflow\n• Live web fact-checking via **Tavily AI Search API**\n• Strict iterative peer review loops (1–3 cycles)\n• Automatic syntax-verified runnable code generator\n• 1-click vector PDF generation with jsPDF`,
+        actionLink: { label: "Inspect Technical Blog Factory", tab: "Projects" }
+      };
+    }
+
+    // 11. SAFEZONE ANDROID APP (Deep Dive)
+    if (/safe.*zone|safezone|parent|child|android.*app|fyp|java|firebase|geofenc|monitoring|control/i.test(q)) {
+      const proj = projectsData.find((p) => p.id === "safezone");
+      return {
+        text: `📱 **SafeZone — Parental Control Android App (FYP):**\n${proj?.description || "High-fidelity Android parental control system."}\n\n**Key Highlights:**\n• Developed as NUML Final Year Project (FYP) team lead\n• Native Android (Java) with **Firebase Realtime Database & Auth**\n• Real-time GPS geofencing & live location tracking\n• Remote lock & app usage screen time schedulers\n• 11 sequential verified UI screens in gallery`,
+        actionLink: { label: "Inspect SafeZone Android App", tab: "Projects" }
+      };
+    }
+
+    // 12. CGPA / EDUCATION / UNIVERSITY / DEGREE
+    if (/cgpa|gpa|marks|grade|numl|university|graduat|degree|academic|education|islamabad|bachelor|study|school|college/i.test(q)) {
+      return {
+        text: `🎓 **Academic Record & High CGPA:**\n• **BS Software Engineering** — National University of Modern Languages (NUML), Islamabad (2022 – 2026)\n• **CGPA**: **${personalInfo.cgpa}** (Exceptional Academic Rigor)\n• **Intermediate (Pre-Engineering)** — Army Public School & College, Gilgit (A Grade)\n\nIjlal maintained top-tier academic excellence with deep foundations in Algorithms, Software Architecture, Machine Learning, and Mobile Systems.`,
+        actionLink: { label: "View Academic Timeline", tab: "About" }
+      };
+    }
+
+    // 13. WORK EXPERIENCE / INTERNSHIPS
+    if (/experience|intern|kartoa|alberuni|work|job|employment|history|career|companies/i.test(q)) {
+      return {
+        text: `💼 **Professional Work Experience:**\n\n• **AI Development Intern @ Kartoa Technologies** (Jan 2026 – Mar 2026)\nEngineered production RAG pipelines, LangGraph multi-agent workflows, and model context optimizations.\n\n• **Requirement Engineering Intern @ NUML × Alberuni Tech** (Aug 2025 – Oct 2025)\nAuthored client SRS/BRD technical documentation and structured Use Case diagrams.\n\n• **Android Developer FYP Lead @ NUML** (Mar 2025 – Dec 2025)\nLed full-cycle architecture and development of the SafeZone parental control mobile app.`,
+        actionLink: { label: "View Experience Timeline", tab: "About" }
+      };
+    }
+
+    // 14. LANGGRAPH / GENERATIVE AI / RAG / LLM
+    if (/langgraph|langchain|rag|agent|generative\s*ai|genai|llm|deepseek|groq|gemini|prompt|model/i.test(q)) {
+      return {
+        text: `⚡ **Generative AI & Agentic Systems Expertise:**\nIjlal has hands-on experience developing advanced AI agent architectures:\n\n• **LangGraph Multi-Agent Workflows**: State graphs, cyclic loops, Human-in-the-Loop checkpointing, and conditional routing\n• **RAG Pipelines**: Dense vector embeddings, sentence-transformers, cosine similarity retrieval, and grounded section citations\n• **Model Orchestration**: Groq Cloud (Llama 3.3, DeepSeek-R1), Google Gemini 2.5 Flash, and OpenAI APIs\n• **AI Microservices**: FastAPI with streaming responses and Pydantic validation filters`,
+        actionLink: { label: "View AI & ML Skillsets", tab: "About" }
+      };
+    }
+
+    // 15. ANDROID / JAVA / MOBILE
+    if (/android|java|mobile|studio|apk|geofence|flutter/i.test(q)) {
+      return {
+        text: `📱 **Android & Mobile Development:**\n• **Native Android**: Java SDK, Android Studio, Activities/Fragments, BroadcastReceivers, Foreground Services\n• **Firebase Suite**: Realtime Database, Cloud Firestore, Authentication, Cloud Messaging\n• **Architecture**: MVC/MVVM patterns, REST API integration, Material Design 3 UI`,
+        actionLink: { label: "View Android Projects", tab: "Projects" }
+      };
+    }
+
+    // 16. WEB & FULL-STACK
+    if (/web|react|typescript|tailwind|node|javascript|frontend|backend|full.*stack|mern/i.test(q)) {
+      return {
+        text: `🌐 **Web & Full-Stack Development:**\n• **Frontend**: React 19, TypeScript, Tailwind CSS v4, Next.js, Motion\n• **Backend**: Node.js, Express, FastAPI, MongoDB, RESTful APIs\n• **Engineering**: PWA, WebP asset optimization, responsive responsive layouts`,
         actionLink: { label: "Explore Detailed Skills Matrix", tab: "About" }
       };
     }
 
-    // Default Fallback
+    // 17. CONTACT / HIRE / RESUME DOWNLOAD
+    if (/contact|hire|email|phone|whatsapp|linkedin|github|reach|call|message|cv|resume|download|available|start/i.test(q)) {
+      return {
+        text: `📬 **Let's Connect & Collaborate!**\n\n• **Email**: ${personalInfo.email}\n• **WhatsApp**: ${personalInfo.phone}\n• **LinkedIn**: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})\n• **Location**: ${personalInfo.location}\n\nIjlal is actively available for AI engineering roles, full-stack development, and internships!`,
+        actionLink: { label: "Open Contact Form", tab: "Contact" }
+      };
+    }
+
+    // 18. GENERAL SKILLS / TOOLBOX
+    if (/skill|stack|technolog|tool|python|fastapi/i.test(q)) {
+      return {
+        text: `🛠️ **Ijlal's Core Engineering Toolbox:**\n\n• **Generative AI & ML**: Python (88%), LangGraph (86%), LangChain & RAG (84%), Prompt Engineering (85%), FastAPI (82%)\n• **Android**: Java SDK (88%), Android Studio (85%), Firebase (84%), Material Design (80%)\n• **Web & Full-Stack**: React 19 & TypeScript (80%), Tailwind CSS (86%), Node & Express (74%), MongoDB (76%)\n• **Software Engineering**: Requirements SRS/BRD (88%), System Design (76%), Git & GitHub (86%)`,
+        actionLink: { label: "Explore Detailed Skills Matrix", tab: "About" }
+      };
+    }
+
+    // 19. DEFAULT FALLBACK
     return {
-      text: `I'm here to help you learn all about **Ijlal Hussain**! 🌟\n\nYou can ask me specific questions like:\n• *"What is his CGPA and degree?"*\n• *"Tell me about ResumeIQ & LangGraph"* \n• *"What did he build for Technical Blog Factory?"*\n• *"What is his Android experience with SafeZone?"*\n• *"What verified certifications does he hold?"*`,
+      text: `I'm here to help you learn all about **Ijlal Hussain**! 🌟\n\nYou can ask me specific questions like:\n• How many projects has he built?\n• What is his CGPA and degree?\n• Tell me about ResumeIQ & LangGraph\n• What certifications does he hold?\n• Where is he from?`,
       actionLink: { label: "View All Projects", tab: "Projects" }
     };
   };
@@ -295,7 +391,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
       setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
-    }, 450);
+    }, 400);
   };
 
   const handleResetChat = () => {
@@ -521,7 +617,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Ask about CGPA, ResumeIQ, LangGraph..."
+                  placeholder="Ask about CGPA, projects, LangGraph, where is he from..."
                   className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-text-main placeholder-text-muted font-sans text-xs focus:outline-none focus:border-cyan-bright focus:ring-1 focus:ring-cyan-bright/50 transition-all"
                 />
 
