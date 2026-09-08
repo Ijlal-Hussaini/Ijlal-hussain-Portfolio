@@ -155,16 +155,39 @@ export default function App() {
       className="min-h-screen bg-bg text-text-main flex flex-col justify-between selection:bg-cyan-glow/30 selection:text-cyan-bright"
     >
       
-      {/* 1. Global Animated Cosmic Neon Orbs background decoration */}
+      {/* 1. Global Animated Cosmic Neon Orbs background decoration (GPU optimized with zero filter blur overhead) */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ transform: "translate3d(0, 0, 0)", contain: "strict" }}>
         {/* Top-Right Purple Aura */}
-        <div className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] sm:w-[50vw] sm:h-[50vw] bg-purple-glow/5 rounded-full blur-[100px] animate-pulse-subtle" style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }} />
+        <div 
+          className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] sm:w-[50vw] sm:h-[50vw] rounded-full animate-pulse-subtle" 
+          style={{ 
+            background: "radial-gradient(circle, rgba(155, 89, 245, 0.12) 0%, rgba(155, 89, 245, 0.04) 45%, transparent 70%)",
+            transform: "translate3d(0,0,0)", 
+            willChange: "opacity" 
+          }} 
+        />
         
         {/* Mid-Left Cyan Aura */}
-        <div className="absolute top-[35%] left-[-20%] w-[80vw] h-[80vw] sm:w-[60vw] sm:h-[60vw] bg-cyan-glow/5 rounded-full blur-[120px] animate-float" style={{ animationDuration: '10s', transform: "translate3d(0,0,0)", willChange: "transform" }} />
+        <div 
+          className="absolute top-[35%] left-[-20%] w-[80vw] h-[80vw] sm:w-[60vw] sm:h-[60vw] rounded-full animate-float" 
+          style={{ 
+            background: "radial-gradient(circle, rgba(0, 212, 255, 0.10) 0%, rgba(0, 212, 255, 0.03) 50%, transparent 70%)",
+            animationDuration: '10s', 
+            transform: "translate3d(0,0,0)", 
+            willChange: "transform" 
+          }} 
+        />
         
         {/* Bottom-Right Dark Indigo Aura */}
-        <div className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] sm:w-[45vw] sm:h-[45vw] bg-purple-bright/5 rounded-full blur-[100px] animate-pulse-subtle" style={{ animationDelay: '2s', transform: "translate3d(0,0,0)", willChange: "transform, opacity" }} />
+        <div 
+          className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] sm:w-[45vw] sm:h-[45vw] rounded-full animate-pulse-subtle" 
+          style={{ 
+            background: "radial-gradient(circle, rgba(185, 128, 255, 0.08) 0%, transparent 70%)",
+            animationDelay: '2s', 
+            transform: "translate3d(0,0,0)", 
+            willChange: "opacity" 
+          }} 
+        />
       </div>
 
       {/* 2. Header component */}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, Briefcase, GraduationCap, Award, Compass, Heart, Languages, Coffee } from "lucide-react";
+import { Download, Briefcase, GraduationCap, Award, Compass, Languages, Coffee } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { personalInfo, skillsData, experienceData, educationData } from "../data";
 
@@ -61,11 +61,8 @@ export default function AboutView() {
     <div id="about-view-container" className="space-y-16 pb-12">
       
       {/* SECTION 1: BIO & CV CTA */}
-      <motion.section
+      <section
         id="about-hero"
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
         className="relative flex flex-col md:flex-row items-start justify-between gap-10"
       >
         <div className="flex-1 space-y-6 text-left">
@@ -74,7 +71,7 @@ export default function AboutView() {
               About the Developer
             </span>
             <h1 className="font-display font-bold text-3xl sm:text-4xl text-text-main">
-              Unifying Code & Cognitive Science
+              Unifying Code &amp; Cognitive Science
             </h1>
           </div>
 
@@ -129,19 +126,15 @@ export default function AboutView() {
             </li>
             <li className="flex justify-between items-center whitespace-nowrap">
               <span className="text-text-muted">Primary Language:</span>
-              <span className="text-text-main font-medium">Urdu & English</span>
+              <span className="text-text-main font-medium">Urdu &amp; English</span>
             </li>
           </ul>
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 2: EXPERIENCE TIMELINE */}
-      <motion.section
+      <section
         id="experience-section"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
         className="space-y-8"
       >
         <div className="text-left space-y-2">
@@ -189,15 +182,11 @@ export default function AboutView() {
             </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 3: EDUCATION TIMELINE */}
-      <motion.section
+      <section
         id="education-section"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
         className="space-y-8"
       >
         <div className="text-left space-y-2">
@@ -235,15 +224,11 @@ export default function AboutView() {
             </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 4: DETAILED SKILLS GRID WITH CATEGORY FILTRATION */}
-      <motion.section
+      <section
         id="skills-section"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
         className="space-y-8"
       >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -276,13 +261,13 @@ export default function AboutView() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[300px]">
           <AnimatePresence mode="popLayout">
-            {filteredSkills.map((cat, idx) => (
+            {filteredSkills.map((cat) => (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.35 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.2 }}
                 key={cat.category}
                 className="glass rounded-2xl p-6 space-y-4 border border-white/5 hover:border-white/15 transition-all"
               >
@@ -307,12 +292,9 @@ export default function AboutView() {
                         </div>
                         {/* Progress Bar */}
                         <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${prof.percent}%` }}
-                            viewport={{ once: false }}
-                            transition={{ duration: 1.2, ease: "easeOut", delay: sIdx * 0.05 }}
-                            className={`h-full rounded-full bg-gradient-to-r ${prof.color}`}
+                          <div
+                            style={{ width: `${prof.percent}%` }}
+                            className={`h-full rounded-full bg-gradient-to-r ${prof.color} transition-all duration-500`}
                           />
                         </div>
                       </div>
@@ -323,15 +305,11 @@ export default function AboutView() {
             ))}
           </AnimatePresence>
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 5: BENTO GRID FUN FACTS */}
-      <motion.section
+      <section
         id="funfacts-section"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
         className="space-y-8"
       >
         <div className="text-center space-y-2 max-w-xl mx-auto">
@@ -339,18 +317,14 @@ export default function AboutView() {
             Personal Spectrum
           </span>
           <h2 className="font-display font-bold text-2xl sm:text-3xl text-text-main">
-            Interests & Characteristics
+            Interests &amp; Characteristics
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {funFacts.map((fact, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08, duration: 0.4 }}
               className="glass rounded-2xl p-6 space-y-4 border border-white/5 text-left hover:border-white/10 transition-all flex flex-col justify-between"
             >
               <div className="p-3 rounded-xl bg-white/5 self-start">
@@ -364,10 +338,10 @@ export default function AboutView() {
                   {fact.text}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 }

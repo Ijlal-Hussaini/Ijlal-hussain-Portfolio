@@ -90,11 +90,11 @@ body {
   background: var(--color-purple-glow);
 }
 
-/* Glassmorphism utilities */
+/* Glassmorphism utilities optimized for 60-120fps mobile scrolling */
 .glass {
-  background: rgba(17, 17, 25, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(17, 17, 25, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 

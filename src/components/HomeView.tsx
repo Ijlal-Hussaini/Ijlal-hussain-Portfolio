@@ -1,18 +1,16 @@
-import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Code, Cpu, Shield, BrainCircuit, ExternalLink, Download, Award, Github } from "lucide-react";
-import { motion, useInView } from "motion/react";
-import { personalInfo, projectsData, skillsData } from "../data";
+import { useState, useEffect, memo } from "react";
+import { ArrowRight, Code, Cpu, BrainCircuit, ExternalLink, Download, Github } from "lucide-react";
+import { personalInfo, projectsData } from "../data";
 
 interface HomeViewProps {
   onNavigate: (tab: string) => void;
 }
 
-export default function HomeView({ onNavigate }: HomeViewProps) {
-  // 1. Typewriter effect variables
+// 1. Isolated Typewriter Component to prevent re-rendering HomeView tree on every keyframe
+const TypewriterHero = memo(function TypewriterHero({ roles }: { roles: string[] }) {
   const [currentText, setCurrentText] = useState("");
   const [roleIndex, setRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const roles = personalInfo.titles;
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -20,26 +18,20 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
     if (!isDeleting) {
       if (currentText === fullText) {
-        // Pause at the end of typing before deleting
-        timer = setTimeout(() => {
-          setIsDeleting(true);
-        }, 2200);
+        timer = setTimeout(() => setIsDeleting(true), 2200);
       } else {
-        // Schedule typing the next character with standard human-like typing speed variation
-        const typingDelay = 70 + Math.random() * 50; 
+        const typingDelay = 70 + Math.random() * 40;
         timer = setTimeout(() => {
           setCurrentText(fullText.substring(0, currentText.length + 1));
         }, typingDelay);
       }
     } else {
       if (currentText === "") {
-        // Pause after deleting before typing the next role
         timer = setTimeout(() => {
           setIsDeleting(false);
           setRoleIndex((prev) => (prev + 1) % roles.length);
         }, 400);
       } else {
-        // Schedule deleting the next character (usually faster than typing)
         timer = setTimeout(() => {
           setCurrentText(currentText.substring(0, currentText.length - 1));
         }, 35);
@@ -49,127 +41,63 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
     return () => clearTimeout(timer);
   }, [currentText, isDeleting, roleIndex, roles]);
 
-  // 2. Animated counters
-  const [cgpa, setCgpa] = useState(0.0);
-  const [projectsCount, setProjectsCount] = useState(0);
-  const [certsCount, setCertsCount] = useState(0);
+  return (
+    <div className="h-8 flex items-center">
+      <span className="font-mono text-sm sm:text-base md:text-lg text-cyan-bright font-medium">
+        {currentText}
+      </span>
+      <span className="w-1.5 h-5 bg-purple-bright ml-1 animate-pulse" />
+    </div>
+  );
+});
+
+export default function HomeView({ onNavigate }: HomeViewProps) {
   const [imageError, setImageError] = useState(false);
-
-  const statsRef = useRef<HTMLDivElement>(null);
-  const isStatsInView = useInView(statsRef, { once: true, amount: 0.15 });
-
-  useEffect(() => {
-    if (isStatsInView) {
-      // Animate CGPA
-      let currentCgpa = 0;
-      const cgpaInterval = setInterval(() => {
-        currentCgpa += 0.12;
-        if (currentCgpa >= 3.96) {
-          setCgpa(3.96);
-          clearInterval(cgpaInterval);
-        } else {
-          setCgpa(parseFloat(currentCgpa.toFixed(2)));
-        }
-      }, 30);
-
-      // Animate Projects
-      let currentProjects = 0;
-      const projInterval = setInterval(() => {
-        currentProjects += 1;
-        if (currentProjects >= 4) {
-          setProjectsCount(4);
-          clearInterval(projInterval);
-        } else {
-          setProjectsCount(currentProjects);
-        }
-      }, 80);
-
-      // Animate Certs
-      let currentCerts = 0;
-      const certsInterval = setInterval(() => {
-        currentCerts += 1;
-        if (currentCerts >= 6) {
-          setCertsCount(6);
-          clearInterval(certsInterval);
-        } else {
-          setCertsCount(currentCerts);
-        }
-      }, 70);
-
-      return () => {
-        clearInterval(cgpaInterval);
-        clearInterval(projInterval);
-        clearInterval(certsInterval);
-      };
-    }
-  }, [isStatsInView]);
 
   // Filter top projects (first 2 for preview)
   const previewProjects = projectsData.slice(0, 2);
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" as const }
-    }
-  };
-
   return (
-    <div id="home-view-container" className="space-y-24 pb-12">
+    <div id="home-view-container" className="space-y-20 sm:space-y-24 pb-12">
       
       {/* SECTION 1: HERO CONTAINER */}
-      <motion.section
+      <section
         id="hero-section"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative pt-10 pb-6 flex flex-col lg:flex-row items-center justify-between gap-12"
+        className="relative pt-6 sm:pt-10 pb-6 flex flex-col lg:flex-row items-center justify-between gap-12"
       >
-        {/* Ambient colored background lights */}
-        <div className="absolute top-10 left-10 w-[300px] h-[300px] bg-cyan-glow/10 blur-[100px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-purple-glow/10 blur-[100px] rounded-full pointer-events-none" />
+        {/* Ambient colored background lights (GPU optimized with radial gradient) */}
+        <div 
+          className="absolute top-10 left-10 w-[300px] h-[300px] rounded-full pointer-events-none" 
+          style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 70%)" }}
+        />
+        <div 
+          className="absolute bottom-10 right-10 w-[300px] h-[300px] rounded-full pointer-events-none" 
+          style={{ background: "radial-gradient(circle, rgba(155, 89, 245, 0.12) 0%, transparent 70%)" }}
+        />
 
         {/* Text Area */}
         <div className="flex-1 space-y-6 text-left relative z-10">
-          <motion.div variants={itemVariants} className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
             <span className="w-2 h-2 rounded-full bg-green-accent animate-pulse-subtle" />
             <span className="font-mono text-[11px] text-text-sub tracking-wider uppercase">
-              Ready for AI & Full-Stack Innovation
+              Ready for AI &amp; Full-Stack Innovation
             </span>
-          </motion.div>
-
-          <div className="space-y-3">
-            <motion.h1 variants={itemVariants} className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-text-main leading-tight tracking-tight">
-              Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-bright to-purple-bright">{personalInfo.name}</span>
-            </motion.h1>
-            
-            {/* Typewriter text wrapper */}
-            <motion.div variants={itemVariants} className="h-8 flex items-center">
-              <span className="font-mono text-sm sm:text-base md:text-lg text-cyan-bright font-medium">
-                {currentText}
-              </span>
-              <span className="w-1.5 h-5 bg-purple-bright ml-1 animate-pulse" />
-            </motion.div>
           </div>
 
-          <motion.p variants={itemVariants} className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed max-w-xl text-justify">
-            {personalInfo.bio}
-          </motion.p>
+          <div className="space-y-3">
+            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-text-main leading-tight tracking-tight">
+              Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-bright to-purple-bright">{personalInfo.name}</span>
+            </h1>
+            
+            {/* Isolated typewriter component */}
+            <TypewriterHero roles={personalInfo.titles} />
+          </div>
 
-          <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-2">
+          <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed max-w-xl text-justify">
+            {personalInfo.bio}
+          </p>
+
+          <div className="flex flex-wrap gap-4 pt-2">
             <button
               id="hero-projects-cta"
               onClick={() => onNavigate("Projects")}
@@ -185,28 +113,28 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             >
               <span>Let's Connect</span>
             </button>
-          </motion.div>
+          </div>
         </div>
 
         {/* Dynamic Holographic Portrait Mockup */}
-        <motion.div
-          variants={itemVariants}
-          className="flex-1 flex justify-center relative z-10"
-        >
+        <div className="flex-1 flex justify-center relative z-10">
           <div className="relative w-72 h-72 sm:w-85 sm:h-85 aspect-square">
             {/* Rotating Outer Tech Circles */}
             <div className="absolute inset-0 rounded-full border border-dashed border-cyan-glow/20 animate-spin-slow pointer-events-none" />
             <div className="absolute -inset-4 rounded-full border border-dashed border-purple-glow/15 animate-reverse-spin pointer-events-none" style={{ animationDuration: '25s' }} />
 
             {/* Subtle premium ambient background glow */}
-            <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-cyan-glow/10 via-purple-glow/10 to-transparent blur-2xl animate-pulse-subtle pointer-events-none" />
+            <div 
+              className="absolute inset-4 rounded-full pointer-events-none" 
+              style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, rgba(155, 89, 245, 0.12) 40%, transparent 70%)" }}
+            />
 
             {/* Profile Avatar Container: Premium Minimalist Circular Frame */}
             <div className="absolute inset-4 rounded-full overflow-hidden bg-gradient-to-b from-white/10 to-white/5 border border-white/10 shadow-2xl p-1 group">
               <div className="relative w-full h-full rounded-full overflow-hidden bg-card flex flex-col items-center justify-center">
                 {personalInfo.photoUrl && !imageError ? (
                   <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                    {/* Real Profile Image - customized object position with instant webp load & full headroom */}
+                    {/* Real Profile Image */}
                     <picture className="w-full h-full">
                       <source srcSet="/assets/images/profile_photo.webp" type="image/webp" />
                       <img
@@ -227,7 +155,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                     {/* Minimalist Premium Dark Vignette */}
                     <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent opacity-60 pointer-events-none" />
 
-                    {/* Clean Minimal Floating Tag - perfectly centered along the bottom circle curvature */}
+                    {/* Clean Minimal Floating Tag */}
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-bg/85 backdrop-blur-md border border-white/10 z-10 text-center shadow-xl whitespace-nowrap pointer-events-none">
                       <span className="block font-display font-bold text-text-main text-[11px] sm:text-xs tracking-wider uppercase">
                         {personalInfo.name}
@@ -236,10 +164,6 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   </div>
                 ) : (
                   <div className="relative w-full h-full flex flex-col items-center justify-center space-y-4">
-                    {/* Visual sci-fi grid overlay */}
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(0,212,255,0.15),rgba(255,255,255,0))]" />
-                    
-                    {/* Floating Central Core Visual */}
                     <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-cyan-bright to-purple-bright p-[1.5px] shadow-lg shadow-purple-glow/20 animate-float">
                       <div className="w-full h-full bg-card rounded-full flex items-center justify-center overflow-hidden">
                         <span className="font-display font-extrabold text-3xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-bright to-purple-bright">
@@ -256,40 +180,31 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                         SYSTEMS ARCHITECT
                       </span>
                     </div>
-
-                    {/* Micro tech indicators */}
-                    <div className="flex space-x-2 font-mono text-[8px] text-text-muted">
-                      <span className="px-1.5 py-0.5 rounded bg-white/5 uppercase">RAG ENG</span>
-                      <span className="px-1.5 py-0.5 rounded bg-white/5 uppercase">MERN</span>
-                      <span className="px-1.5 py-0.5 rounded bg-white/5 uppercase">NATIVE ANDROID</span>
-                    </div>
                   </div>
                 )}
               </div>
             </div>
           </div>
-        </motion.div>
-      </motion.section>
+        </div>
+      </section>
 
       {/* SECTION 2: STATS SUMMARY GRID */}
-      <motion.section
+      <section
         id="stats-section"
-        ref={statsRef}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
         className="relative z-10"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* CGPA */}
           <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/20 transition-all">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-glow/5 rounded-full blur-xl pointer-events-none" />
+            <div 
+              className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
+              style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%)" }}
+            />
             <div className="inline-flex p-3 rounded-xl bg-cyan-glow/10 text-cyan-bright mb-1">
               <Code className="w-5 h-5" />
             </div>
             <span className="block font-display font-bold text-4xl text-text-main text-glow-cyan">
-              {cgpa.toFixed(2)}
+              3.96
             </span>
             <span className="block font-sans text-xs text-text-sub font-semibold">
               NUML University CGPA
@@ -301,47 +216,49 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
           {/* PROJECTS */}
           <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/20 transition-all">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-purple-glow/5 rounded-full blur-xl pointer-events-none" />
+            <div 
+              className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
+              style={{ background: "radial-gradient(circle, rgba(155, 89, 245, 0.15) 0%, transparent 70%)" }}
+            />
             <div className="inline-flex p-3 rounded-xl bg-purple-glow/10 text-purple-bright mb-1">
               <BrainCircuit className="w-5 h-5" />
             </div>
             <span className="block font-display font-bold text-4xl text-text-main text-glow-purple">
-              {projectsCount}+
+              4+
             </span>
             <span className="block font-sans text-xs text-text-sub font-semibold">
               Engineered Applications
             </span>
             <span className="block font-mono text-[10px] text-text-muted">
-              Fully Autonomous AI, Mobile, & Web
+              Autonomous AI, Mobile &amp; Web
             </span>
           </div>
 
           {/* CERTIFICATIONS */}
           <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/20 transition-all">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-green-accent/5 rounded-full blur-xl pointer-events-none" />
+            <div 
+              className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
+              style={{ background: "radial-gradient(circle, rgba(0, 214, 143, 0.15) 0%, transparent 70%)" }}
+            />
             <div className="inline-flex p-3 rounded-xl bg-green-accent/10 text-green-accent mb-1">
-              <Award className="w-5 h-5" />
+              <Cpu className="w-5 h-5" />
             </div>
-            <span className="block font-display font-bold text-4xl text-text-main">
-              {certsCount}
+            <span className="block font-display font-bold text-4xl text-text-main" style={{ textShadow: "0 0 10px rgba(0, 214, 143, 0.4)" }}>
+              6
             </span>
             <span className="block font-sans text-xs text-text-sub font-semibold">
-              Professional Accreditations
+              Verified Industry Certifications
             </span>
             <span className="block font-mono text-[10px] text-text-muted">
-              NAVTTC, Cisco, Kartoa, DigiSkills
+              DeepLearning.AI, Stanford, Google, Meta
             </span>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 3: CORE CAPABILITIES OVERVIEW */}
-      <motion.section
+      <section
         id="capabilities-section"
-        initial={{ opacity: 0, y: 35 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.7 }}
         className="space-y-8 relative z-10"
       >
         <div className="text-center space-y-2 max-w-xl mx-auto">
@@ -362,7 +279,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               <BrainCircuit className="w-6 h-6" />
             </div>
             <h3 className="font-display font-semibold text-base text-text-main">
-              Generative AI & Agentic Systems
+              Generative AI &amp; Agentic Systems
             </h3>
             <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Constructing autonomous AI workflows using <strong className="text-text-main font-semibold">LangChain</strong> and <strong className="text-text-main font-semibold">LangGraph</strong>, designing RAG pipelines, LLM fine-tuning schemas, and prompt orchestration templates.
@@ -393,15 +310,11 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </p>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 4: QUICK WORK SHOWCASE */}
-      <motion.section
+      <section
         id="showcase-section"
-        initial={{ opacity: 0, y: 35 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.7 }}
         className="space-y-8 relative z-10"
       >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -423,13 +336,9 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {previewProjects.map((project, idx) => (
-            <motion.div
+          {previewProjects.map((project) => (
+            <div
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
               className="glass rounded-2xl p-6 flex flex-col justify-between space-y-6 hover:border-white/15 transition-all group"
             >
               <div className="space-y-4">
@@ -492,23 +401,25 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* SECTION 5: CRAFT QUOTE BANNER */}
-      <motion.section
+      <section
         id="quote-section"
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.7 }}
         className="relative z-10"
       >
         <div className="glass rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6 relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-br from-bg2 to-bg3">
-          <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-glow/5 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-glow/5 rounded-full blur-2xl pointer-events-none" />
+          <div 
+            className="absolute top-0 left-0 w-32 h-32 rounded-full pointer-events-none" 
+            style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 70%)" }}
+          />
+          <div 
+            className="absolute bottom-0 right-0 w-32 h-32 rounded-full pointer-events-none" 
+            style={{ background: "radial-gradient(circle, rgba(155, 89, 245, 0.12) 0%, transparent 70%)" }}
+          />
 
           <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mx-auto text-cyan-bright text-2xl font-serif">
             “
@@ -525,8 +436,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span className="block text-text-muted">Software Engineer · NUML Graduate</span>
           </div>
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 }
-
