@@ -537,7 +537,7 @@ export const educationData: Education[] = [
     grade: "Grade B (62%)"
   },
   {
-    degree: "Matriculation (Medical Sciences)",
+    degree: "Matriculation (General Science)",
     institution: "Vision Higher Secondary School, Danyore Gilgit",
     period: "Apr 2016 – Jun 2018",
     grade: "Grade A (78%)"

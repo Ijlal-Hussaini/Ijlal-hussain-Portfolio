@@ -341,7 +341,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("where is he graduated")
     ) {
       return {
-        text: `🎓 **University & Academic Distinction:**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** with a **Bachelor of Science in Software Engineering (BS SE)** [2022 – 2026], achieving an outstanding **${personalInfo.cgpa} CGPA**.\n\n• **BS Software Engineering**: NUML Islamabad (3.96 / 4.0 CGPA)\n• **Intermediate (Computer Science)**: Govt Boys Degree College, Danyore Gilgit (Grade B)\n• **Matriculation (Medical Sciences)**: Vision Higher Secondary School, Danyore Gilgit (Grade A)`,
+        text: `🎓 **University & Academic Distinction:**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** with a **Bachelor of Science in Software Engineering (BS SE)** [2022 – 2026], achieving an outstanding **${personalInfo.cgpa} CGPA**.\n\n• **BS Software Engineering**: NUML Islamabad (3.96 / 4.0 CGPA)\n• **Intermediate (Computer Science)**: Govt Boys Degree College, Danyore Gilgit (Grade B)\n• **Matriculation (General Science)**: Vision Higher Secondary School, Danyore Gilgit (Grade A)`,
         actionLink: { label: "View Academic Timeline", tab: "About" }
       };
     }
