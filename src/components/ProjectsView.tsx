@@ -317,6 +317,7 @@ export default function ProjectsView() {
       )}
 
       {/* PROJECT FULL DETAILS & SEQUENTIAL GALLERY MODAL */}
+      {/* HIGH FIDELITY PROJECT INSPECTOR MODAL */}
       {createPortal(
         <AnimatePresence>
           {selectedProject && (
@@ -324,28 +325,30 @@ export default function ProjectsView() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md"
-              style={{ zIndex: 99999 }}
+              transition={{ duration: 0.18 }}
+              className="fixed inset-0 z-[100000] overflow-y-auto bg-black/90 backdrop-blur-sm p-3 sm:p-6"
               onClick={() => setSelectedProject(null)}
               role="dialog"
               aria-modal="true"
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                transition={{ type: "spring", damping: 25, stiffness: 350 }}
-                className="w-full max-w-4xl max-h-[90vh] bg-card rounded-3xl p-6 sm:p-8 space-y-8 overflow-y-auto border border-white/10 shadow-2xl relative text-left"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Close Trigger */}
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/5 text-text-sub hover:text-text-main hover:bg-white/10 transition-colors cursor-pointer"
-                  aria-label="Close modal"
+              <div className="min-h-full flex items-start sm:items-center justify-center py-2 sm:py-6">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  style={{ willChange: "transform, opacity" }}
+                  className="w-full max-w-4xl bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-8 border border-white/10 shadow-2xl relative text-left my-auto"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <X className="w-5 h-5" />
-                </button>
+                  {/* Close Trigger */}
+                  <button
+                    onClick={() => setSelectedProject(null)}
+                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/10 text-text-main hover:bg-white/20 transition-colors cursor-pointer z-10"
+                    aria-label="Close modal"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
 
                 {/* MODAL HEADER */}
                 <div className="space-y-3 pr-8">
@@ -487,11 +490,12 @@ export default function ProjectsView() {
                   </div>
                 </div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>,
+      document.body
+    )}
 
       {/* LIGHTBOX FULLSCREEN IMAGE CAROUSEL MODAL (Sequences 1, 2, 3...) */}
       {createPortal(

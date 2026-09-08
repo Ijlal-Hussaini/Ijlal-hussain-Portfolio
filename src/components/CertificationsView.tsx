@@ -229,32 +229,48 @@ export default function CertificationsView() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md overflow-y-auto"
-              style={{ zIndex: 99999 }}
+              transition={{ duration: 0.18 }}
+              className="fixed inset-0 z-[100000] overflow-y-auto bg-black/90 backdrop-blur-sm p-3 sm:p-6"
               onClick={() => setSelectedCert(null)}
               role="dialog"
               aria-modal="true"
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                transition={{ type: "spring", damping: 25, stiffness: 350 }}
-                className="w-full max-w-4xl bg-card rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Header backdrop color strip */}
-                <div className="h-2 bg-gradient-to-r from-cyan-glow via-purple-glow to-green-accent" />
+              <div className="min-h-full flex items-start sm:items-center justify-center py-2 sm:py-6">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  style={{ willChange: "transform, opacity" }}
+                  className="w-full max-w-4xl bg-card rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative my-auto"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Header backdrop color strip */}
+                  <div className="h-2 bg-gradient-to-r from-cyan-glow via-purple-glow to-green-accent" />
 
-                <div className="p-6 sm:p-8 space-y-6">
-                  {/* Close trigger */}
-                  <button
-                    onClick={() => setSelectedCert(null)}
-                    className="absolute top-4 right-4 p-2 rounded-lg bg-white/5 text-text-sub hover:text-text-main hover:bg-white/10 transition-colors cursor-pointer z-10"
-                    aria-label="Close verification panel"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+                  {/* Mobile Header with prominent Close (X) button */}
+                  <div className="flex items-center justify-between px-4 py-3 sm:hidden border-b border-white/10 bg-white/[0.02]">
+                    <span className="font-mono text-[10px] text-cyan-bright font-bold uppercase tracking-wider">
+                      Certificate Verification
+                    </span>
+                    <button
+                      onClick={() => setSelectedCert(null)}
+                      className="p-1.5 rounded-lg bg-white/10 text-text-main hover:bg-white/20 transition-colors cursor-pointer"
+                      aria-label="Close verification panel"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="p-4 sm:p-8 space-y-6 relative">
+                    {/* Desktop Close trigger */}
+                    <button
+                      onClick={() => setSelectedCert(null)}
+                      className="hidden sm:flex absolute top-4 right-4 p-2 rounded-lg bg-white/5 text-text-sub hover:text-text-main hover:bg-white/10 transition-colors cursor-pointer z-10 items-center justify-center"
+                      aria-label="Close verification panel"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
 
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-stretch">
                     {/* Left Column: Certificate Image Preview */}
@@ -407,11 +423,12 @@ export default function CertificationsView() {
                   </div>
                 </div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>,
+      document.body
+    )}
 
       {/* FULL SCREEN LIGHTBOX ZOOM MODAL */}
       {createPortal(

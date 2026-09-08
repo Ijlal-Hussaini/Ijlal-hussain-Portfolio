@@ -244,7 +244,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 4. GRATITUDE & CLOSING ("thanks", "thank you", "great", "awesome", "bye", "goodbye")
     if (/^(thank|thanks|thank\s+you|appreciate|awesome|great|cool|goodbye|bye)(\s|$)/i.test(cleanWords)) {
       return {
-        text: `You're very welcome! 😊 If you have any more questions or would like to collaborate with Ijlal, feel free to reach out directly through the contact section!`,
+        text: `You're very welcome! 😊 If you have any more questions or would like to get in touch with Ijlal, feel free to reach out directly through the contact section!`,
         actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
@@ -393,7 +393,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 20. CONTACT / HIRE / RESUME DOWNLOAD
     if (/contact|hire|email|phone|whatsapp|linkedin|github|reach|call|message|cv|resume|download|available|start|job/i.test(cleanWords)) {
       return {
-        text: `📬 **Let's Connect & Collaborate!**\n\n• **Email**: ${personalInfo.email}\n• **WhatsApp**: ${personalInfo.phone}\n• **LinkedIn**: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})\n• **Location**: ${personalInfo.location}\n\nIjlal is actively available for AI engineering roles, full-stack development, and internships!`,
+        text: `📬 **Let's Connect!**\n\n• **Email**: ${personalInfo.email}\n• **WhatsApp**: ${personalInfo.phone}\n• **LinkedIn**: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})\n• **Location**: ${personalInfo.location}\n\nIjlal is actively available for AI engineering roles, full-stack development, and internships!`,
         actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
