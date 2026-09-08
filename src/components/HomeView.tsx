@@ -56,15 +56,10 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
   const [imageError, setImageError] = useState(false);
 
   const statsRef = useRef<HTMLDivElement>(null);
-  const isStatsInView = useInView(statsRef, { once: false, amount: 0.15 });
+  const isStatsInView = useInView(statsRef, { once: true, amount: 0.15 });
 
   useEffect(() => {
     if (isStatsInView) {
-      // Always reset to 0 upon entry to trigger fresh animation
-      setCgpa(0);
-      setProjectsCount(0);
-      setCertsCount(0);
-
       // Animate CGPA
       let currentCgpa = 0;
       const cgpaInterval = setInterval(() => {
@@ -87,7 +82,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         } else {
           setProjectsCount(currentProjects);
         }
-      }, 100);
+      }, 80);
 
       // Animate Certs
       let currentCerts = 0;
@@ -99,18 +94,13 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         } else {
           setCertsCount(currentCerts);
         }
-      }, 80);
+      }, 70);
 
       return () => {
         clearInterval(cgpaInterval);
         clearInterval(projInterval);
         clearInterval(certsInterval);
       };
-    } else {
-      // Safely reset values to 0 when scrolled out of view
-      setCgpa(0);
-      setProjectsCount(0);
-      setCertsCount(0);
     }
   }, [isStatsInView]);
 

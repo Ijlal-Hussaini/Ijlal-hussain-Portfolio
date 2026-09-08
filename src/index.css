@@ -53,12 +53,16 @@ html {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
   color: var(--color-text-main);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Enhanced typography justification */

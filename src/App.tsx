@@ -61,17 +61,20 @@ export default function App() {
     };
   }, []);
 
-  // Monitor page scroll to toggle the scroll-to-top button
+  // Monitor page scroll to toggle the scroll-to-top button with 60fps requestAnimationFrame throttling
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      if (window.scrollY > 400) {
-        setIsScrollVisible(true);
-      } else {
-        setIsScrollVisible(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrollVisible(window.scrollY > 400);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -154,15 +157,15 @@ export default function App() {
     >
       
       {/* 1. Global Animated Cosmic Neon Orbs background decoration */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" style={{ transform: "translate3d(0, 0, 0)", contain: "strict" }}>
         {/* Top-Right Purple Aura */}
-        <div className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] sm:w-[50vw] sm:h-[50vw] bg-purple-glow/5 rounded-full blur-[120px] animate-pulse-subtle" />
+        <div className="absolute top-[-20%] right-[-10%] w-[80vw] h-[80vw] sm:w-[50vw] sm:h-[50vw] bg-purple-glow/5 rounded-full blur-[100px] animate-pulse-subtle" style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }} />
         
         {/* Mid-Left Cyan Aura */}
-        <div className="absolute top-[35%] left-[-20%] w-[80vw] h-[80vw] sm:w-[60vw] sm:h-[60vw] bg-cyan-glow/5 rounded-full blur-[140px] animate-float" style={{ animationDuration: '10s' }} />
+        <div className="absolute top-[35%] left-[-20%] w-[80vw] h-[80vw] sm:w-[60vw] sm:h-[60vw] bg-cyan-glow/5 rounded-full blur-[120px] animate-float" style={{ animationDuration: '10s', transform: "translate3d(0,0,0)", willChange: "transform" }} />
         
         {/* Bottom-Right Dark Indigo Aura */}
-        <div className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] sm:w-[45vw] sm:h-[45vw] bg-purple-bright/5 rounded-full blur-[110px] animate-pulse-subtle" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] sm:w-[45vw] sm:h-[45vw] bg-purple-bright/5 rounded-full blur-[100px] animate-pulse-subtle" style={{ animationDelay: '2s', transform: "translate3d(0,0,0)", willChange: "transform, opacity" }} />
       </div>
 
       {/* 2. Header component */}
