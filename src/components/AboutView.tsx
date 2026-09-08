@@ -96,6 +96,8 @@ export default function AboutView() {
             id="download-cv-about"
             href={personalInfo.resumeUrl || "/Ijlal_Hussain_CV.pdf"}
             download="Ijlal_Hussain_CV.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 font-sans font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-glow/10 hover:opacity-90 transition-all btn-glow-purple cursor-pointer decoration-none"
           >
             <Download className="w-4 h-4" />

@@ -187,6 +187,8 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                 id="resume-btn-header"
                 href={personalInfo.resumeUrl || "/Ijlal_Hussain_CV.pdf"}
                 download="Ijlal_Hussain_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 font-sans font-semibold text-xs tracking-wide uppercase transition-all duration-300 hover:opacity-90 btn-glow-cyan shadow-lg shadow-cyan-glow/10"
               >
                 <FileText className="w-4 h-4" />
@@ -213,6 +215,8 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
               id="resume-btn-mobile-head"
               href={personalInfo.resumeUrl || "/Ijlal_Hussain_CV.pdf"}
               download="Ijlal_Hussain_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="p-2 rounded-lg bg-white/5 text-cyan-bright hover:bg-white/10 transition-colors"
               title="Download Resume"
             >
@@ -333,6 +337,8 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                     id="resume-btn-drawer"
                     href={personalInfo.resumeUrl || "/Ijlal_Hussain_CV.pdf"}
                     download="Ijlal_Hussain_CV.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 font-sans font-bold text-xs uppercase tracking-wide transition-all duration-300 shadow-md shadow-cyan-glow/15"
                   >
                     <FileText className="w-4 h-4" />

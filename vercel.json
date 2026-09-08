@@ -1,7 +1,52 @@
 {
+  "headers": [
+    {
+      "source": "/Ijlal_Hussain_CV.pdf",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"Ijlal_Hussain_CV.pdf\""
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/downloads/SafeZone.apk",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/vnd.android.package-archive"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment; filename=\"SafeZone.apk\""
+        }
+      ]
+    },
+    {
+      "source": "/(og_preview.png|assets/images/og_preview.png)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/png"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, immutable"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|downloads/|icons/|favicon|og_preview|Ijlal_Hussain_CV|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
