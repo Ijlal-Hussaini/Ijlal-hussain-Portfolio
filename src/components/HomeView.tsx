@@ -268,18 +268,20 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </motion.div>
       </motion.section>
 
-      {/* SECTION 2: STATS SUMMARY GRID */}
-      <motion.section
+      {/* SECTION 2: STATS SUMMARY GRID (Gradual Staggered Reveal) */}
+      <section
         id="stats-section"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative z-10"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* CGPA */}
-          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/30 hover:-translate-y-1 transition-all duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.05, ease: [0.25, 1, 0.5, 1] }}
+            className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/30 hover:-translate-y-1.5 transition-all duration-300"
+          >
             <div 
               className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
               style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%)" }}
@@ -296,10 +298,16 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span className="block font-mono text-[10px] text-text-muted">
               First Class Honors (Academic Limit 4.0)
             </span>
-          </div>
+          </motion.div>
 
           {/* PROJECTS */}
-          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/30 hover:-translate-y-1 transition-all duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
+            className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/30 hover:-translate-y-1.5 transition-all duration-300"
+          >
             <div 
               className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
               style={{ background: "radial-gradient(circle, rgba(155, 89, 245, 0.15) 0%, transparent 70%)" }}
@@ -316,10 +324,16 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span className="block font-mono text-[10px] text-text-muted">
               Autonomous AI, Mobile &amp; Web
             </span>
-          </div>
+          </motion.div>
 
           {/* CERTIFICATIONS */}
-          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/30 hover:-translate-y-1 transition-all duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.25, ease: [0.25, 1, 0.5, 1] }}
+            className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/30 hover:-translate-y-1.5 transition-all duration-300"
+          >
             <div 
               className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
               style={{ background: "radial-gradient(circle, rgba(0, 214, 143, 0.15) 0%, transparent 70%)" }}
@@ -336,20 +350,22 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span className="block font-mono text-[10px] text-text-muted">
               DeepLearning.AI, Stanford, Google, Meta
             </span>
-          </div>
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* SECTION 3: CORE CAPABILITIES OVERVIEW */}
-      <motion.section
+      {/* SECTION 3: CORE CAPABILITIES OVERVIEW (Staggered Scroll Entrance) */}
+      <section
         id="capabilities-section"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8 relative z-10"
       >
-        <div className="text-center space-y-2 max-w-xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="text-center space-y-2 max-w-xl mx-auto"
+        >
           <span className="font-mono text-xs text-cyan-bright uppercase tracking-wider">
             Specialized Horizons
           </span>
@@ -359,10 +375,16 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <p className="font-sans text-xs sm:text-sm text-text-muted leading-relaxed">
             Targeting the intersection of intelligence, fluid mobile native systems, and durable backends.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.08, ease: [0.25, 1, 0.5, 1] }}
+            className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300"
+          >
             <div className="w-12 h-12 rounded-xl bg-cyan-glow/10 flex items-center justify-center text-cyan-bright">
               <BrainCircuit className="w-6 h-6" />
             </div>
@@ -372,9 +394,15 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Constructing autonomous AI workflows using <strong className="text-text-main font-semibold">LangChain</strong> and <strong className="text-text-main font-semibold">LangGraph</strong>, designing RAG pipelines, LLM fine-tuning schemas, and prompt orchestration templates.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.18, ease: [0.25, 1, 0.5, 1] }}
+            className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300"
+          >
             <div className="w-12 h-12 rounded-xl bg-purple-glow/10 flex items-center justify-center text-purple-bright">
               <Code className="w-6 h-6" />
             </div>
@@ -384,9 +412,15 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Writing scalable web backends with <strong className="text-text-main font-semibold">Node.js</strong> and <strong className="text-text-main font-semibold">Express.js</strong>, modeling flexible unstructured schemas in <strong className="text-text-main font-semibold">MongoDB</strong>, and developing smooth responsive React UI interfaces.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.28, ease: [0.25, 1, 0.5, 1] }}
+            className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300"
+          >
             <div className="w-12 h-12 rounded-xl bg-green-accent/10 flex items-center justify-center text-green-accent">
               <Cpu className="w-6 h-6" />
             </div>
@@ -396,20 +430,22 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <p className="font-sans text-xs text-text-sub leading-relaxed text-justify">
               Developing highly integrated Android client apps in <strong className="text-text-main font-semibold">Java</strong> and <strong className="text-text-main font-semibold">Flutter</strong> utilizing modern UI principles, background service tracking, and offline persistence.
             </p>
-          </div>
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* SECTION 4: QUICK WORK SHOWCASE */}
-      <motion.section
+      {/* SECTION 4: QUICK WORK SHOWCASE (Staggered Project Cards) */}
+      <section
         id="showcase-section"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8 relative z-10"
       >
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4"
+        >
           <div className="text-left space-y-2">
             <span className="font-mono text-xs text-purple-bright uppercase tracking-wider">
               Selected Showcase
@@ -425,17 +461,17 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span>See All Project Specifications</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {previewProjects.map((project, idx) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="glass rounded-2xl p-6 flex flex-col justify-between space-y-6 hover:border-cyan-bright/20 hover:-translate-y-1 transition-all duration-300 group"
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 0.5, delay: idx * 0.15, ease: [0.25, 1, 0.5, 1] }}
+              className="glass rounded-2xl p-6 flex flex-col justify-between space-y-6 hover:border-cyan-bright/30 hover:-translate-y-1.5 transition-all duration-300 group"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -500,18 +536,20 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </motion.div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
-      {/* SECTION 5: CRAFT QUOTE BANNER */}
-      <motion.section
+      {/* SECTION 5: CRAFT QUOTE BANNER (Smooth Scale & Fade) */}
+      <section
         id="quote-section"
-        initial={{ opacity: 0, scale: 0.97 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative z-10"
       >
-        <div className="glass rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6 relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-br from-bg2 to-bg3">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="glass rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6 relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-br from-bg2 to-bg3"
+        >
           <div 
             className="absolute top-0 left-0 w-32 h-32 rounded-full pointer-events-none" 
             style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 70%)" }}
@@ -535,8 +573,8 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span className="block text-text-main font-semibold">Ijlal Hussain</span>
             <span className="block text-text-muted">Software Engineer · NUML Graduate</span>
           </div>
-        </div>
-      </motion.section>
+        </motion.div>
+      </section>
     </div>
   );
 }

@@ -319,13 +319,13 @@ export default function AboutView() {
                             {prof.label}
                           </span>
                         </div>
-                        {/* Progress Bar with smooth dynamic fill */}
+                        {/* Progress Bar with smooth, gradual dynamic fill */}
                         <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
                           <motion.div
                             initial={{ width: 0 }}
                             whileInView={{ width: `${prof.percent}%` }}
                             viewport={{ amount: 0.2 }}
-                            transition={{ duration: 0.8, ease: "easeOut", delay: sIdx * 0.03 }}
+                            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: sIdx * 0.08 }}
                             className={`h-full rounded-full bg-gradient-to-r ${prof.color}`}
                           />
                         </div>
