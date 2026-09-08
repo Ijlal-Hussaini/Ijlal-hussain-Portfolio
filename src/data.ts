@@ -202,7 +202,7 @@ export const projectsData: Project[] = [
     demo: "/downloads/SafeZone.apk",
     description: "Safe Zone is a complete high-fidelity parental control Android system designed to curate a safer digital space for children. Developed as my Final Year Project (FYP) at NUML, the system splits into a parent dashboard and a child monitor, synchronizing instantly using Firebase cloud endpoints.",
     imageUrl: "SafeZone",
-    coverImage: "/assets/projects/SafeZone/02_Parent_Dashboard.jpeg",
+    coverImage: "/assets/projects/SafeZone/01_Login_Signup.jpeg",
     images: [
       {
         seq: 1,
