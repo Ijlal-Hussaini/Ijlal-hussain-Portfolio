@@ -64,7 +64,7 @@ const StatCounter = memo(function StatCounter({
 }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { amount: "some" });
+  const isInView = useInView(ref, { amount: 0.3, margin: "0px 0px -40px 0px" });
 
   useEffect(() => {
     if (!isInView) {
@@ -278,7 +278,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: "some" }}
+            viewport={{ amount: 0.3, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.05, ease: [0.25, 1, 0.5, 1] }}
             className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/30 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -304,7 +304,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: "some" }}
+            viewport={{ amount: 0.3, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
             className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/30 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -330,7 +330,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: "some" }}
+            viewport={{ amount: 0.3, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.25, ease: [0.25, 1, 0.5, 1] }}
             className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/30 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -362,7 +362,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ amount: 0.2 }}
+          viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
           transition={{ duration: 0.5 }}
           className="text-center space-y-2 max-w-xl mx-auto"
         >
@@ -381,7 +381,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
+            viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.08, ease: [0.25, 1, 0.5, 1] }}
             className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -399,7 +399,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
+            viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.18, ease: [0.25, 1, 0.5, 1] }}
             className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -417,7 +417,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
+            viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
             transition={{ duration: 0.5, delay: 0.28, ease: [0.25, 1, 0.5, 1] }}
             className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300"
           >
@@ -442,7 +442,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ amount: 0.2 }}
+          viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
           transition={{ duration: 0.5 }}
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-4"
         >
@@ -469,7 +469,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.2 }}
+              viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
               transition={{ duration: 0.5, delay: idx * 0.15, ease: [0.25, 1, 0.5, 1] }}
               className="glass rounded-2xl p-6 flex flex-col justify-between space-y-6 hover:border-cyan-bright/30 hover:-translate-y-1.5 transition-all duration-300 group"
             >
@@ -546,7 +546,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ amount: 0.2 }}
+          viewport={{ amount: 0.25, margin: "0px 0px -40px 0px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="glass rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6 relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-br from-bg2 to-bg3"
         >
