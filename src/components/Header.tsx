@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Github, Linkedin, Mail, FileText, Sun, Moon } from "lucide-react";
+import { Menu, X, Github, Linkedin, Mail, FileText, Sun, Moon, DownloadCloud } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { personalInfo } from "../data";
 import WhatsAppIcon from "./WhatsAppIcon";
@@ -182,6 +182,19 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                 <WhatsAppIcon className="w-5 h-5" />
               </a>
 
+              {/* Install App Button */}
+              <button
+                id="header-install-app"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent("trigger-pwa-install"));
+                }}
+                className="hidden xl:inline-flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-cyan-bright border border-white/10 text-xs font-sans font-semibold transition-all cursor-pointer shadow-sm hover:border-cyan-bright/30"
+                title="Install Portfolio App on Desktop or Android"
+              >
+                <DownloadCloud className="w-3.5 h-3.5" />
+                <span>Install App</span>
+              </button>
+
               {/* Resume Button */}
               <a
                 id="resume-btn-header"
@@ -331,8 +344,8 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                   ))}
                 </div>
 
-                {/* CV Button in Drawer */}
-                <div className="pt-2">
+                {/* CV & Install Buttons in Drawer */}
+                <div className="pt-2 space-y-2">
                   <a
                     id="resume-btn-drawer"
                     href={personalInfo.resumeUrl || "/Ijlal_Hussain_CV.pdf"}
@@ -344,6 +357,17 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                     <FileText className="w-4 h-4" />
                     <span>Download CV (PDF)</span>
                   </a>
+
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      window.dispatchEvent(new CustomEvent("trigger-pwa-install"));
+                    }}
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-cyan-bright border border-white/10 text-xs font-sans font-semibold transition-all cursor-pointer shadow-sm"
+                  >
+                    <DownloadCloud className="w-4 h-4" />
+                    <span>Install to Desktop / Phone</span>
+                  </button>
                 </div>
               </div>
 
