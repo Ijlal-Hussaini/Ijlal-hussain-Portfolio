@@ -338,13 +338,13 @@ export default function ProjectsView() {
                   exit={{ opacity: 0, scale: 0.95, y: 15 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
                   style={{ willChange: "transform, opacity" }}
-                  className="w-full max-w-4xl bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-8 border border-white/10 shadow-2xl relative text-left my-auto"
+                  className="w-full max-w-4xl bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 space-y-8 border border-white/10 shadow-2xl relative text-left my-auto text-text-main"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {/* Close Trigger */}
                   <button
                     onClick={() => setSelectedProject(null)}
-                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/10 text-text-main hover:bg-white/20 transition-colors cursor-pointer z-10"
+                    className="absolute top-4 right-4 p-2.5 rounded-xl bg-card2 hover:bg-card text-text-main border border-white/10 transition-colors cursor-pointer z-10 shadow-sm"
                     aria-label="Close modal"
                   >
                     <X className="w-5 h-5" />
@@ -352,14 +352,14 @@ export default function ProjectsView() {
 
                 {/* MODAL HEADER */}
                 <div className="space-y-3 pr-8">
-                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-glow/10 text-cyan-bright text-xs font-mono font-bold uppercase tracking-wider">
+                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-bright/10 text-cyan-bright text-xs font-mono font-bold uppercase tracking-wider border border-cyan-bright/20">
                     {getCategoryIcon(selectedProject.category)}
                     <span>{selectedProject.category} Project</span>
                   </div>
                   <h2 className="font-display font-bold text-2xl sm:text-3xl text-text-main">
                     {selectedProject.title}
                   </h2>
-                  <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed border-l-2 border-cyan-bright pl-4 py-1 bg-white/[0.02] text-justify">
+                  <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed border-l-2 border-cyan-bright pl-4 py-2 bg-card2/50 rounded-r-xl text-justify">
                     {selectedProject.description}
                   </p>
                 </div>
@@ -388,15 +388,15 @@ export default function ProjectsView() {
                       <div
                         key={img.seq}
                         onClick={() => setActiveImageIndex(idx)}
-                        className="group relative cursor-pointer bg-slate-900 rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-bright transition-all duration-300 shadow-md flex flex-col justify-between"
+                        className="group relative cursor-pointer bg-card2 rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-bright transition-all duration-300 shadow-sm hover:shadow-md flex flex-col justify-between"
                       >
                         {/* Sequence Number Badge */}
-                        <div className="absolute top-2 left-2 z-10 px-2.5 py-0.5 rounded-full bg-slate-950/90 text-cyan-bright font-mono text-[11px] font-bold border border-cyan-bright/30 backdrop-blur-md">
+                        <div className="absolute top-2 left-2 z-10 px-2.5 py-0.5 rounded-full bg-card/90 text-cyan-bright font-mono text-[11px] font-bold border border-cyan-bright/30 backdrop-blur-md shadow-sm">
                           #{img.seq}
                         </div>
 
                         {/* Image Thumbnail */}
-                        <div className={`relative w-full ${selectedProject.category === 'Mobile' ? 'aspect-[9/16]' : 'aspect-[16/10]'} bg-slate-950 overflow-hidden`}>
+                        <div className={`relative w-full ${selectedProject.category === 'Mobile' ? 'aspect-[9/16]' : 'aspect-[16/10]'} bg-card2 overflow-hidden`}>
                           <img
                             src={img.url}
                             alt={img.title}
@@ -412,13 +412,13 @@ export default function ProjectsView() {
                               (e.target as HTMLImageElement).src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
                             }}
                           />
-                          <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <Maximize2 className="w-6 h-6 text-white drop-shadow-md" />
                           </div>
                         </div>
 
                         {/* Caption snippet */}
-                        <div className="p-2.5 bg-slate-950/90 text-left border-t border-white/5">
+                        <div className="p-2.5 bg-card2 text-left border-t border-white/10">
                           <div className="font-sans text-[11px] font-bold text-text-main truncate">
                             {img.title}
                           </div>
@@ -441,7 +441,7 @@ export default function ProjectsView() {
                     {selectedProject.features.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start space-x-2 text-xs font-sans text-text-sub bg-white/5 p-3 rounded-xl border border-white/5"
+                        className="flex items-start space-x-2 text-xs font-sans text-text-sub bg-card2 p-3 rounded-xl border border-white/10 shadow-sm"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-cyan-bright mt-1.5 flex-shrink-0" />
                         <span>{feature}</span>
@@ -459,7 +459,7 @@ export default function ProjectsView() {
                     {selectedProject.tech.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 rounded-lg bg-white/5 text-xs font-mono text-purple-bright border border-white/10 font-medium"
+                        className="px-3 py-1 rounded-lg bg-card2 text-xs font-mono text-purple-bright border border-white/10 font-semibold"
                       >
                         {tech}
                       </span>
@@ -482,7 +482,7 @@ export default function ProjectsView() {
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-text-main font-sans font-semibold text-xs transition-colors border border-white/10"
+                      className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-card2 hover:bg-card text-text-main font-sans font-semibold text-xs transition-colors border border-white/10 shadow-sm"
                     >
                       <Github className="w-4 h-4" />
                       <span>View GitHub Repository</span>
