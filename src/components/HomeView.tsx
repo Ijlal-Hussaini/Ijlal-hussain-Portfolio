@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowRight, Code, Cpu, Shield, BrainCircuit, ExternalLink, Award, Github } from "lucide-react";
+import { ArrowRight, Code, Cpu, Shield, BrainCircuit, ExternalLink, Download, Award, Github } from "lucide-react";
 import { motion, useInView } from "motion/react";
 import { personalInfo, projectsData, skillsData } from "../data";
 
@@ -448,7 +448,16 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                     {project.category}
                   </span>
                   <div className="flex items-center space-x-1">
-                    {project.demo && (
+                    {project.apkUrl || project.category === "Mobile" ? (
+                      <a
+                        href={project.apkUrl || project.demo}
+                        download="SafeZone.apk"
+                        className="p-1.5 rounded-lg text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+                        title="Download Android APK"
+                      >
+                        <Download className="w-4 h-4" />
+                      </a>
+                    ) : project.demo ? (
                       <a
                         href={project.demo}
                         target="_blank"
@@ -458,7 +467,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                       >
                         <ExternalLink className="w-4 h-4" />
                       </a>
-                    )}
+                    ) : null}
                     <a
                       href={project.github}
                       target="_blank"

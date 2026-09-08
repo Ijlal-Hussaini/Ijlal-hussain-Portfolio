@@ -4,6 +4,7 @@ import {
   Filter,
   Github,
   ExternalLink,
+  Download,
   X,
   ListTodo,
   ShieldAlert,
@@ -242,16 +243,28 @@ export default function ProjectsView() {
                       </h3>
 
                       <div className="flex items-center space-x-1 flex-shrink-0">
-                        <a
-                          href={project.demo || project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all"
-                          title="Open Live Website"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
+                        {project.apkUrl || project.category === "Mobile" ? (
+                          <a
+                            href={project.apkUrl || project.demo}
+                            download="SafeZone.apk"
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-1.5 rounded-lg text-text-muted hover:text-green-accent hover:bg-white/5 transition-all"
+                            title="Download Android APK"
+                          >
+                            <Download className="w-4 h-4" />
+                          </a>
+                        ) : project.demo ? (
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-all"
+                            title="Open Live Website"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        ) : null}
                         <a
                           href={project.github}
                           target="_blank"
@@ -296,17 +309,30 @@ export default function ProjectsView() {
                         <span>View on GitHub</span>
                       </a>
 
-                      <a
-                        href={project.demo || project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/30 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
-                        title="Open Live Website in New Tab"
-                      >
-                        <span>Live Project</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
+                      {project.apkUrl || project.category === "Mobile" ? (
+                        <a
+                          href={project.apkUrl || project.demo}
+                          download="SafeZone.apk"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-sans font-semibold text-[11px] border border-emerald-500/30 shadow-sm transition-all hover:shadow-emerald-500/20 cursor-pointer"
+                          title="Download Android APK (Direct Download)"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Download APK</span>
+                        </a>
+                      ) : project.demo ? (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-bright/10 hover:bg-cyan-bright text-cyan-bright hover:text-slate-950 font-sans font-semibold text-[11px] border border-cyan-bright/30 shadow-sm transition-all hover:shadow-cyan-glow/20 cursor-pointer"
+                          title="Open Live Website in New Tab"
+                        >
+                          <span>Live Project</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -467,7 +493,16 @@ export default function ProjectsView() {
                   </div>
 
                   <div className="flex flex-wrap gap-4 pt-4">
-                    {selectedProject.demo && (
+                    {selectedProject.apkUrl || (selectedProject.category === "Mobile" && selectedProject.demo) ? (
+                      <a
+                        href={selectedProject.apkUrl || selectedProject.demo}
+                        download="SafeZone.apk"
+                        className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-green-500 text-slate-950 font-sans font-bold text-xs uppercase tracking-wider shadow-md shadow-emerald-500/20 transition-all hover:opacity-95 cursor-pointer"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download Android APK</span>
+                      </a>
+                    ) : selectedProject.demo ? (
                       <a
                         href={selectedProject.demo}
                         target="_blank"
@@ -477,7 +512,7 @@ export default function ProjectsView() {
                         <ExternalLink className="w-4 h-4" />
                         <span>Launch Live Website</span>
                       </a>
-                    )}
+                    ) : null}
                     <a
                       href={selectedProject.github}
                       target="_blank"

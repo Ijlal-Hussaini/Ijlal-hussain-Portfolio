@@ -41,6 +41,7 @@ export interface Project {
   features: string[];
   github: string;
   demo?: string;
+  apkUrl?: string;
   description: string;
   imageUrl?: string;
   coverImage: string;
@@ -197,6 +198,8 @@ export const projectsData: Project[] = [
       "System-level app blocking and installation prevention"
     ],
     github: "https://github.com/Ijlal-Hussaini/Safe-Zone-Kid-Friendly-Internet-and-App-Monitoring",
+    apkUrl: "/downloads/SafeZone.apk",
+    demo: "/downloads/SafeZone.apk",
     description: "Safe Zone is a complete high-fidelity parental control Android system designed to curate a safer digital space for children. Developed as my Final Year Project (FYP) at NUML, the system splits into a parent dashboard and a child monitor, synchronizing instantly using Firebase cloud endpoints.",
     imageUrl: "SafeZone",
     coverImage: "/assets/projects/SafeZone/02_Parent_Dashboard.jpeg",
