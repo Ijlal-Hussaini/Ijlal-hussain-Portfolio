@@ -85,10 +85,11 @@
 
 ## 🌟 Key Features & Architectural Highlights
 
-- ⚡ **Ultra-Fast Performance**: Zero render-blocking CSS, WebP next-gen compression, and critical asset preloading for instant page loads.
+- 🤖 **Embedded "Chat with My Resume" AI Assistant**: Zero-cost, 100% client-side natural language RAG bot with fuzzy typo tolerance (Levenshtein distance), grounded domain counts, project names inspector, and interactive quick action deep-links.
+- ⚡ **Ultra-Fast Performance**: Zero render-blocking CSS, WebP next-gen compression, and critical asset preloading for instant sub-second page loads.
 - 🎨 **Adaptive Glassmorphic Design**: Sleek cosmic dark theme (`#05050a`) and crisp light theme with instant toggle and persistent theme caching.
 - 📱 **Mobile-First Responsive Drawer**: Slide-out navigation drawer with blurred backdrop overlay and body scroll locking.
-- 🔄 **URL Hash Routing & State Persistence**: Deep-linkable tabs (`/#about`, `/#projects`, `/#contact`) with full page persistence on browser refresh and Back/Forward history.
+- 🔄 **URL Hash Routing & State Persistence**: Deep-linkable tabs (`/#about`, `/#projects`, `/#certifications`, `/#contact`) with full page persistence on browser refresh and Back/Forward history.
 - 🔤 **Precision Typography & Justification**: Automatic hyphenation (`hyphens: auto`) and clean text justification across all descriptions and timeline items.
 - 📬 **Live Email Gateway**: Direct client-side message dispatch powered by Web3Forms API with automatic mailto fallback.
 - 📲 **Progressive Web App (PWA)**: Standalone installable app experience on Android, iOS, Windows, and macOS with web app manifest and asset caching.
@@ -113,9 +114,9 @@
 |:---|:---|
 | **Core Frontend** | React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion (Framer Motion v12) |
 | **Icons & Typography** | Lucide React, Plus Jakarta Sans, Space Grotesk, JetBrains Mono |
-| **Generative AI & Agentic** | LangGraph, LangChain, RAG Pipelines, OpenAI API, LLM Fine-Tuning |
+| **Generative AI & Agentic** | LangGraph, LangChain, RAG Pipelines, OpenAI API, Groq Cloud, Gemini Flash |
 | **Full-Stack Web** | Node.js, Express.js, MongoDB, RESTful Architecture, Web3Forms API |
-| **Mobile Development** | Native Android (Java), Flutter, MVVM Architecture, Room Database, Retrofit |
+| **Mobile Development** | Native Android (Java), Flutter, MVVM Architecture, Firebase, Room DB |
 | **Deployment & CI/CD** | Vercel Global Edge CDN, Git / GitHub Repository |
 
 ---
@@ -133,7 +134,7 @@ ijlal-hussain-portfolio/
 │       └── 05_contact_view.png
 ├── public/
 │   ├── assets/
-│   │   ├── certifications/        # Authentic vector certificate PDFs and thumbnails
+│   │   ├── certifications/        # Authentic vector certificate PDFs and thumbnails (6 Total)
 │   │   ├── images/                # Next-gen WebP & PNG profile photos, OG preview
 │   │   └── projects/              # Sequential project UI screenshots (1-11)
 │   ├── icons/                     # PWA maskable application icons (192px, 512px)
@@ -141,6 +142,7 @@ ijlal-hussain-portfolio/
 │   └── manifest.json              # Web App Manifest specification
 ├── src/
 │   ├── components/
+│   │   ├── AIChatBot.tsx          # Embedded RAG Chatbot with fuzzy typo-tolerant NLP
 │   │   ├── AboutView.tsx          # Career timeline, skills pills & bio
 │   │   ├── CertificationsView.tsx # Verified credentials ledger & PDF viewer modal
 │   │   ├── ContactView.tsx        # Live Web3Forms submission & local time ticker
