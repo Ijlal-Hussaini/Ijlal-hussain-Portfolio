@@ -22,7 +22,6 @@
     <img src="https://img.shields.io/badge/Vite_6-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 6" />
     <img src="https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS v4" />
     <img src="https://img.shields.io/badge/Motion-0055FF?style=flat-square&logo=framer&logoColor=white" alt="Motion" />
-    <img src="https://img.shields.io/badge/PWA_Ready-5A0FC8?style=flat-square&logo=pwa&logoColor=white" alt="PWA" />
     <img src="https://img.shields.io/badge/Status-Production_Ready-00D68F?style=flat-square" alt="Status" />
   </p>
 </div>
@@ -92,7 +91,6 @@
 - 🔄 **URL Hash Routing & State Persistence**: Deep-linkable tabs (`/#about`, `/#projects`, `/#certifications`, `/#contact`) with full page persistence on browser refresh and Back/Forward history.
 - 🔤 **Precision Typography & Justification**: Automatic hyphenation (`hyphens: auto`) and clean text justification across all descriptions and timeline items.
 - 📬 **Live Email Gateway**: Direct client-side message dispatch powered by Web3Forms API with automatic mailto fallback.
-- 📲 **Progressive Web App (PWA)**: Standalone installable app experience on Android, iOS, Windows, and macOS with web app manifest and asset caching.
 - 🔍 **SEO & Social Optimization**: 1200×630px high-resolution OpenGraph banners, Twitter Card metadata, and semantic HTML5 layout.
 
 ---
@@ -104,7 +102,7 @@
 | **ResumeIQ** | `AI/ML` | 7-Node LangGraph Agent, Local RAG, Groq Cloud, FastAPI, Next.js 16 | 🌐 [Live App](https://resumeiq-cvparser.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Resume_IQ) |
 | **SafeZone** | `Mobile` | Native Android, Java, Firebase Realtime DB, Geofencing, Material Design | 📥 [Download APK (v1.0)](https://ijlalhussain.vercel.app/downloads/SafeZone.apk) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Safe-Zone-Kid-Friendly-Internet-and-App-Monitoring) |
 | **Technical Blog Factory** | `AI/ML` | 3-Agent LangGraph Studio, Tavily Fact-Checking, Gemini 2.5, FastAPI | 🌐 [Live App](https://technical-blog-factory.onrender.com/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/technical-blog-factory) |
-| **Developer Portfolio** | `Web` | React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion, PWA | 🌐 [Live Site](https://ijlalhussain.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio) |
+| **Developer Portfolio** | `Web` | React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion | 🌐 [Live Site](https://ijlalhussain.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio) |
 
 ---
 
@@ -137,11 +135,7 @@ ijlal-hussain-portfolio/
 │   │   ├── certifications/        # Authentic vector certificate PDFs and thumbnails (6 Total)
 │   │   ├── images/                # Next-gen WebP & PNG profile photos, OG preview
 │   │   └── projects/              # Sequential project UI screenshots (SafeZone 1-15, ResumeIQ, BlogFactory, Portfolio)
-│   ├── downloads/
-│   │   └── SafeZone.apk           # Production standalone Android APK package
-│   ├── icons/                     # PWA maskable application icons (192px, 512px)
-│   ├── Ijlal_Hussain_CV.pdf       # Official resume document
-│   └── manifest.json              # Web App Manifest specification
+│   └── Ijlal_Hussain_CV.pdf       # Official resume document
 ├── src/
 │   ├── components/
 │   │   ├── AIChatBot.tsx          # Embedded RAG Chatbot with fuzzy typo-tolerant NLP

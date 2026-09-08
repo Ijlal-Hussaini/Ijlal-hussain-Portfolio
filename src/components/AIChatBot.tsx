@@ -318,7 +318,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       (hasWord("project") || hasWord("prokjec") || hasWord("prjec") || hasWord("built") || hasWord("many") || contains("how many"))
     ) {
       return {
-        text: `🌐 **Web & Full-Stack Projects (1 Featured Web App):**\n\n• **Developer Portfolio Platform**\nEngineered with React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion, PWA, and Web3Forms with sub-second page loads and zero render-blocking CSS.`,
+        text: `🌐 **Web & Full-Stack Projects (1 Featured Web App):**\n\n• **Developer Portfolio Platform**\nEngineered with React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion, and Web3Forms with sub-second page loads and zero render-blocking CSS.`,
         actionLink: { label: "Explore Portfolio Specifications", tab: "Projects" }
       };
     }

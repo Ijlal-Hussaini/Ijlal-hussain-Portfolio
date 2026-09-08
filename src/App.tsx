@@ -14,7 +14,6 @@ import ProjectsView from "./components/ProjectsView";
 import CertificationsView from "./components/CertificationsView";
 import ContactView from "./components/ContactView";
 import AIChatBot from "./components/AIChatBot";
-import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 export default function App() {
   const tabs = ["Home", "About", "Projects", "Certifications", "Contact"];
@@ -219,9 +218,6 @@ export default function App() {
 
       {/* 6. Embedded AI Resume Chat Assistant Widget (Zero-API Client-Side RAG) */}
       <AIChatBot onNavigate={setActiveTab} isScrollTopVisible={isScrollVisible} />
-
-      {/* 7. Progressive Web App (PWA) Standalone Desktop & Mobile Install Prompt */}
-      <PWAInstallPrompt />
     </motion.div>
   );
 }

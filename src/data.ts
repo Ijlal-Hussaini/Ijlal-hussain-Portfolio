@@ -414,14 +414,14 @@ export const projectsData: Project[] = [
     id: "portfolio",
     title: "Developer Portfolio — High-Performance Engineering Platform",
     category: "Web",
-    tech: ["React 19", "TypeScript", "Vite 6", "Tailwind CSS v4", "Motion", "Web3Forms", "PWA"],
+    tech: ["React 19", "TypeScript", "Vite 6", "Tailwind CSS v4", "Motion", "Web3Forms"],
     features: [
       "Sub-second page loads with zero render-blocking CSS, preloaded WebP images, and high-performance bundle optimization",
       "Persistent URL Hash routing (#about, #projects, #certifications, #contact) with complete page reload state preservation",
       "Adaptive Cosmic Dark & Crisp Light themes with seamless real-time toggle and localized preference caching",
       "Interactive Verified Credentials Ledger with instant PDF document inspector and 1-click downloads",
       "Real-time client-side message dispatch powered by Web3Forms API with instant local PKT time ticker",
-      "Installable Progressive Web App (PWA) with responsive slide-out side drawer and body scroll locking"
+      "Responsive slide-out navigation drawer with body scroll locking and mobile-first touch ergonomics"
     ],
     github: "https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio",
     demo: "https://ijlalhussain.vercel.app/",
