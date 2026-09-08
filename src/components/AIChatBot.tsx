@@ -172,6 +172,18 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
   }, [isOpen, messages]);
 
+  // Automatically close chatbot if user opens mobile navigation drawer
+  useEffect(() => {
+    const handleMobileMenu = (e: Event) => {
+      const customEvent = e as CustomEvent<{ isOpen: boolean }>;
+      if (customEvent.detail?.isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("mobile-menu-toggle", handleMobileMenu);
+    return () => window.removeEventListener("mobile-menu-toggle", handleMobileMenu);
+  }, []);
+
   const quickChips = [
     { label: `📊 All Projects (${projectsData.length})`, query: "How many projects has he built?" },
     { label: "🎓 CGPA & Education", query: "What is Ijlal's CGPA and degree?" },
@@ -469,8 +481,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     <>
       {/* 1. FLOATING ACTION LAUNCH BUBBLE */}
       <div
-        className={`fixed z-50 transition-all duration-300 ${
-          isScrollTopVisible ? "bottom-22 right-6" : "bottom-6 right-6"
+        className={`fixed z-40 transition-all duration-300 ${
+          isScrollTopVisible ? "bottom-22 right-4 sm:right-6" : "bottom-4 sm:bottom-6 right-4 sm:right-6"
         }`}
       >
         <AnimatePresence>
@@ -479,6 +491,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative group"
@@ -529,11 +542,12 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 30 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 30 }}
-            transition={{ type: "spring", damping: 25, stiffness: 350 }}
-            className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-[99999] w-[calc(100vw-2rem)] sm:w-[420px] h-[580px] max-h-[85vh] rounded-3xl glass bg-slate-950/95 border border-white/15 shadow-2xl backdrop-blur-2xl flex flex-col justify-between overflow-hidden text-left"
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            style={{ willChange: "transform, opacity" }}
+            className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 z-[90] w-[calc(100vw-1.5rem)] sm:w-[420px] h-[520px] max-h-[80vh] sm:h-[580px] sm:max-h-[85vh] rounded-2xl sm:rounded-3xl bg-slate-950/98 border border-white/15 shadow-2xl backdrop-blur-md flex flex-col justify-between overflow-hidden text-left"
           >
             {/* MODAL HEADER */}
             <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">

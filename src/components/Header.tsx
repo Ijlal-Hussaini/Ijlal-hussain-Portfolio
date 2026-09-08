@@ -220,7 +220,15 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
             </a>
             <button
               id="mobile-menu-toggle"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                const nextState = !isOpen;
+                setIsOpen(nextState);
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(
+                    new CustomEvent("mobile-menu-toggle", { detail: { isOpen: nextState } })
+                  );
+                }
+              }}
               className="p-2 rounded-lg text-text-sub hover:text-text-main hover:bg-white/5 focus:outline-none cursor-pointer"
               aria-label="Toggle navigation menu"
             >
@@ -239,9 +247,17 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsOpen(false)}
-              className="md:hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
+              transition={{ duration: 0.15 }}
+              onClick={() => {
+                setIsOpen(false);
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(
+                    new CustomEvent("mobile-menu-toggle", { detail: { isOpen: false } })
+                  );
+                }
+              }}
+              className="md:hidden fixed inset-0 z-[999998] bg-black/75 backdrop-blur-sm"
+              style={{ willChange: "opacity" }}
             />
 
             {/* Side Slide-out Panel */}
@@ -250,8 +266,9 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="md:hidden fixed top-0 right-0 bottom-0 w-72 max-w-[85vw] bg-card border-l border-white/10 z-50 flex flex-col justify-between p-6 shadow-2xl overflow-y-auto"
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              style={{ willChange: "transform" }}
+              className="md:hidden fixed top-0 right-0 bottom-0 w-72 max-w-[85vw] bg-slate-950/98 border-l border-white/15 z-[999999] flex flex-col justify-between p-6 shadow-2xl overflow-y-auto"
             >
               <div className="space-y-6">
                 {/* Drawer Header */}
@@ -277,7 +294,14 @@ export default function Header({ activeTab, setActiveTab, tabs }: HeaderProps) {
                     </div>
                   </div>
                   <button
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setIsOpen(false);
+                      if (typeof window !== "undefined") {
+                        window.dispatchEvent(
+                          new CustomEvent("mobile-menu-toggle", { detail: { isOpen: false } })
+                        );
+                      }
+                    }}
                     className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-text-sub hover:text-text-main transition-colors cursor-pointer"
                     aria-label="Close navigation menu"
                   >
