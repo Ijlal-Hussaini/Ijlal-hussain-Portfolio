@@ -77,7 +77,7 @@ function FormattedMessage({ text }: { text: string }) {
       const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
       if (boldMatch) {
         return (
-          <strong key={index} className="text-white font-bold">
+          <strong key={index} className="text-text-main font-bold">
             {boldMatch[1]}
           </strong>
         );
@@ -501,7 +501,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
               <button
                 onClick={() => setIsOpen(true)}
-                className="relative flex items-center space-x-2.5 px-4 py-3 rounded-full bg-slate-950 text-white border border-cyan-bright/40 shadow-2xl shadow-cyan-glow/20 cursor-pointer focus:outline-none"
+                className="relative flex items-center space-x-2.5 px-4 py-3 rounded-full bg-card text-text-main border border-cyan-bright/40 shadow-2xl shadow-cyan-glow/20 cursor-pointer focus:outline-none"
                 title="Chat with Ijlal's AI Resume Assistant"
                 aria-label="Open AI Resume Chat"
               >
@@ -518,12 +518,12 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                     />
                   </div>
                   {/* Green online pulse dot */}
-                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-accent border-2 border-slate-950 animate-ping" />
-                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-accent border-2 border-slate-950" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-accent border-2 border-card animate-ping" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-accent border-2 border-card" />
                 </div>
 
                 <div className="text-left pr-1 hidden sm:block">
-                  <span className="block font-display font-bold text-xs text-white leading-tight">
+                  <span className="block font-display font-bold text-xs text-text-main leading-tight">
                     Ask My AI
                   </span>
                   <span className="block font-mono text-[9px] text-cyan-bright leading-none">
@@ -547,10 +547,10 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             style={{ willChange: "transform, opacity" }}
-            className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 z-[90] w-[calc(100vw-1.5rem)] sm:w-[420px] h-[520px] max-h-[80vh] sm:h-[580px] sm:max-h-[85vh] rounded-2xl sm:rounded-3xl bg-slate-950/98 border border-white/15 shadow-2xl backdrop-blur-md flex flex-col justify-between overflow-hidden text-left"
+            className="fixed bottom-3 sm:bottom-6 right-3 sm:right-6 z-[90] w-[calc(100vw-1.5rem)] sm:w-[420px] h-[520px] max-h-[80vh] sm:h-[580px] sm:max-h-[85vh] rounded-2xl sm:rounded-3xl bg-card border border-white/10 shadow-2xl backdrop-blur-xl flex flex-col justify-between overflow-hidden text-left text-text-main"
           >
             {/* MODAL HEADER */}
-            <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+            <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-card2/50">
               <div className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-bright to-purple-bright p-0.5">
@@ -560,7 +560,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                       className="w-full h-full rounded-full object-cover"
                     />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-accent border-2 border-slate-950" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-accent border-2 border-card" />
                 </div>
 
                 <div>
@@ -582,7 +582,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
               <div className="flex items-center space-x-1">
                 <button
                   onClick={handleResetChat}
-                  className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-white/5 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-text-muted hover:text-cyan-bright hover:bg-card2 transition-colors cursor-pointer"
                   title="Reset conversation"
                   aria-label="Reset chat"
                 >
@@ -590,7 +590,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-text-muted hover:text-text-main hover:bg-card2 transition-colors cursor-pointer"
                   title="Minimize chat"
                   aria-label="Close chat"
                 >
@@ -617,8 +617,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                   <div
                     className={`max-w-[85%] rounded-2xl p-3.5 space-y-2.5 text-xs font-sans leading-relaxed shadow-md ${
                       msg.sender === "user"
-                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-tr-none"
-                        : "bg-white/[0.04] text-text-main border border-white/10 rounded-tl-none"
+                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-tr-none shadow-purple-glow/20"
+                        : "bg-card2 text-text-main border border-white/10 rounded-tl-none shadow-sm"
                     }`}
                   >
                     <FormattedMessage text={msg.text} />
@@ -654,13 +654,13 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
             </div>
 
             {/* QUICK SUGGESTION CHIPS */}
-            <div className="px-4 py-2 border-t border-white/5 bg-white/[0.01]">
+            <div className="px-4 py-2 border-t border-white/5 bg-card2/30">
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
                 {quickChips.map((chip, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSend(chip.query)}
-                    className="whitespace-nowrap px-2.5 py-1 rounded-full bg-white/5 hover:bg-cyan-bright/10 text-text-sub hover:text-cyan-bright border border-white/10 hover:border-cyan-bright/30 font-sans text-[10px] font-medium transition-colors cursor-pointer flex-shrink-0"
+                    className="whitespace-nowrap px-2.5 py-1 rounded-full bg-card hover:bg-cyan-bright/15 text-text-sub hover:text-cyan-bright border border-white/10 hover:border-cyan-bright/30 font-sans text-[10px] font-medium transition-colors cursor-pointer flex-shrink-0"
                   >
                     {chip.label}
                   </button>
@@ -669,7 +669,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
             </div>
 
             {/* INPUT FOOTER */}
-            <div className="p-3 border-t border-white/10 bg-slate-950/80">
+            <div className="p-3 border-t border-white/10 bg-card2/50">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -683,13 +683,13 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder="Ask about CGPA, projects, certifications, LangGraph, where is he from..."
-                  className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-text-main placeholder-text-muted font-sans text-xs focus:outline-none focus:border-cyan-bright focus:ring-1 focus:ring-cyan-bright/50 transition-all"
+                  className="flex-1 px-4 py-2.5 rounded-xl bg-card border border-white/15 text-text-main placeholder-text-muted font-sans text-xs focus:outline-none focus:border-cyan-bright focus:ring-1 focus:ring-cyan-bright/50 transition-all"
                 />
 
                 <button
                   type="submit"
                   disabled={!inputValue.trim() || isTyping}
-                  className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-all cursor-pointer font-bold flex-shrink-0"
+                  className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 transition-all cursor-pointer font-bold flex-shrink-0 shadow-sm"
                   title="Send question"
                 >
                   <Send className="w-4 h-4" />
