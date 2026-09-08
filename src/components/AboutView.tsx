@@ -325,7 +325,7 @@ export default function AboutView() {
                             initial={{ width: 0 }}
                             whileInView={{ width: `${prof.percent}%` }}
                             viewport={{ amount: 0.2 }}
-                            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: sIdx * 0.08 }}
+                            transition={{ duration: 2.2, ease: [0.25, 1, 0.5, 1], delay: sIdx * 0.1 }}
                             className={`h-full rounded-full bg-gradient-to-r ${prof.color}`}
                           />
                         </div>
