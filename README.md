@@ -102,7 +102,7 @@
 | Project | Category | Architecture & Stack | Live URL / Codebase |
 |:---|:---|:---|:---|
 | **ResumeIQ** | `AI/ML` | 7-Node LangGraph Agent, Local RAG, Groq Cloud, FastAPI, Next.js 16 | 🌐 [Live App](https://resumeiq-cvparser.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Resume_IQ) |
-| **SafeZone** | `Mobile` | Native Android, Java, Firebase Realtime DB, Geofencing, Material Design | 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Safe-Zone-Kid-Friendly-Internet-and-App-Monitoring) |
+| **SafeZone** | `Mobile` | Native Android, Java, Firebase Realtime DB, Geofencing, Material Design | 📥 [Download APK (v1.0)](https://ijlalhussain.vercel.app/downloads/SafeZone.apk) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Safe-Zone-Kid-Friendly-Internet-and-App-Monitoring) |
 | **Technical Blog Factory** | `AI/ML` | 3-Agent LangGraph Studio, Tavily Fact-Checking, Gemini 2.5, FastAPI | 🌐 [Live App](https://technical-blog-factory.onrender.com/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/technical-blog-factory) |
 | **Developer Portfolio** | `Web` | React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion, PWA | 🌐 [Live Site](https://ijlalhussain.vercel.app/) • 🐙 [GitHub](https://github.com/Ijlal-Hussaini/Ijlal-hussain-Portfolio) |
 
@@ -137,6 +137,8 @@ ijlal-hussain-portfolio/
 │   │   ├── certifications/        # Authentic vector certificate PDFs and thumbnails (6 Total)
 │   │   ├── images/                # Next-gen WebP & PNG profile photos, OG preview
 │   │   └── projects/              # Sequential project UI screenshots (SafeZone 1-15, ResumeIQ, BlogFactory, Portfolio)
+│   ├── downloads/
+│   │   └── SafeZone.apk           # Production standalone Android APK package
 │   ├── icons/                     # PWA maskable application icons (192px, 512px)
 │   ├── Ijlal_Hussain_CV.pdf       # Official resume document
 │   └── manifest.json              # Web App Manifest specification
