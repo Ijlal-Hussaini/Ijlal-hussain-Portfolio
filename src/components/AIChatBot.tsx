@@ -31,6 +31,59 @@ interface Message {
 }
 
 /**
+ * Fast Levenshtein distance for fuzzy typo-tolerant keyword matching
+ */
+function editDistance(a: string, b: string): number {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+
+  const matrix: number[][] = [];
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          matrix[i][j - 1] + 1,     // insertion
+          matrix[i - 1][j] + 1      // deletion
+        );
+      }
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+/**
+ * Check if any token matches the target word fuzzily (with max edit distance threshold)
+ */
+function hasFuzzyWord(tokens: string[], target: string, maxDist = 2): boolean {
+  const targetLower = target.toLowerCase();
+  return tokens.some((token) => {
+    const t = token.toLowerCase();
+    if (t === targetLower) return true;
+    // Only allow substring matching if both lengths >= 4
+    if (t.length >= 4 && targetLower.length >= 4 && (t.includes(targetLower) || targetLower.includes(t))) {
+      return true;
+    }
+    // For short words (<= 3 chars), require exact match
+    if (targetLower.length <= 3) {
+      return t === targetLower;
+    }
+    if (Math.abs(t.length - targetLower.length) > maxDist) return false;
+    return editDistance(t, targetLower) <= maxDist;
+  });
+}
+
+/**
  * Bulletproof Markdown & Rich-Text parser
  * Converts **bold**, *italic*, `code`, and [label](url) into clean React elements
  * without leaking raw asterisks, stars, or brackets.
@@ -66,7 +119,7 @@ function FormattedMessage({ text }: { text: string }) {
         return (
           <code
             key={index}
-            className="px-1.5 py-0.5 rounded bg-white/10 text-cyan-bright font-mono text-[11px] border border-white/10"
+            className="px-1.5 py-0.5 rounded bg-cyan-bright/10 text-cyan-bright font-mono text-[11px] border border-cyan-bright/20"
           >
             {codeMatch[1]}
           </code>
@@ -87,7 +140,7 @@ function FormattedMessage({ text }: { text: string }) {
       const italicMatch = part.match(/^\*([^*]+)\*$/);
       if (italicMatch) {
         return (
-          <span key={index} className="text-text-main font-medium italic">
+          <span key={index} className="text-text-sub font-medium italic">
             {italicMatch[1]}
           </span>
         );
@@ -210,14 +263,179 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
   };
 
   /**
-   * 100% Grounded Natural Language Intent & QA Engine
-   * Strictly synchronized with all portfolio data in data.ts
+   * 100% Grounded, Typo-Tolerant Natural Language Intent Engine
    */
   const generateGroundedResponse = (rawQuery: string): { text: string; actionLink?: { label: string; tab?: string; url?: string } } => {
     const q = rawQuery.toLowerCase().trim();
-    const cleanWords = q.replace(/[^a-z0-9\s]/g, " ").trim();
+    // Normalize common typos and noise characters
+    const cleanWords = q
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const tokens = cleanWords.split(/\s+/).filter(Boolean);
 
-    // 1. SIMPLE CONVERSATIONAL ACKNOWLEDGMENTS ("ok", "okay", "k", "alright", "sure", "cool", "nice", "got it", "fine", "perfect", "yes", "yep", "no", "nah", "sounds good")
+    // Helper to check for subphrase or typo-tolerant token
+    const hasWord = (target: string, maxDist = 2) => hasFuzzyWord(tokens, target, maxDist);
+    const contains = (phrase: string) => cleanWords.includes(phrase.toLowerCase());
+
+    // 1. PROJECT NAMES ONLY ("enlist only prokjec names", "just project names", "names of projects", "list project names", "only project names")
+    if (
+      (contains("name") || contains("names") || contains("only") || contains("just") || contains("enlist") || contains("title") || contains("titles")) &&
+      (hasWord("project") || hasWord("prokjec") || hasWord("prjec") || hasWord("work") || hasWord("app") || contains("project") || contains("prokjec"))
+    ) {
+      return {
+        text: `📋 **Featured Project Names (4 Total):**\n\n1. 🤖 **ResumeIQ** (AI Career Intelligence Platform)\n2. 📝 **Technical Blog Post Factory** (Autonomous Multi-Agent Studio)\n3. 📱 **Safe Zone** (Parental Control Android App)\n4. 🌐 **Developer Portfolio** (React 19 & Tailwind Web App)\n\nClick below to inspect full writeups and screenshots!`,
+        actionLink: { label: "Explore All Projects", tab: "Projects" }
+      };
+    }
+
+    // 2. AI / MACHINE LEARNING PROJECTS SPECIFIC COUNT ("how many ai projects", "how many ai projects he built", "ai projects", "ml projects")
+    if (
+      (hasWord("ai", 0) || hasWord("ml", 0) || hasWord("genai", 1) || hasWord("generative", 2) || contains("machine learning") || contains("artificial intelligence")) &&
+      (hasWord("project") || hasWord("prokjec") || hasWord("prjec") || hasWord("built") || hasWord("developed") || hasWord("many") || contains("how many"))
+    ) {
+      const aiProjects = projectsData.filter((p) => p.category === "AI/ML");
+      return {
+        text: `🤖 **AI & Generative AI Projects (${aiProjects.length} Total):**\n\n1. **ResumeIQ** — 7-node LangGraph cyclic state machine with local RAG retrieval, sentence-transformers vector embeddings, and Groq/Gemini dual-core failover.\n2. **Technical Blog Factory** — Autonomous 3-agent writing studio built with LangGraph 0.3+ and live Tavily web search fact-checking.\n\nBoth projects demonstrate production-grade multi-agent architectures and RAG pipelines!`,
+        actionLink: { label: "Inspect AI Projects", tab: "Projects" }
+      };
+    }
+
+    // 3. ANDROID / MOBILE PROJECTS SPECIFIC COUNT ("how many andriod prjec", "how many android projects", "mobile app", "andriod")
+    if (
+      (hasWord("android", 2) || hasWord("andriod", 2) || hasWord("mobile", 1) || hasWord("app", 0) || hasWord("apk", 0)) &&
+      (hasWord("project") || hasWord("prokjec") || hasWord("prjec") || hasWord("built") || hasWord("many") || hasWord("developed") || contains("how many"))
+    ) {
+      return {
+        text: `📱 **Android & Mobile Projects (1 Featured App):**\n\n• **Safe Zone — Parental Control App (NUML FYP Lead)**\nHigh-fidelity native Android application built in Java with Firebase Realtime Database & Auth. Features real-time GPS geofencing, remote screen lock, content filtering, and 11 verified sequential UI screens in the gallery.`,
+        actionLink: { label: "Inspect SafeZone Android App", tab: "Projects" }
+      };
+    }
+
+    // 4. WEB / FULL-STACK PROJECTS SPECIFIC COUNT ("how many web projects", "web applications", "websites", "react projects")
+    if (
+      (hasWord("web", 0) || hasWord("website", 2) || hasWord("fullstack", 2) || hasWord("frontend", 2) || hasWord("react", 1)) &&
+      (hasWord("project") || hasWord("prokjec") || hasWord("prjec") || hasWord("built") || hasWord("many") || contains("how many"))
+    ) {
+      return {
+        text: `🌐 **Web & Full-Stack Projects (1 Featured Web App):**\n\n• **Developer Portfolio Platform**\nEngineered with React 19, TypeScript, Vite 6, Tailwind CSS v4, Motion, PWA, and Web3Forms with sub-second page loads and zero render-blocking CSS.`,
+        actionLink: { label: "Explore Portfolio Specifications", tab: "Projects" }
+      };
+    }
+
+    // 5. UNIVERSITY / GRADUATION / DEGREE ("from which univerty he is graduated", "where did he study", "which university", "what college", "numl")
+    if (
+      hasWord("university", 2) ||
+      hasWord("univerty", 2) ||
+      hasWord("unversity", 2) ||
+      hasWord("graduated", 2) ||
+      hasWord("graduate", 2) ||
+      hasWord("graduation", 2) ||
+      hasWord("numl", 1) ||
+      hasWord("degree", 1) ||
+      hasWord("college", 2) ||
+      hasWord("school", 2) ||
+      contains("where did he study") ||
+      contains("which university") ||
+      contains("where he graduated") ||
+      contains("where is he graduated")
+    ) {
+      return {
+        text: `🎓 **University & Academic Distinction:**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** with a **Bachelor of Science in Software Engineering (BS SE)** [2022 – 2026], achieving an outstanding **${personalInfo.cgpa} CGPA**.\n\n• **BS Software Engineering**: NUML Islamabad (3.96 / 4.0 CGPA)\n• **Intermediate (Computer Science)**: Govt Boys Degree College, Danyore Gilgit (Grade B)\n• **Matriculation (Medical Sciences)**: Vision Higher Secondary School, Danyore Gilgit (Grade A)`,
+        actionLink: { label: "View Academic Timeline", tab: "About" }
+      };
+    }
+
+    // 6. AGE / HOW OLD IS HE / BIRTH DATE ("how old is he", "what is his age", "when was he born", "how old", "dob")
+    if (
+      hasWord("age", 0) ||
+      contains("how old") ||
+      contains("his age") ||
+      hasWord("born", 1) ||
+      hasWord("birth", 1) ||
+      hasWord("dob", 0)
+    ) {
+      return {
+        text: `🎂 **Age & Profile:**\nIjlal is a young, passionate software engineer in his **early 20s** (graduated with his BS in Software Engineering in early 2026).\n\nHe is in the prime of his career, fully dedicated to building modern 2026 Generative AI systems, multi-agent workflows, and high-performance software applications!`,
+        actionLink: { label: "View Full Profile", tab: "About" }
+      };
+    }
+
+    // 7. LOCATION / WHERE IS HE FROM / HOMETOWN ("wher is he form", "where is he from", "where does he live", "where is ijlal located", "gilgit", "pakistan")
+    if (
+      ((hasWord("where", 1) || hasWord("wher", 1)) && (hasWord("from", 1) || hasWord("form", 1) || hasWord("live", 1) || hasWord("located", 2) || hasWord("he", 0) || hasWord("ijlal", 1))) ||
+      hasWord("location", 2) ||
+      hasWord("city", 1) ||
+      hasWord("country", 2) ||
+      hasWord("hometown", 2) ||
+      hasWord("origin", 2) ||
+      hasWord("gilgit", 1) ||
+      hasWord("pakistan", 2) ||
+      contains("wher is he") ||
+      contains("where is he")
+    ) {
+      return {
+        text: `📍 **Location & Roots:**\nIjlal is originally from the picturesque region of **Gilgit, Pakistan** 🏔️.\n\nHe completed his Software Engineering degree at **NUML in Islamabad** and is actively open to **remote global opportunities worldwide** as well as on-site positions in Islamabad/Pakistan!`,
+        actionLink: { label: "Contact Ijlal", tab: "Contact" }
+      };
+    }
+
+    // 8. WHY HIRE IJLAL / STRENGTHS / WHAT MAKES HIM UNIQUE ("why hire", "why should we hire", "strengths")
+    if (
+      (hasWord("why") && (hasWord("hire", 1) || hasWord("choose", 1) || hasWord("select", 1))) ||
+      hasWord("strength", 2) ||
+      hasWord("strengths", 2) ||
+      hasWord("unique", 2) ||
+      contains("why hire")
+    ) {
+      return {
+        text: `🌟 **Why Hire Ijlal Hussain?**\n• **Top Academic Standing**: Graduated with an exceptional **3.96 / 4.0 CGPA** at NUML Islamabad\n• **Production AI Expertise**: Proven LangGraph cyclic state machines, multi-agent graphs, and RAG pipelines\n• **Full-Lifecycle Leadership**: Led the SafeZone Android FYP as team lead and completed AI & Requirements internships\n• **6 Verified Credentials**: NAVTTC AI/ML, Cisco Python, DigiSkills, and industry recommendation letters\n• **Fast Execution**: Delivers clean, production-grade, well-documented code with precision`,
+        actionLink: { label: "Open Contact Form", tab: "Contact" }
+      };
+    }
+
+    // 9. RELOCATION / REMOTE WORK / WORK AVAILABILITY ("can he relocate", "is he open to remote", "remote work")
+    if (
+      hasWord("relocate", 2) ||
+      hasWord("relocation", 2) ||
+      hasWord("remote", 1) ||
+      (hasWord("available", 2) && (hasWord("work", 1) || hasWord("job", 1)))
+    ) {
+      return {
+        text: `💼 **Work Availability & Relocation:**\n• **Remote**: Actively available for remote software engineering and AI engineering roles globally\n• **On-Site / Hybrid**: Fully open to on-site and hybrid positions in **Islamabad** and nationwide\n• **Start Date**: Available immediately for full-time roles, contracts, and internships!`,
+        actionLink: { label: "Send a Message", tab: "Contact" }
+      };
+    }
+
+    // 10. TECHNICAL SKILLS & TECH STACK ("skills", "tech stack", "technologies", "what does he know", "tools", "programming languages")
+    if (
+      hasWord("skill", 2) ||
+      hasWord("skills", 2) ||
+      hasWord("stack", 1) ||
+      hasWord("technology", 2) ||
+      hasWord("technologies", 2) ||
+      hasWord("tool", 1) ||
+      hasWord("tools", 1) ||
+      hasWord("framework", 2) ||
+      hasWord("frameworks", 2) ||
+      contains("tech stack") ||
+      contains("programming language")
+    ) {
+      return {
+        text: `🛠️ **Core Technical Skills & Stack:**\n\n• **Generative AI & ML**: Python (88%), LangGraph (86%), LangChain & RAG (84%), Prompt Engineering (85%), Vector Embeddings (80%), FastAPI (82%)\n• **Android Development**: Android SDK / Java (88%), Android Studio (85%), Firebase Realtime DB & Auth (84%), Material Design (80%), Flutter (55%)\n• **Web & Full-Stack**: React 19 & TypeScript (80%), JavaScript ES6+ (84%), Tailwind CSS (86%), Node.js & Express (74%), MongoDB & REST APIs (76%)\n• **Engineering & Tools**: Requirements Engineering / SRS (88%), UML (82%), System Design (76%), Git & GitHub (86%), Postman (78%), Figma (72%)`,
+        actionLink: { label: "View Complete Skills Matrix", tab: "About" }
+      };
+    }
+
+    // 11. JOKE / FUN / EASTER EGG ("tell me a joke", "make me laugh", "funny")
+    if (hasWord("joke", 1) || contains("make me laugh") || contains("funny")) {
+      return {
+        text: `😄 **AI Developer Joke:**\nWhy did the LangGraph agent break up with the simple prompt?\n\n*Because it wanted stateful cyclical feedback loops, but the prompt just kept talking in one direction!* 🤖✨`,
+        actionLink: { label: "Inspect LangGraph Projects", tab: "Projects" }
+      };
+    }
+
+    // 12. CONVERSATIONAL ACKNOWLEDGMENTS ("ok", "okay", "k", "alright", "sure", "cool", "nice", "got it", "fine", "perfect", "yes", "yep", "no", "nah", "sounds good")
     if (/^(ok|okay|k|kk|alright|sure|cool|nice|got it|fine|perfect|yes|yep|yeah|no|nah|nope|sounds good|understood|noted)$/i.test(cleanWords)) {
       return {
         text: `Got it! 👍 Feel free to ask anything else about **Ijlal's ${projectsData.length} projects**, **${certificationsData.length} verified certifications**, **3.96 CGPA at NUML**, or engineering stack!`,
@@ -225,40 +443,56 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 2. GREETINGS & SALUTATIONS ("hello", "hi", "hey", "salam", "assalam", "aoa", "good morning", "good afternoon", "good evening", "hey there")
-    if (/^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|good\s*(morning|afternoon|evening|day|night))(\s|$)/i.test(cleanWords)) {
+    // 13. GREETINGS & SALUTATIONS ("hello", "hi", "hey", "salam", "assalam", "aoa", "good morning", "good evening", "hey there")
+    if (/^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|good\s*(morning|afternoon|evening|day|night))(\s|$)/i.test(cleanWords) || hasWord("hello", 1) || hasWord("salam", 1) || hasWord("greetings", 2)) {
       return {
         text: `Hello! 👋 Glad to connect with you!\n\nI can give you instant grounded answers about **Ijlal Hussain's**:\n• **${projectsData.length} Featured Projects** (ResumeIQ, Technical Blog Factory, SafeZone, Portfolio)\n• **Academic Distinction** (${personalInfo.cgpa} CGPA at NUML Islamabad)\n• **${certificationsData.length} Verified Certifications** (NAVTTC AI/ML, Cisco Python, DigiSkills, Kartoa Letter)\n• **Generative AI & LangGraph** agentic systems\n• **Native Android** & **Full-Stack Web** engineering\n\nWhat would you like to know?`,
         actionLink: { label: "View About & Skills", tab: "About" }
       };
     }
 
-    // 3. BOT IDENTITY / HOW ARE YOU / CREATOR ("how are you", "who are you", "who made you", "what is your name", "what do you do")
-    if (/how\s+are\s+you|who\s+are\s+you|who\s+made\s+you|what\s+is\s+your\s+name|who\s+created\s+you|what\s+do\s+you\s+do|introduce\s+yourself/i.test(cleanWords)) {
+    // 14. BOT IDENTITY / HOW ARE YOU / CREATOR ("how are you", "who are you", "who made you", "what is your name", "what do you do")
+    if (
+      hasWord("who are you") ||
+      contains("how are you") ||
+      contains("who made you") ||
+      contains("what is your name") ||
+      contains("what do you do") ||
+      contains("introduce yourself") ||
+      contains("how r u") ||
+      hasWord("hru", 0)
+    ) {
       return {
         text: `I'm doing great, thank you! 😊\n\nI am **Ijlal's AI Portfolio Assistant**, running 100% client-side in your browser. I have full knowledge of Ijlal's software engineering background, projects, academic honors, verified certifications, and skills.`,
         actionLink: { label: "Explore Projects", tab: "Projects" }
       };
     }
 
-    // 4. GRATITUDE & CLOSING ("thanks", "thank you", "great", "awesome", "bye", "goodbye")
-    if (/^(thank|thanks|thank\s+you|appreciate|awesome|great|cool|goodbye|bye)(\s|$)/i.test(cleanWords)) {
+    // 15. GRATITUDE & CLOSING ("thanks", "thank you", "great", "awesome", "bye", "goodbye")
+    if (/^(thank|thanks|thank\s+you|appreciate|awesome|great|cool|goodbye|bye)(\s|$)/i.test(cleanWords) || hasWord("thanks", 1)) {
       return {
         text: `You're very welcome! 😊 If you have any more questions or would like to get in touch with Ijlal, feel free to reach out directly through the contact section!`,
         actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
 
-    // 5. INTRODUCE IJLAL / WHO IS IJLAL / BIO / SUMMARY
-    if (/who\s+is\s+ijlal|about\s+ijlal|tell\s+me\s+about\s+ijlal|introduce\s+ijlal|summary|overview|bio|background/i.test(cleanWords)) {
-      return {
-        text: `👨‍💻 **About Ijlal Hussain:**\n${personalInfo.bio}\n\n**Core Pillars:**\n• **Education**: BS Software Engineering at NUML Islamabad (**${personalInfo.cgpa} CGPA**)\n• **Specialization**: Generative AI (LangGraph, RAG), Native Android (Java, Firebase), and MERN/React Web Development\n• **Experience**: AI Intern @ Kartoa Technologies, RE Intern @ Alberuni Tech, and FYP Lead @ NUML\n• **Accreditation**: ${certificationsData.length} verified institutional certifications`,
-        actionLink: { label: "Read Full Bio & Timeline", tab: "About" }
-      };
-    }
-
-    // 6. ALL CERTIFICATIONS & CERTIFICATE COUNTS ("how many certif", "how many certificate", "list certificates", "all certificates", "what certificates", "credentials", "navttc", "cisco", "digiskills")
-    if (/certif|licens|credential|navttc|digiskill|cisco|python\s+essential|graphic\s+design|freelanc|adan|internship\s+letter/i.test(cleanWords)) {
+    // 16. ALL CERTIFICATIONS & CERTIFICATE COUNTS ("how many certif", "how many certificate", "list certificates", "all certificates", "what certificates", "credentials", "navttc", "cisco", "digiskills")
+    if (
+      hasWord("certificate", 2) ||
+      hasWord("certification", 2) ||
+      hasWord("cerfiticate", 2) ||
+      hasWord("certifcate", 2) ||
+      hasWord("credential", 2) ||
+      hasWord("credentials", 2) ||
+      hasWord("license", 2) ||
+      hasWord("navttc", 1) ||
+      hasWord("cisco", 1) ||
+      hasWord("digiskill", 2) ||
+      hasWord("digiskills", 2) ||
+      contains("python essential") ||
+      contains("graphic design") ||
+      contains("freelanc")
+    ) {
       const certList = certificationsData.map((c, i) => {
         const idStr = c.credentialId ? ` (ID: ${c.credentialId})` : "";
         return `${i + 1}. **${c.title}** — ${c.organization} [${c.period}]${idStr}`;
@@ -270,8 +504,16 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 7. ALL PROJECTS & PROJECT COUNTS ("how many projects", "how many project di he", "list projects", "projects count", "what projects", "show projects")
-    if (/how\s+many\s+project|project.*count|number\s+of\s+project|total\s+project|list.*project|all\s+project|show.*project|what\s+project|portfolio.*project/i.test(cleanWords)) {
+    // 17. ALL PROJECTS & PROJECT COUNTS (General) ("how many projects", "how many project di he", "list projects", "projects count", "what projects")
+    if (
+      hasWord("project", 2) ||
+      hasWord("projects", 2) ||
+      hasWord("prokjec", 2) ||
+      hasWord("prjec", 2) ||
+      hasWord("portfolio", 2) ||
+      contains("what did he build") ||
+      contains("what he built")
+    ) {
       const projList = projectsData.map((p, i) => {
         return `${i + 1}. **${p.title}** (${p.category})\n   • Tech: ${p.tech.slice(0, 4).join(", ")}`;
       }).join("\n\n");
@@ -282,8 +524,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 8. RESUMEIQ (Deep Dive)
-    if (/resumeiq|resume\s*iq|ats|cv\s*parser|career\s*intelligence/i.test(cleanWords)) {
+    // 18. RESUMEIQ (Deep Dive)
+    if (hasWord("resumeiq", 2) || (hasWord("resume", 1) && hasWord("iq", 0)) || hasWord("ats", 0)) {
       const proj = projectsData.find((p) => p.id === "resumeiq");
       return {
         text: `🤖 **ResumeIQ — AI Career Intelligence Platform:**\n${proj?.description || "Production-grade career intelligence engine."}\n\n**Key Highlights:**\n• 7-node cyclic **LangGraph** state machine\n• Grounded local RAG retrieval with sentence-transformers\n• Groq Cloud AI + Gemini dual-core failover\n• ATS parseability auditing & Google XYZ bullet rewrites\n• Modern Next.js 16 Liquid Glass frontend`,
@@ -291,8 +533,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 9. TECHNICAL BLOG FACTORY (Deep Dive)
-    if (/blog|factory|post\s*factory|technical\s*blog|writer\s*agent|peer\s*review|tavily/i.test(cleanWords)) {
+    // 19. TECHNICAL BLOG FACTORY (Deep Dive)
+    if (hasWord("factory", 2) || (hasWord("blog", 1) && (hasWord("post", 1) || hasWord("writer", 1))) || hasWord("tavily", 1)) {
       const proj = projectsData.find((p) => p.id === "blogfactory");
       return {
         text: `📝 **Technical Blog Post Factory:**\n${proj?.description || "Multi-agent autonomous publishing studio."}\n\n**Key Highlights:**\n• Autonomous 3-agent **LangGraph 0.3+** cyclic workflow\n• Live web fact-checking via **Tavily AI Search API**\n• Strict iterative peer review loops (1–3 cycles)\n• Automatic syntax-verified runnable code generator\n• 1-click vector PDF generation with jsPDF`,
@@ -300,8 +542,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 10. SAFEZONE ANDROID APP (Deep Dive)
-    if (/safe\s*zone|safezone|parent|child|android\s*app|fyp|geofenc|monitoring|control/i.test(cleanWords)) {
+    // 20. SAFEZONE ANDROID APP (Deep Dive)
+    if (hasWord("safezone", 2) || (hasWord("safe", 1) && hasWord("zone", 1)) || hasWord("parental", 2) || hasWord("geofence", 2) || hasWord("fyp", 0)) {
       const proj = projectsData.find((p) => p.id === "safezone");
       return {
         text: `📱 **SafeZone — Parental Control Android App (FYP):**\n${proj?.description || "High-fidelity Android parental control system."}\n\n**Key Highlights:**\n• Developed as NUML Final Year Project (FYP) team lead\n• Native Android (Java) with **Firebase Realtime Database & Auth**\n• Real-time GPS geofencing & live location tracking\n• Remote lock & app usage screen time schedulers\n• 11 sequential verified UI screens in gallery`,
@@ -309,28 +551,16 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 11. PORTFOLIO WEBSITE ARCHITECTURE
-    if (/portfolio\s*web|tech\s*stack\s*portfolio|how\s*built|react\s*19|vite|pwa|tailwind/i.test(cleanWords)) {
+    // 21. CGPA / GPA / MARKS / GRADES
+    if (hasWord("cgpa", 1) || hasWord("gpa", 0) || hasWord("marks", 1) || hasWord("grade", 1) || hasWord("grades", 1)) {
       return {
-        text: `⚡ **Developer Portfolio Architecture:**\nEngineered with **React 19**, **TypeScript**, **Vite 6**, and **Tailwind CSS v4**.\n\n• Sub-second page loads with zero render-blocking CSS & WebP compression\n• Persistent Hash routing (\`#projects\`, \`#about\`, \`#certifications\`, \`#contact\`)\n• Installable Progressive Web App (PWA)\n• Web3Forms live email gateway with local PKT time ticker\n• Interactive credentials ledger with signed PDF viewer`,
-        actionLink: { label: "Explore Portfolio Specifications", tab: "Projects" }
+        text: `🎓 **Academic Record & High CGPA:**\n• **BS Software Engineering** — National University of Modern Languages (NUML), Islamabad\n• **CGPA**: **${personalInfo.cgpa}** (Exceptional Academic Distinction)\n• **Intermediate (Computer Science)** — Govt Boys Degree College Danyore Gilgit (Grade B)\n• **Matriculation** — Vision Higher Secondary School Danyore Gilgit (Grade A)`,
+        actionLink: { label: "View Academic Timeline", tab: "About" }
       };
     }
 
-    // 12. CGPA / EDUCATION / UNIVERSITY / DEGREE / SCHOOL / COLLEGE
-    if (/cgpa|gpa|marks|grade|numl|university|graduat|degree|academic|education|islamabad|bachelor|study|school|college|matric|intermediate|fsc/i.test(cleanWords)) {
-      const eduList = educationData.map((e) => {
-        return `• **${e.degree}** — ${e.institution} (${e.period}) [${e.grade}]`;
-      }).join("\n");
-
-      return {
-        text: `🎓 **Academic Distinction & Educational Background:**\n\n${eduList}\n\nIjlal graduated with an exceptional **${personalInfo.cgpa} CGPA** from NUML Islamabad, maintaining top-tier academic rigor with strong foundations in Algorithms, Software Architecture, Machine Learning, and Distributed Systems.`,
-        actionLink: { label: "View Education Details", tab: "About" }
-      };
-    }
-
-    // 13. WORK EXPERIENCE / INTERNSHIPS / CAREER
-    if (/experience|intern|kartoa|alberuni|work|job|employment|history|career|companies/i.test(cleanWords)) {
+    // 22. WORK EXPERIENCE / INTERNSHIPS / CAREER
+    if (hasWord("experience", 2) || hasWord("internship", 2) || hasWord("internships", 2) || hasWord("kartoa", 1) || hasWord("alberuni", 2) || hasWord("work", 1) || hasWord("career", 1)) {
       const expList = experienceData.map((exp) => {
         return `• **${exp.role} @ ${exp.company}** (${exp.period})\n  ${exp.highlights[0]}`;
       }).join("\n\n");
@@ -341,48 +571,24 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 14. LANGGRAPH / GENERATIVE AI / RAG / LLM
-    if (/langgraph|langchain|rag|agent|generative\s*ai|genai|llm|deepseek|groq|gemini|prompt|model/i.test(cleanWords)) {
+    // 23. LANGGRAPH / GENERATIVE AI / RAG / LLM
+    if (hasWord("langgraph", 2) || hasWord("langchain", 2) || hasWord("rag", 0) || hasWord("agent", 1) || hasWord("agentic", 2) || hasWord("llm", 0) || hasWord("deepseek", 2) || hasWord("groq", 1) || hasWord("gemini", 1)) {
       return {
         text: `⚡ **Generative AI & Agentic Systems Expertise:**\nIjlal has hands-on experience developing advanced AI agent architectures:\n\n• **LangGraph Multi-Agent Workflows**: State graphs, cyclic loops, Human-in-the-Loop checkpointing, and conditional routing\n• **RAG Pipelines**: Dense vector embeddings, sentence-transformers, cosine similarity retrieval, and grounded section citations\n• **Model Orchestration**: Groq Cloud (Llama 3.3, DeepSeek-R1), Google Gemini 2.5 Flash, and OpenAI APIs\n• **AI Microservices**: FastAPI with streaming responses and Pydantic validation filters`,
         actionLink: { label: "View AI & ML Skillsets", tab: "About" }
       };
     }
 
-    // 15. ANDROID / JAVA / MOBILE
-    if (/android|java|mobile|studio|apk|geofence|flutter/i.test(cleanWords)) {
+    // 24. LANGUAGES (Urdu, English, Brushaski)
+    if (hasWord("language", 2) || hasWord("languages", 2) || hasWord("speak", 1) || hasWord("urdu", 0) || hasWord("english", 2) || hasWord("brushaski", 2)) {
       return {
-        text: `📱 **Android & Mobile Development:**\n• **Native Android**: Java SDK, Android Studio, Activities/Fragments, BroadcastReceivers, Foreground Services\n• **Firebase Suite**: Realtime Database, Cloud Firestore, Authentication, Cloud Messaging\n• **Architecture**: MVC/MVVM patterns, REST API integration, Material Design 3 UI`,
-        actionLink: { label: "View Android Projects", tab: "Projects" }
-      };
-    }
-
-    // 16. WEB & FULL-STACK
-    if (/web|react|typescript|tailwind|node|javascript|frontend|backend|full\s*stack|mern/i.test(cleanWords)) {
-      return {
-        text: `🌐 **Web & Full-Stack Development:**\n• **Frontend**: React 19, TypeScript, Tailwind CSS v4, Next.js, Motion\n• **Backend**: Node.js, Express, FastAPI, MongoDB, RESTful APIs\n• **Tooling**: Vite, Git/GitHub, PWA, WebP asset compression`,
-        actionLink: { label: "Explore Detailed Skills Matrix", tab: "About" }
-      };
-    }
-
-    // 17. LANGUAGES (Urdu, English, Brushaski)
-    if (/language|speak|fluent|urdu|english|brushaski|tongue/i.test(cleanWords)) {
-      return {
-        text: `🗣️ **Languages & Communication:**\n• **Urdu**: Native (${skillsData.find(s => s.category === "Languages")?.skills.find(k => k.name === "Urdu")?.level || "Native"})\n• **Brushaski**: Mother Tongue (${skillsData.find(s => s.category === "Languages")?.skills.find(k => k.name === "Brushaski")?.level || "Mother Tongue"})\n• **English**: Professional Working Proficiency (${skillsData.find(s => s.category === "Languages")?.skills.find(k => k.name === "English")?.level || "Professional"})`,
+        text: `🗣️ **Languages & Communication:**\n• **Urdu**: Native\n• **Brushaski**: Mother Tongue\n• **English**: Professional Working Proficiency`,
         actionLink: { label: "View Skills Matrix", tab: "About" }
       };
     }
 
-    // 18. LOCATION / WHERE IS HE FROM / HOMETOWN
-    if (/where.*(from|live|ijlal|he|located|based)|location|city|country|hometown|gilgit|pakistan/i.test(cleanWords)) {
-      return {
-        text: `📍 **Location & Background:**\nIjlal is originally from the picturesque region of **Gilgit, Pakistan** 🏔️.\n\nHe completed his Software Engineering degree at **NUML in Islamabad** and is actively open to **remote global roles** as well as on-site positions in Islamabad/Pakistan!`,
-        actionLink: { label: "Contact Ijlal", tab: "Contact" }
-      };
-    }
-
-    // 19. CURRENT TIME / TIMEZONE / PKT
-    if (/time.*(is\s*it|there|now|zone|current)|timezone|pkt|pakistan\s*time/i.test(cleanWords)) {
+    // 25. CURRENT TIME / TIMEZONE / PKT
+    if (hasWord("time", 1) || hasWord("clock", 1) || hasWord("timezone", 2) || hasWord("pkt", 0)) {
       const pkt = getPKTTime();
       return {
         text: `🕒 **Current Local Time:**\nIt is currently **${pkt} PKT (UTC+5)** in Pakistan where Ijlal is located.\n\nYou can send him a message anytime via email or WhatsApp, and he will get back to you promptly!`,
@@ -390,23 +596,15 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // 20. CONTACT / HIRE / RESUME DOWNLOAD
-    if (/contact|hire|email|phone|whatsapp|linkedin|github|reach|call|message|cv|resume|download|available|start|job/i.test(cleanWords)) {
+    // 26. CONTACT / HIRE / RESUME DOWNLOAD / EMAIL / WHATSAPP
+    if (hasWord("contact", 2) || hasWord("hire", 1) || hasWord("email", 1) || hasWord("phone", 1) || hasWord("whatsapp", 2) || hasWord("linkedin", 2) || hasWord("github", 2) || hasWord("resume", 1) || hasWord("cv", 0)) {
       return {
         text: `📬 **Let's Connect!**\n\n• **Email**: ${personalInfo.email}\n• **WhatsApp**: ${personalInfo.phone}\n• **LinkedIn**: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})\n• **Location**: ${personalInfo.location}\n\nIjlal is actively available for AI engineering roles, full-stack development, and internships!`,
         actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
 
-    // 21. GENERAL SKILLS / TOOLBOX
-    if (/skill|stack|technolog|tool|python|fastapi/i.test(cleanWords)) {
-      return {
-        text: `🛠️ **Ijlal's Core Engineering Toolbox:**\n\n• **Generative AI & ML**: Python (88%), LangGraph (86%), LangChain & RAG (84%), Prompt Engineering (85%), FastAPI (82%)\n• **Android**: Java SDK (88%), Android Studio (85%), Firebase (84%), Material Design (80%)\n• **Web & Full-Stack**: React 19 & TypeScript (80%), Tailwind CSS (86%), Node & Express (74%), MongoDB (76%)\n• **Software Engineering**: Requirements SRS/BRD (88%), System Design (76%), Git & GitHub (86%)`,
-        actionLink: { label: "Explore Detailed Skills Matrix", tab: "About" }
-      };
-    }
-
-    // 22. GIBBERISH / RANDOM CHARACTERS FILTER (e.g. "sada", "1123", "abc", "asdf", "sjifoasidjfosidfj")
+    // 27. GIBBERISH / RANDOM CHARACTERS FILTER (e.g. "sada", "1123", "abc", "asdf", "sjifoasidjfosidfj")
     const isPureDigits = /^\d+$/.test(cleanWords);
     const isTooShortNoise = cleanWords.length <= 4 && !/^(hi|hey|gpa|ai|fyp|numl|job|cv|web|app|java|help)$/.test(cleanWords);
     const lacksVowels = cleanWords.length > 5 && !/[aeiouy]/.test(cleanWords);
@@ -414,14 +612,14 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
     if (isPureDigits || isTooShortNoise || lacksVowels || hasLongRandomSequence) {
       return {
-        text: `I couldn't quite understand that. 🤔 I'm specialized in answering questions about Ijlal's engineering career, projects, and skills.\n\nTry asking:\n• How many projects has he built?\n• How many certifications does he have?\n• What is his CGPA?\n• What is his LangGraph & AI experience?\n• Where is he from?`,
+        text: `I couldn't quite understand that. 🤔 I'm specialized in answering questions about Ijlal's engineering career, projects, and skills.\n\nTry asking:\n• List project names\n• From which university is he graduated?\n• How many AI projects has he built?\n• How old is he?\n• Where is he from?`,
         actionLink: { label: "Explore All Projects", tab: "Projects" }
       };
     }
 
-    // 23. DEFAULT CONCISE FALLBACK
+    // 28. DEFAULT CONCISE FALLBACK
     return {
-      text: `I'm here to help you learn all about **Ijlal Hussain**! 🌟\n\nYou can ask me specific questions like:\n• How many projects has he built?\n• How many certifications does he have?\n• What is his CGPA and degree?\n• Tell me about ResumeIQ & LangGraph\n• What experience does he have with SafeZone?`,
+      text: `I'm here to help you learn all about **Ijlal Hussain**! 🌟\n\nYou can ask me specific questions like:\n• List project names\n• From which university is he graduated?\n• How many AI projects has he built?\n• How many certifications does he have?\n• Where is he from?`,
       actionLink: { label: "View All Projects", tab: "Projects" }
     };
   };
@@ -682,7 +880,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Ask about CGPA, projects, certifications, LangGraph, where is he from..."
+                  placeholder="Ask about university, project names, AI projects, Android app, age, location..."
                   className="flex-1 px-4 py-2.5 rounded-xl bg-card border border-white/15 text-text-main placeholder-text-muted font-sans text-xs focus:outline-none focus:border-cyan-bright focus:ring-1 focus:ring-cyan-bright/50 transition-all"
                 />
 
