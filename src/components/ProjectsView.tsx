@@ -125,21 +125,34 @@ export default function ProjectsView() {
             )}
           </div>
 
-          {/* Categories filters */}
+          {/* Categories filters with count badges */}
           <div className="flex flex-wrap gap-1.5 self-start sm:self-auto border-b border-white/5 pb-2 sm:pb-0">
-            {filterCategories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-3.5 py-2.5 rounded-xl font-sans text-xs font-semibold tracking-wide cursor-pointer transition-all ${
-                  activeFilter === cat
-                    ? "bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 shadow-md shadow-purple-glow/10 font-bold"
-                    : "bg-white/5 text-text-sub hover:bg-white/10"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            {filterCategories.map((cat) => {
+              const count = cat === "All" ? projectsData.length : projectsData.filter((p) => p.category === cat).length;
+              const isActive = activeFilter === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveFilter(cat)}
+                  className={`inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl font-sans text-xs font-semibold tracking-wide cursor-pointer transition-all ${
+                    isActive
+                      ? "bg-gradient-to-r from-cyan-bright to-purple-bright text-slate-950 shadow-md shadow-purple-glow/10 font-bold"
+                      : "bg-white/5 text-text-sub hover:bg-white/10 hover:text-text-main"
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span
+                    className={`px-1.5 py-0.5 rounded-md text-[10px] font-mono leading-none ${
+                      isActive
+                        ? "bg-slate-950/25 text-slate-950 font-bold"
+                        : "bg-white/10 text-cyan-bright font-semibold"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>

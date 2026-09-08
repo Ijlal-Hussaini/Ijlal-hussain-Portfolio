@@ -13,6 +13,7 @@ import AboutView from "./components/AboutView";
 import ProjectsView from "./components/ProjectsView";
 import CertificationsView from "./components/CertificationsView";
 import ContactView from "./components/ContactView";
+import AIChatBot from "./components/AIChatBot";
 
 export default function App() {
   const tabs = ["Home", "About", "Projects", "Certifications", "Contact"];
@@ -211,6 +212,9 @@ export default function App() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* 6. Embedded AI Resume Chat Assistant Widget (Zero-API Client-Side RAG) */}
+      <AIChatBot onNavigate={setActiveTab} isScrollTopVisible={isScrollVisible} />
     </motion.div>
   );
 }
