@@ -61,8 +61,11 @@ export default function AboutView() {
     <div id="about-view-container" className="space-y-16 pb-12">
       
       {/* SECTION 1: BIO & CV CTA */}
-      <section
+      <motion.section
         id="about-hero"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative flex flex-col md:flex-row items-start justify-between gap-10"
       >
         <div className="flex-1 space-y-6 text-left">
@@ -130,11 +133,15 @@ export default function AboutView() {
             </li>
           </ul>
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 2: EXPERIENCE TIMELINE */}
-      <section
+      <motion.section
         id="experience-section"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
         <div className="text-left space-y-2">
@@ -148,7 +155,14 @@ export default function AboutView() {
 
         <div className="relative border-l border-white/5 pl-6 sm:pl-8 space-y-12">
           {experienceData.map((exp, index) => (
-            <div key={index} className="relative group">
+            <motion.div 
+              key={index} 
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="relative group"
+            >
               {/* Timeline marker icon */}
               <span className="absolute -left-10 sm:-left-12 top-1.5 w-8 h-8 rounded-full bg-card border border-white/10 flex items-center justify-center text-cyan-bright group-hover:border-cyan-glow/50 transition-all shadow-md">
                 <Briefcase className="w-4 h-4" />
@@ -179,14 +193,18 @@ export default function AboutView() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 3: EDUCATION TIMELINE */}
-      <section
+      <motion.section
         id="education-section"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
         <div className="text-left space-y-2">
@@ -200,7 +218,14 @@ export default function AboutView() {
 
         <div className="relative border-l border-white/5 pl-6 sm:pl-8 space-y-12">
           {educationData.map((edu, index) => (
-            <div key={index} className="relative group">
+            <motion.div 
+              key={index} 
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="relative group"
+            >
               {/* Timeline marker icon */}
               <span className="absolute -left-10 sm:-left-12 top-1.5 w-8 h-8 rounded-full bg-card border border-white/10 flex items-center justify-center text-purple-bright group-hover:border-purple-glow/50 transition-all shadow-md">
                 <GraduationCap className="w-4 h-4" />
@@ -221,14 +246,18 @@ export default function AboutView() {
                   <span className="font-mono text-xs text-green-accent font-semibold">{edu.grade}</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 4: DETAILED SKILLS GRID WITH CATEGORY FILTRATION */}
-      <section
+      <motion.section
         id="skills-section"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -290,11 +319,14 @@ export default function AboutView() {
                             {prof.label}
                           </span>
                         </div>
-                        {/* Progress Bar */}
+                        {/* Progress Bar with smooth once-only fill */}
                         <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden">
-                          <div
-                            style={{ width: `${prof.percent}%` }}
-                            className={`h-full rounded-full bg-gradient-to-r ${prof.color} transition-all duration-500`}
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${prof.percent}%` }}
+                            viewport={{ once: true, amount: 0.1 }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: sIdx * 0.04 }}
+                            className={`h-full rounded-full bg-gradient-to-r ${prof.color}`}
                           />
                         </div>
                       </div>
@@ -305,11 +337,15 @@ export default function AboutView() {
             ))}
           </AnimatePresence>
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 5: BENTO GRID FUN FACTS */}
-      <section
+      <motion.section
         id="funfacts-section"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8"
       >
         <div className="text-center space-y-2 max-w-xl mx-auto">
@@ -323,9 +359,13 @@ export default function AboutView() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {funFacts.map((fact, index) => (
-            <div
+            <motion.div
               key={index}
-              className="glass rounded-2xl p-6 space-y-4 border border-white/5 text-left hover:border-white/10 transition-all flex flex-col justify-between"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: index * 0.08, duration: 0.4 }}
+              className="glass rounded-2xl p-6 space-y-4 border border-white/5 text-left hover:border-white/15 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
               <div className="p-3 rounded-xl bg-white/5 self-start">
                 {fact.icon}
@@ -338,10 +378,10 @@ export default function AboutView() {
                   {fact.text}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }

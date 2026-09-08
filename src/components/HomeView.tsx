@@ -1,5 +1,6 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, useRef } from "react";
 import { ArrowRight, Code, Cpu, BrainCircuit, ExternalLink, Download, Github } from "lucide-react";
+import { motion, useInView } from "motion/react";
 import { personalInfo, projectsData } from "../data";
 
 interface HomeViewProps {
@@ -51,18 +52,84 @@ const TypewriterHero = memo(function TypewriterHero({ roles }: { roles: string[]
   );
 });
 
+// 2. Animated Counter Component (Triggered once with requestAnimationFrame for 60fps smoothness)
+const StatCounter = memo(function StatCounter({
+  target,
+  decimals = 0,
+  suffix = "",
+}: {
+  target: number;
+  decimals?: number;
+  suffix?: string;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+
+    const updateCounter = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const currentVal = start + (target - start) * easeProgress;
+      setCount(currentVal);
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      } else {
+        setCount(target);
+      }
+    };
+
+    requestAnimationFrame(updateCounter);
+  }, [isInView, target]);
+
+  return (
+    <span ref={ref}>
+      {decimals > 0 ? count.toFixed(decimals) : Math.floor(count)}
+      {suffix}
+    </span>
+  );
+});
+
 export default function HomeView({ onNavigate }: HomeViewProps) {
   const [imageError, setImageError] = useState(false);
 
   // Filter top projects (first 2 for preview)
   const previewProjects = projectsData.slice(0, 2);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] as const },
+    },
+  };
+
   return (
     <div id="home-view-container" className="space-y-20 sm:space-y-24 pb-12">
       
       {/* SECTION 1: HERO CONTAINER */}
-      <section
+      <motion.section
         id="hero-section"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
         className="relative pt-6 sm:pt-10 pb-6 flex flex-col lg:flex-row items-center justify-between gap-12"
       >
         {/* Ambient colored background lights (GPU optimized with radial gradient) */}
@@ -77,27 +144,29 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
         {/* Text Area */}
         <div className="flex-1 space-y-6 text-left relative z-10">
-          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+          <motion.div variants={itemVariants} className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
             <span className="w-2 h-2 rounded-full bg-green-accent animate-pulse-subtle" />
             <span className="font-mono text-[11px] text-text-sub tracking-wider uppercase">
               Ready for AI &amp; Full-Stack Innovation
             </span>
-          </div>
+          </motion.div>
 
           <div className="space-y-3">
-            <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-text-main leading-tight tracking-tight">
+            <motion.h1 variants={itemVariants} className="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-text-main leading-tight tracking-tight">
               Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-bright to-purple-bright">{personalInfo.name}</span>
-            </h1>
+            </motion.h1>
             
             {/* Isolated typewriter component */}
-            <TypewriterHero roles={personalInfo.titles} />
+            <motion.div variants={itemVariants}>
+              <TypewriterHero roles={personalInfo.titles} />
+            </motion.div>
           </div>
 
-          <p className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed max-w-xl text-justify">
+          <motion.p variants={itemVariants} className="font-sans text-xs sm:text-sm text-text-sub leading-relaxed max-w-xl text-justify">
             {personalInfo.bio}
-          </p>
+          </motion.p>
 
-          <div className="flex flex-wrap gap-4 pt-2">
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-2">
             <button
               id="hero-projects-cta"
               onClick={() => onNavigate("Projects")}
@@ -113,11 +182,11 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             >
               <span>Let's Connect</span>
             </button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Dynamic Holographic Portrait Mockup */}
-        <div className="flex-1 flex justify-center relative z-10">
+        <motion.div variants={itemVariants} className="flex-1 flex justify-center relative z-10">
           <div className="relative w-72 h-72 sm:w-85 sm:h-85 aspect-square">
             {/* Rotating Outer Tech Circles */}
             <div className="absolute inset-0 rounded-full border border-dashed border-cyan-glow/20 animate-spin-slow pointer-events-none" />
@@ -185,17 +254,21 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* SECTION 2: STATS SUMMARY GRID */}
-      <section
+      <motion.section
         id="stats-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative z-10"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* CGPA */}
-          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/20 transition-all">
+          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-cyan-glow/30 hover:-translate-y-1 transition-all duration-300">
             <div 
               className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
               style={{ background: "radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%)" }}
@@ -204,7 +277,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               <Code className="w-5 h-5" />
             </div>
             <span className="block font-display font-bold text-4xl text-text-main text-glow-cyan">
-              3.96
+              <StatCounter target={3.96} decimals={2} />
             </span>
             <span className="block font-sans text-xs text-text-sub font-semibold">
               NUML University CGPA
@@ -215,7 +288,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           </div>
 
           {/* PROJECTS */}
-          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/20 transition-all">
+          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-purple-glow/30 hover:-translate-y-1 transition-all duration-300">
             <div 
               className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
               style={{ background: "radial-gradient(circle, rgba(155, 89, 245, 0.15) 0%, transparent 70%)" }}
@@ -224,7 +297,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               <BrainCircuit className="w-5 h-5" />
             </div>
             <span className="block font-display font-bold text-4xl text-text-main text-glow-purple">
-              4+
+              <StatCounter target={4} suffix="+" />
             </span>
             <span className="block font-sans text-xs text-text-sub font-semibold">
               Engineered Applications
@@ -235,7 +308,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           </div>
 
           {/* CERTIFICATIONS */}
-          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/20 transition-all">
+          <div className="glass rounded-2xl p-6 text-center space-y-2 relative overflow-hidden group hover:border-green-accent/30 hover:-translate-y-1 transition-all duration-300">
             <div 
               className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none" 
               style={{ background: "radial-gradient(circle, rgba(0, 214, 143, 0.15) 0%, transparent 70%)" }}
@@ -244,7 +317,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               <Cpu className="w-5 h-5" />
             </div>
             <span className="block font-display font-bold text-4xl text-text-main" style={{ textShadow: "0 0 10px rgba(0, 214, 143, 0.4)" }}>
-              6
+              <StatCounter target={6} />
             </span>
             <span className="block font-sans text-xs text-text-sub font-semibold">
               Verified Industry Certifications
@@ -254,11 +327,15 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </span>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 3: CORE CAPABILITIES OVERVIEW */}
-      <section
+      <motion.section
         id="capabilities-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8 relative z-10"
       >
         <div className="text-center space-y-2 max-w-xl mx-auto">
@@ -274,7 +351,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass glass-hover rounded-2xl p-6 space-y-4">
+          <div className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300">
             <div className="w-12 h-12 rounded-xl bg-cyan-glow/10 flex items-center justify-center text-cyan-bright">
               <BrainCircuit className="w-6 h-6" />
             </div>
@@ -286,7 +363,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </p>
           </div>
 
-          <div className="glass glass-hover rounded-2xl p-6 space-y-4">
+          <div className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300">
             <div className="w-12 h-12 rounded-xl bg-purple-glow/10 flex items-center justify-center text-purple-bright">
               <Code className="w-6 h-6" />
             </div>
@@ -298,7 +375,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </p>
           </div>
 
-          <div className="glass glass-hover rounded-2xl p-6 space-y-4">
+          <div className="glass glass-hover rounded-2xl p-6 space-y-4 hover:-translate-y-1.5 transition-all duration-300">
             <div className="w-12 h-12 rounded-xl bg-green-accent/10 flex items-center justify-center text-green-accent">
               <Cpu className="w-6 h-6" />
             </div>
@@ -310,11 +387,15 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             </p>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 4: QUICK WORK SHOWCASE */}
-      <section
+      <motion.section
         id="showcase-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="space-y-8 relative z-10"
       >
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -336,10 +417,14 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {previewProjects.map((project) => (
-            <div
+          {previewProjects.map((project, idx) => (
+            <motion.div
               key={project.id}
-              className="glass rounded-2xl p-6 flex flex-col justify-between space-y-6 hover:border-white/15 transition-all group"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="glass rounded-2xl p-6 flex flex-col justify-between space-y-6 hover:border-cyan-bright/20 hover:-translate-y-1 transition-all duration-300 group"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -401,14 +486,18 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 5: CRAFT QUOTE BANNER */}
-      <section
+      <motion.section
         id="quote-section"
+        initial={{ opacity: 0, scale: 0.97 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative z-10"
       >
         <div className="glass rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-6 relative overflow-hidden border border-white/10 shadow-xl bg-gradient-to-br from-bg2 to-bg3">
@@ -436,7 +525,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
             <span className="block text-text-muted">Software Engineer · NUML Graduate</span>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }
