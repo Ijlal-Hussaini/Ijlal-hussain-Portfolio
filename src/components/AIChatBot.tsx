@@ -93,6 +93,8 @@ const KNOWN_VOCABULARY = new Set([
   "and", "or", "in", "of", "to", "for", "with", "on", "at", "by", "from", "as", "into", "like", "tool", "tools", "platform", "platforms",
   "framework", "frameworks", "library", "libraries", "system", "systems", "application", "applications", "things", "been", "doing",
   "level", "proficiency", "percentage", "percent", "score", "scores", "grade", "grades", "first class", "honors", "distinction",
+  "subject", "subjects", "course", "courses", "coursework", "passion", "passionate", "challenge", "challenges", "problem", "problems",
+  "target", "role", "roles", "position", "frontend", "backend", "fullstack", "style", "ethic", "php", "rust", "ruby", "aws", "c++", "cpp", "c#", "csharp", "swift", "kotlin", "go", "golang", "vue", "angular", "django", "laravel",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -316,10 +318,11 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
   const quickChips = [
     { label: "🎓 CGPA (3.96)", query: "What is Ijlal's CGPA?" },
+    { label: "🤖 Favorite Subject", query: "What is Ijlal's favorite subject?" },
+    { label: "⚡ LangGraph & RAG", query: "What is his LangGraph and RAG experience?" },
     { label: "🤖 ResumeIQ (AI)", query: "Tell me about ResumeIQ project" },
     { label: "📱 Safe Zone (FYP)", query: "Tell me about Safe Zone Android app" },
     { label: "📝 Blog Factory (AI)", query: "Tell me about Technical Blog Factory" },
-    { label: "⚡ LangGraph & RAG", query: "What is his LangGraph and RAG experience?" },
     { label: "🏢 Kartoa Internship", query: "What did he do at Kartoa Technologies?" },
     { label: `📜 Certifications (${certificationsData.length})`, query: "What verified certifications does he have?" },
     { label: "📍 Where is he from?", query: "Where is Ijlal from?" },
@@ -348,7 +351,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
    * Deeply trained across all portfolio data (data.ts) with direct, concise answers and strict guardrails.
    */
   const generateGroundedResponse = (rawQuery: string): { text: string; actionLink?: { label: string; tab?: string; url?: string } } => {
-    const q = rawQuery.toLowerCase().trim();
+    const normalizedRaw = rawQuery.toLowerCase().replace(/c\+\+/g, "cpp").replace(/c#/g, "csharp");
+    const q = normalizedRaw.trim();
     // Normalize punctuation & noise characters
     const cleanWords = q
       .replace(/[^a-z0-9\s]/g, " ")
@@ -377,6 +381,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       if (/^(langgrap|langraph)$/.test(t)) return "langgraph";
       if (/^(langchan|lanchain)$/.test(t)) return "langchain";
       if (/^(tavly|tavili)$/.test(t)) return "tavily";
+      if (/^(favorit|favourite|favorute|favoroutie|favoruite)$/.test(t)) return "favorite";
+      if (/^(subet|subjct|subjec|subjets)$/.test(t)) return "subject";
       return t;
     });
 
@@ -673,7 +679,125 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 14. TITLES & ROLE
+    // 14. FAVORITE SUBJECT / PASSION / ARTIFICIAL INTELLIGENCE
+    // -------------------------------------------------------------
+    if (
+      contains("favorite subject") ||
+      contains("favourite subject") ||
+      contains("favorite course") ||
+      contains("favorite topic") ||
+      contains("major interest") ||
+      contains("his passion") ||
+      contains("what is he passionate about") ||
+      contains("what does he love") ||
+      (hasWord("favorite") && (hasWord("subject") || hasWord("course") || hasWord("topic") || hasWord("ai")))
+    ) {
+      return {
+        text: `🤖 **Ijlal's Favorite Subject & Passion:**\nIjlal's absolute favorite subject and specialized passion is **Artificial Intelligence (Generative AI, LangGraph Multi-Agent Systems, and Retrieval-Augmented Generation / RAG)**! ✨\n\nHe is deeply fascinated by building autonomous, stateful agentic workflows that solve complex real-world challenges with high precision and sub-second execution.`,
+        actionLink: { label: "Inspect AI Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 15. COURSEWORK & UNIVERSITY SUBJECTS AT NUML
+    // -------------------------------------------------------------
+    if (
+      contains("courses did he take") ||
+      contains("subjects did he study") ||
+      contains("university coursework") ||
+      contains("numl subjects") ||
+      contains("numl courses") ||
+      contains("coursework") ||
+      contains("courses studied") ||
+      (hasWord("courses") && hasWord("numl")) ||
+      (hasWord("subjects") && hasWord("numl"))
+    ) {
+      return {
+        text: `📚 **Key Software Engineering & CS Coursework at NUML:**\n• **Artificial Intelligence & Machine Learning** (Favorite Subject)\n• **Data Structures & Algorithms (DSA)**\n• **Object-Oriented Programming (OOP)** (Java & Python)\n• **Software Requirements Engineering (SRE)** (SRS / BRD)\n• **Database Management Systems (DBMS)** (SQL & NoSQL)\n• **System Design & Software Architecture**\n• **Operating Systems & Computer Networks**\n• **Software Quality Assurance & Testing (SQA)**`,
+        actionLink: { label: "View Academic Timeline", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 16. TECHNICAL CHALLENGES & ENGINEERING FEATS
+    // -------------------------------------------------------------
+    if (
+      contains("technical challenge") ||
+      contains("technical challenges") ||
+      contains("difficult challenge") ||
+      contains("problem he solved") ||
+      contains("hardest problem") ||
+      contains("complex problem") ||
+      contains("engineering hurdle")
+    ) {
+      return {
+        text: `🧩 **Key Technical Challenges Solved by Ijlal:**\n\n1. **Android Low-Level Interception (Safe Zone)**:\nEngineered a background interception pipeline using Android \`AccessibilityService\` and \`DevicePolicyManager\` to intercept restricted window focus changes and block uninstallation.\n\n2. **LangGraph State Graph Resilience & Failover (ResumeIQ)**:\nDesigned a 7-node cyclic state machine coupling sub-second Groq Cloud (Llama-3.3-70B) inference with automated failover to Google Gemini 2.5 Flash, paired with local sentence-transformers RAG embeddings.\n\n3. **Multi-Agent Fact-Checking (Blog Factory)**:\nOrchestrated an autonomous 3-agent cyclic loop that integrates live Tavily web search fact-checking against official docs and syntax-verifies runnable code snippets.`,
+        actionLink: { label: "Inspect Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 17. UNSUPPORTED / NON-CORE SKILLS QUERY (PHP, C++, C#, Rust, Ruby, AWS, Go, Swift, etc.)
+    // -------------------------------------------------------------
+    const unsupportedTechList = ["php", "rust", "ruby", "aws", "cpp", "csharp", "swift", "kotlin", "vue", "angular", "django", "laravel"];
+    const matchedUnsupported = unsupportedTechList.find((tech) =>
+      cleanWords.split(/\s+/).includes(tech) ||
+      contains(`does he know ${tech}`) ||
+      contains(`is he good at ${tech}`) ||
+      contains(`experience with ${tech}`)
+    ) || (
+      (tokens.includes("golang") || contains("know go") || contains("experience with go") || contains("go language") || contains("go developer") || contains("programming in go")) ? "GO" : null
+    );
+
+    if (matchedUnsupported && !hasWord("python") && !hasWord("java") && !hasWord("react")) {
+      const techName = matchedUnsupported === "cpp" ? "C++" : (matchedUnsupported === "csharp" ? "C#" : (matchedUnsupported === "GO" ? "Golang" : matchedUnsupported.toUpperCase()));
+      return {
+        text: `💡 **Tech Stack Scope & Learning Agility:**\nIjlal's primary, production-tested engineering stack is **Python (88%)**, **Java & Android SDK (88%)**, **React 19 & TypeScript (80%)**, and **FastAPI (82%)**.\n\nWhile **${techName}** is not in his primary daily toolkit, his strong Computer Science foundations (**3.96 / 4.0 CGPA from NUML**) and proven full-stack adaptability allow him to master new languages, cloud platforms, and frameworks rapidly.`,
+        actionLink: { label: "View Core Skills", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 18. COMPARATIVE QUESTIONS (Frontend vs Backend, Python vs Java)
+    // -------------------------------------------------------------
+    if (contains("frontend or backend") || contains("frontend vs backend") || contains("better at frontend or backend") || contains("backend or frontend")) {
+      return {
+        text: `⚖️ **Full-Stack Balance (Frontend & Backend):**\nIjlal is versatile across both:\n• **Backend Engineering (FastAPI, Python, Node.js, Express, Firebase)**: 84% average proficiency building asynchronous REST microservices and AI pipelines.\n• **Frontend Development (React 19, Next.js 16, TypeScript, Tailwind CSS v4)**: 80% proficiency crafting responsive, glassmorphic modern web applications!`,
+        actionLink: { label: "View Skills Breakdown", tab: "About" }
+      };
+    }
+
+    if (contains("python or java") || contains("python vs java") || contains("better at python or java") || contains("java or python")) {
+      return {
+        text: `⚖️ **Python vs Java Expertise:**\nIjlal has deep, certified mastery in both (**88% proficiency each**):\n• **Python**: His primary language for **Generative AI state graphs (LangGraph)**, **RAG retrieval (LangChain)**, and **FastAPI AI endpoints**.\n• **Java**: His primary language for **Native Android Mobile Engineering (Android SDK, Firebase)** in his Safe Zone FYP!`,
+        actionLink: { label: "View Skills Breakdown", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 19. TARGET CAREER ROLES & ASPIRATIONS
+    // -------------------------------------------------------------
+    if (
+      contains("target role") ||
+      contains("target roles") ||
+      contains("targeting") ||
+      contains("career goal") ||
+      contains("career goals") ||
+      contains("what job does he want") ||
+      contains("what position is he looking for") ||
+      contains("future goals") ||
+      contains("aspiring role") ||
+      (hasWord("target") && (hasWord("role") || hasWord("job") || hasWord("position") || hasWord("work"))) ||
+      ((hasWord("role") || hasWord("job") || hasWord("position")) && (hasWord("target") || hasWord("looking") || hasWord("seeking") || hasWord("want") || hasWord("aspiring")))
+    ) {
+      return {
+        text: `🎯 **Target Roles & Career Focus:**\nIjlal is actively targeting high-impact roles including:\n• 🤖 **AI Engineer / Generative AI Developer** (LangGraph & RAG)\n• 💻 **Software Engineer (Python / Full-Stack)**\n• 📱 **Native Android Engineer (Java / Firebase)**\n• ⚙️ **Backend Engineer (FastAPI / Microservices)**`,
+        actionLink: { label: "Discuss Opportunities", tab: "Contact" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 20. TITLES & ROLE
     // -------------------------------------------------------------
     if (
       contains("what are his titles") ||
@@ -683,7 +807,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("what is his profession") ||
       contains("what kind of engineer") ||
       contains("what is his role") ||
-      contains("what role") ||
+      contains("what are his roles") ||
       contains("his specialization") ||
       contains("what is his specialty")
     ) {
@@ -1004,10 +1128,10 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
-    // LEADERSHIP / TEAM MANAGEMENT (Evaluated before generic SafeZone overview)
-    if (hasWord("leadership", 2) || contains("lead a team") || contains("team lead") || contains("lead developer") || contains("team management") || contains("who was the lead") || contains("lead of safe zone") || contains("lead safe zone")) {
+    // LEADERSHIP / TEAM MANAGEMENT / WORK ETHIC (Evaluated before generic SafeZone overview)
+    if (hasWord("leadership", 2) || contains("lead a team") || contains("team lead") || contains("lead developer") || contains("team management") || contains("who was the lead") || contains("lead of safe zone") || contains("lead safe zone") || contains("leadership style") || contains("work ethic")) {
       return {
-        text: `👑 **Leadership Experience:**\nAs the **FYP Team Lead for Safe Zone**, Ijlal led a 4-developer engineering team through architecture design, sprint planning, Figma UI prototyping, Java development, and final university defense.`,
+        text: `👑 **Leadership Experience & Work Ethic:**\nAs the **FYP Team Lead for Safe Zone**, Ijlal led a 4-developer engineering team through architecture design, sprint planning, Figma UI prototyping, Java development, and final university defense.\n\nHis leadership style is **collaborative, empathetic, and architecture-first**, prioritizing clean code standards, proactive communication, and sprint delivery.`,
         actionLink: { label: "Inspect SafeZone App", tab: "Projects" }
       };
     }
