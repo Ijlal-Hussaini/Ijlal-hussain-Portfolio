@@ -332,9 +332,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     { label: "🏢 Kartoa Internship", query: "What did he do at Kartoa Technologies?" },
     { label: `📜 Certifications (${certificationsData.length})`, query: "What verified certifications does he have?" },
     { label: "📍 Where is he from?", query: "Where is Ijlal from?" },
-    { label: "💼 Available for Hire?", query: "Is Ijlal available for hire?" },
-    { label: "📄 JSON Data", query: "Give all the data of portfolio in JSON" },
-    { label: "📬 Contact & Resume", query: "How can I contact Ijlal or get his CV?" }
+    { label: "💼 Available for Hire?", query: "Is Ijlal available for hire?" }
   ];
 
   // Helper: Get Current Pakistan Standard Time (PKT)
