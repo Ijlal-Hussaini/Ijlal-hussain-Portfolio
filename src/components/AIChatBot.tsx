@@ -640,8 +640,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("tell a joke") ||
       contains("calculate") ||
       contains("math") ||
-      /\b\d+\s*[\+\-\*\/x]\s*\d+\b/.test(input) ||
-      /^\d+\s*[\+\-\*\/x]\s*\d+$/.test(input.trim()) ||
+      /\b\d+\s*[\+\-\*\/x]\s*\d+\b/.test(rawQuery) ||
+      /^\d+\s*[\+\-\*\/x]\s*\d+$/.test(rawQuery.trim()) ||
       contains("who was einstein")
     );
 
@@ -1312,18 +1312,33 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
     // Simulate realistic intelligent streaming delay
     setTimeout(() => {
-      const response = generateGroundedResponse(text);
-      const botMsg: Message = {
-        id: "bot-" + Date.now(),
-        sender: "bot",
-        text: response.text,
-        actionLink: response.actionLink,
-        timestamp: "Just now"
-      };
+      try {
+        const response = generateGroundedResponse(text);
+        const botMsg: Message = {
+          id: "bot-" + Date.now(),
+          sender: "bot",
+          text: response.text,
+          actionLink: response.actionLink,
+          timestamp: "Just now"
+        };
 
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(false);
-    }, 400);
+        setMessages((prev) => [...prev, botMsg]);
+      } catch (err) {
+        console.error("AI ChatBot runtime error:", err);
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: "bot-" + Date.now(),
+            sender: "bot",
+            text: `I'm here to answer questions about **Ijlal Hussain**! 🌟\n\nTry asking me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*`,
+            actionLink: { label: "View All Projects", tab: "Projects" },
+            timestamp: "Just now"
+          }
+        ]);
+      } finally {
+        setIsTyping(false);
+      }
+    }, 300);
   };
 
   const handleResetChat = () => {
