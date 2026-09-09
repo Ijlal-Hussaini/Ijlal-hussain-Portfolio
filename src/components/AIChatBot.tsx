@@ -95,6 +95,7 @@ const KNOWN_VOCABULARY = new Set([
   "level", "proficiency", "percentage", "percent", "score", "scores", "grade", "grades", "first class", "honors", "distinction",
   "subject", "subjects", "course", "courses", "coursework", "passion", "passionate", "challenge", "challenges", "problem", "problems",
   "target", "role", "roles", "position", "frontend", "backend", "fullstack", "style", "ethic", "php", "rust", "ruby", "aws", "c++", "cpp", "c#", "csharp", "swift", "kotlin", "go", "golang", "vue", "angular", "django", "laravel",
+  "career", "careers", "goal", "goals", "aspiration", "aspirations", "seek", "seeking", "tackle", "tackled", "joke", "jokes", "story", "stories", "solve", "solves", "solving", "calculator", "calculate", "math", "quicksort", "bubble", "array", "binary", "tree", "component", "navbar", "essay", "poem",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -645,6 +646,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("who won") ||
       contains("weather in") ||
       contains("tell me a story") ||
+      contains("tell a story") ||
+      hasWord("story") ||
       contains("what is photosynthesis") ||
       contains("what is quantum") ||
       contains("bitcoin price") ||
@@ -653,9 +656,16 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("recipe for") ||
       contains("write an essay") ||
       contains("write a poem") ||
+      contains("tell me a joke") ||
       contains("tell a joke") ||
+      hasWord("joke") ||
+      hasWord("jokes") ||
       contains("calculate") ||
-      contains("math") ||
+      contains("solve this") ||
+      contains("solve math") ||
+      contains("solve equation") ||
+      /solve\s+\d+/.test(cleanWords) ||
+      (contains("math") && !hasWord("numl") && !hasWord("grade") && !hasWord("matric")) ||
       /\b\d+\s*[\+\-\*\/x]\s*\d+\b/.test(rawQuery) ||
       /^\d+\s*[\+\-\*\/x]\s*\d+$/.test(rawQuery.trim()) ||
       contains("who was einstein")
@@ -709,8 +719,13 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("numl courses") ||
       contains("coursework") ||
       contains("courses studied") ||
-      (hasWord("courses") && hasWord("numl")) ||
-      (hasWord("subjects") && hasWord("numl"))
+      contains("what did he study at numl") ||
+      contains("what did he study") ||
+      contains("university subjects") ||
+      contains("subjects studied") ||
+      (hasWord("courses") && (hasWord("numl") || hasWord("university") || hasWord("study"))) ||
+      (hasWord("subjects") && (hasWord("numl") || hasWord("university") || hasWord("study"))) ||
+      (hasWord("study") && hasWord("numl") && !contains("where"))
     ) {
       return {
         text: `📚 **Key Software Engineering & CS Coursework at NUML:**\n• **Artificial Intelligence & Machine Learning** (Favorite Subject)\n• **Data Structures & Algorithms (DSA)**\n• **Object-Oriented Programming (OOP)** (Java & Python)\n• **Software Requirements Engineering (SRE)** (SRS / BRD)\n• **Database Management Systems (DBMS)** (SQL & NoSQL)\n• **System Design & Software Architecture**\n• **Operating Systems & Computer Networks**\n• **Software Quality Assurance & Testing (SQA)**`,
@@ -760,14 +775,14 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     // 18. COMPARATIVE QUESTIONS (Frontend vs Backend, Python vs Java)
     // -------------------------------------------------------------
-    if (contains("frontend or backend") || contains("frontend vs backend") || contains("better at frontend or backend") || contains("backend or frontend")) {
+    if (contains("frontend or backend") || contains("frontend vs backend") || contains("better at frontend or backend") || contains("backend or frontend") || contains("backend vs frontend")) {
       return {
         text: `⚖️ **Full-Stack Balance (Frontend & Backend):**\nIjlal is versatile across both:\n• **Backend Engineering (FastAPI, Python, Node.js, Express, Firebase)**: 84% average proficiency building asynchronous REST microservices and AI pipelines.\n• **Frontend Development (React 19, Next.js 16, TypeScript, Tailwind CSS v4)**: 80% proficiency crafting responsive, glassmorphic modern web applications!`,
         actionLink: { label: "View Skills Breakdown", tab: "About" }
       };
     }
 
-    if (contains("python or java") || contains("python vs java") || contains("better at python or java") || contains("java or python")) {
+    if (contains("python or java") || contains("python vs java") || contains("better at python or java") || contains("java or python") || contains("java vs python")) {
       return {
         text: `⚖️ **Python vs Java Expertise:**\nIjlal has deep, certified mastery in both (**88% proficiency each**):\n• **Python**: His primary language for **Generative AI state graphs (LangGraph)**, **RAG retrieval (LangChain)**, and **FastAPI AI endpoints**.\n• **Java**: His primary language for **Native Android Mobile Engineering (Android SDK, Firebase)** in his Safe Zone FYP!`,
         actionLink: { label: "View Skills Breakdown", tab: "About" }
@@ -787,8 +802,11 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("what position is he looking for") ||
       contains("future goals") ||
       contains("aspiring role") ||
+      contains("roles is he seeking") ||
+      contains("role is he seeking") ||
+      (hasWord("career") && (hasWord("goals") || hasWord("goal") || hasWord("path") || hasWord("target") || hasWord("seeking") || hasWord("roles"))) ||
       (hasWord("target") && (hasWord("role") || hasWord("job") || hasWord("position") || hasWord("work"))) ||
-      ((hasWord("role") || hasWord("job") || hasWord("position")) && (hasWord("target") || hasWord("looking") || hasWord("seeking") || hasWord("want") || hasWord("aspiring")))
+      ((hasWord("role") || hasWord("roles") || hasWord("job") || hasWord("position")) && (hasWord("target") || hasWord("targeting") || hasWord("looking") || hasWord("seeking") || hasWord("seek") || hasWord("want") || hasWord("aspiring")))
     ) {
       return {
         text: `🎯 **Target Roles & Career Focus:**\nIjlal is actively targeting high-impact roles including:\n• 🤖 **AI Engineer / Generative AI Developer** (LangGraph & RAG)\n• 💻 **Software Engineer (Python / Full-Stack)**\n• 📱 **Native Android Engineer (Java / Firebase)**\n• ⚙️ **Backend Engineer (FastAPI / Microservices)**`,
