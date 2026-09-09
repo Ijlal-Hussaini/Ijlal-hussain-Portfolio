@@ -678,24 +678,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 11. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh")
-    // -------------------------------------------------------------
-    const isPureDigits = /^\d+$/.test(cleanWords);
-    const isNoiseOrStroke = contains("stroke") && /\d+/.test(cleanWords);
-    const isShortNoise = cleanWords.length <= 4 && !KNOWN_VOCABULARY.has(cleanWords);
-    const lacksVowels = cleanWords.length > 4 && !/[aeiouy]/.test(cleanWords);
-    const hasLongRandomSequence = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(cleanWords);
-    const hasNoRecognizedTokens = rawTokens.length > 0 && !rawTokens.some(isRecognizedToken);
-
-    if (isPureDigits || isNoiseOrStroke || isShortNoise || lacksVowels || hasLongRandomSequence || hasNoRecognizedTokens) {
-      return {
-        text: `Oops! That looks like a random keystroke or number. 🤖\n\nHow can I help you today? You can ask me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What is his LangGraph experience?"*\n• *"How can I contact him?"*`,
-        actionLink: { label: "Explore All Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 12. OUT-OF-BOUNDS / EXTERNAL CODING / OFF-TOPIC GUARDRAIL
+    // 11. OUT-OF-BOUNDS / EXTERNAL CODING / OFF-TOPIC GUARDRAIL
     // -------------------------------------------------------------
     const isGeneralCodingTask = (
       (contains("write a") || contains("write code") || contains("generate code") || contains("write script") || contains("solve this") || contains("calculate") || contains("fix my code") || contains("write python") || contains("write java") || contains("write c") || contains("create code") || contains("write me") || contains("write sql") || contains("write query") || contains("invert binary tree") || contains("quicksort")) &&
@@ -732,13 +715,47 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       (contains("math") && !hasWord("numl") && !hasWord("grade") && !hasWord("matric")) ||
       /\b\d+\s*[\+\-\*\/x]\s*\d+\b/.test(rawQuery) ||
       /^\d+\s*[\+\-\*\/x]\s*\d+$/.test(rawQuery.trim()) ||
-      contains("who was einstein")
+      contains("who was einstein") ||
+      contains("what is pythons") ||
+      contains("pythons") ||
+      contains("snake") ||
+      contains("snakes") ||
+      contains("what is software engineering") ||
+      contains("define software engineering") ||
+      contains("what is computer science") ||
+      contains("define computer science") ||
+      contains("what is an operating system") ||
+      contains("what is hardware") ||
+      contains("what is internet") ||
+      contains("what is cybersecurity") ||
+      contains("what is cloud computing") ||
+      contains("what is data science") ||
+      contains("what is biology") ||
+      contains("what is physics") ||
+      contains("what is chemistry")
     );
 
     if (isGeneralCodingTask || isGeneralTrivia) {
       return {
-        text: `Sorry, that's outside my context! 😊 I am Ijlal's dedicated portfolio AI assistant, trained exclusively on his software engineering projects, skills, education, and career experience.\n\nFeel free to ask me anything about Ijlal's work, such as his **ResumeIQ** AI platform or **Safe Zone** Android app!`,
+        text: `Sorry, that's outside my context or not in my knowledge base regarding **Ijlal Hussain and his portfolio**! 🤖\n\nI am Ijlal's dedicated portfolio AI assistant, trained exclusively on his software engineering projects (ResumeIQ, SafeZone, Blog Factory), his **3.96 CGPA** at NUML, verified certifications, and technical skills.\n\nFeel free to ask me anything about Ijlal's work, such as his **ResumeIQ** AI platform or **Safe Zone** Android app!`,
         actionLink: { label: "Explore Ijlal's Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 12. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh")
+    // -------------------------------------------------------------
+    const isPureDigits = /^\d+$/.test(cleanWords);
+    const isNoiseOrStroke = contains("stroke") && /\d+/.test(cleanWords);
+    const isShortNoise = cleanWords.length <= 4 && !KNOWN_VOCABULARY.has(cleanWords);
+    const lacksVowels = cleanWords.length > 4 && !/[aeiouy]/.test(cleanWords);
+    const hasLongRandomSequence = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(cleanWords);
+    const hasNoRecognizedTokens = rawTokens.length > 0 && !rawTokens.some(isRecognizedToken);
+
+    if (isPureDigits || isNoiseOrStroke || isShortNoise || lacksVowels || hasLongRandomSequence || hasNoRecognizedTokens) {
+      return {
+        text: `Oops! That looks like a random keystroke or number. 🤖\n\nHow can I help you today? You can ask me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What is his LangGraph experience?"*\n• *"How can I contact him?"*`,
+        actionLink: { label: "Explore All Projects", tab: "Projects" }
       };
     }
 
@@ -1890,8 +1907,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 52. CONCISE GENERAL GROUNDED FALLBACK
     // -------------------------------------------------------------
     return {
-      text: `I'm here to answer questions about **Ijlal Hussain**! 🌟\n\nTry asking me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What did he do at Kartoa?"*\n• *"How can I contact him?"*`,
-      actionLink: { label: "View All Projects", tab: "Projects" }
+      text: `Sorry, that's outside my context or not in my knowledge base regarding **Ijlal Hussain and his portfolio**! 🤖\n\nI am Ijlal's dedicated portfolio AI assistant, trained exclusively to answer questions about his software engineering projects (ResumeIQ, SafeZone, Blog Factory), his **3.96 CGPA** honors at NUML, verified certifications, and technical skills.\n\nTry asking me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What did he do at Kartoa?"*\n• *"How can I contact him?"*`,
+      actionLink: { label: "Explore Projects", tab: "Projects" }
     };
   };
 
