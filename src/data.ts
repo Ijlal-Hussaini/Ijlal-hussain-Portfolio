@@ -527,13 +527,13 @@ export const educationData: Education[] = [
   {
     degree: "BS Software Engineering",
     institution: "NUML Islamabad",
-    period: "Mar 2022 – Mar 2026",
+    period: "Feb 2022 – Jan 2026",
     grade: "CGPA: 3.96 / 4.0"
   },
   {
     degree: "Intermediate (Computer Science)",
     institution: "Government Boys Degree College, Danyore Gilgit",
-    period: "Aug 2020 – Mar 2022",
+    period: "Sep 2019 – Sep 2021",
     grade: "Grade B (62%)"
   },
   {
