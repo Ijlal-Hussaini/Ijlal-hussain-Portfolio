@@ -27,6 +27,9 @@ const KNOWN_VOCABULARY = new Set([
   "resume", "cv", "experience", "internship", "lead", "leadership", "cert", "certs", "certificate", "certificates", "certification", "certifications",
   "android", "java", "python", "ai", "ml", "genai", "generative", "langgraph", "langchain", "rag", "fastapi", "react", "nextjs", "typescript",
   "javascript", "tailwind", "node", "express", "mongo", "mongodb", "firebase", "flutter", "dart", "postman", "figma", "git",
+  "docker", "dockerfile", "container", "containers", "containerization", "devops", "mern", "rest", "api", "apis", "microservice", "microservices",
+  "database", "databases", "chromadb", "faiss", "pydantic", "sentence", "transformers", "prompting", "guardrails", "guardrail", "tavily",
+  "ats", "scoring", "keyword", "keywords", "formula", "accessibility", "devicepolicy", "srs", "brd", "uml", "usecase", "curriculum", "scholarship", "distinction", "mother", "tongue",
   "english", "urdu", "brushaski", "language", "languages", "gilgit", "islamabad", "pakistan", "time", "timezone", "location", "city", "country",
   "age", "old", "born", "birthday", "salary", "rate", "rates", "budget", "pricing", "interview", "meeting", "pwa", "offline",
   "help", "menu", "options", "commands", "about", "profile", "bio", "background", "summary", "overview", "json", "jason", "data", "info", "information",
@@ -49,7 +52,7 @@ const KNOWN_VOCABULARY = new Set([
   "subject", "subjects", "course", "courses", "coursework", "passion", "passionate", "challenge", "challenges", "problem", "problems",
   "target", "role", "roles", "position", "frontend", "backend", "fullstack", "style", "ethic", "php", "rust", "ruby", "aws", "c++", "cpp", "c#", "csharp", "swift", "kotlin", "go", "golang", "vue", "angular", "django", "laravel",
   "career", "careers", "goal", "goals", "aspiration", "aspirations", "seek", "seeking", "tackle", "tackled", "joke", "jokes", "story", "stories", "solve", "solves", "solving", "calculator", "calculate", "math", "quicksort", "bubble", "array", "binary", "tree", "component", "navbar", "essay", "poem",
-  "qualification", "qualifications", "study", "studied",
+  "qualification", "qualifications", "study", "studied", "defin", "defne", "dfine", "definition", "definitions", "explain", "explanation", "concept", "concepts", "meaning",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -67,7 +70,6 @@ function isRecognizedToken(token) {
 
 function hasFuzzyWord(tokens, target, maxDist = 2) {
   const targetLower = target.toLowerCase();
-  // Precision rules: short words or words prone to collisions (e.g. contact vs contract)
   if (targetLower.length <= 5 || targetLower === "contact" || targetLower === "contract" || targetLower === "first" || targetLower === "best" || targetLower === "list") {
     return tokens.some((token) => token.toLowerCase() === targetLower);
   }
@@ -96,6 +98,37 @@ function generateGroundedResponse(rawQuery) {
 
   // Normalize phonetic and typo variations
   const tokens = rawTokens.map((t) => {
+    if (/^(wat|waht|wht|whut|whta|wahtt)$/.test(t)) return "what";
+    if (/^(wich|whch|whic)$/.test(t)) return "which";
+    if (/^(wer|wher|whre|whr)$/.test(t)) return "where";
+    if (/^(wen|whn|whern)$/.test(t)) return "when";
+    if (/^(hw|howw|ho)$/.test(t)) return "how";
+    if (/^(wh|whoo|wo)$/.test(t)) return "who";
+    if (/^(tel|telll|tll)$/.test(t)) return "tell";
+    if (/^(shw|sho|showw)$/.test(t)) return "show";
+    if (/^(giv|gve)$/.test(t)) return "give";
+    if (/^(expln|explainn|explan|xplain)$/.test(t)) return "explain";
+    if (/^(defin|defne|dfine|definitiin|definiton)$/.test(t)) return "definition";
+    if (/^(mening|meannig)$/.test(t)) return "meaning";
+    if (/^(pythn|pytn|pyhton|pythoon|pthon)$/.test(t)) return "python";
+    if (/^(jav|javaa)$/.test(t)) return "java";
+    if (/^(rct|reakt|reactjs|reactt)$/.test(t)) return "react";
+    if (/^(nxtjs|nextj|nextts)$/.test(t)) return "nextjs";
+    if (/^(typscript|typescrip|typcsript)$/.test(t)) return "typescript";
+    if (/^(jvascript|javascrip|javscript)$/.test(t)) return "javascript";
+    if (/^(fastpi|fastap|fastappi)$/.test(t)) return "fastapi";
+    if (/^(dockr|dokr)$/.test(t)) return "docker";
+    if (/^(chrmodb|chroma)$/.test(t)) return "chromadb";
+    if (/^(pydantc)$/.test(t)) return "pydantic";
+    if (/^(firebas|firebse|firbase)$/.test(t)) return "firebase";
+    if (/^(mongod|mongdb|mngodb)$/.test(t)) return "mongodb";
+    if (/^(talwind|tailwnd|tlwind)$/.test(t)) return "tailwind";
+    if (/^(fluttr|fluter)$/.test(t)) return "flutter";
+    if (/^(postmn)$/.test(t)) return "postman";
+    if (/^(fgma)$/.test(t)) return "figma";
+    if (/^(gthub|githb|gitub)$/.test(t)) return "github";
+    if (/^(experence|exprnc|experince|expreience)$/.test(t)) return "experience";
+    if (/^(proficency|proficienc|proficincy)$/.test(t)) return "proficiency";
     if (/^(itjall|itjal|ijall|ijlla|ijla|ijlall|ijhall|ijlaal|ijlas|ejlal|ejlaal|ijlal)$/.test(t)) return "ijlal";
     if (/^(hussani|hussaini|husain|hussan|hussin|husayn|husein|hussien|hossain|hossin|hussain|hussains)$/.test(t)) return "hussain";
     if (/^(cgoa|cgpaa|cgpa|cpa|gpaa|gpa)$/.test(t)) return "cgpa";
@@ -1049,53 +1082,91 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 42. SPECIFIC SKILL PROFICIENCIES
+  // 42. SPECIFIC SKILL PROFICIENCIES & TECH CONCEPTS
   if (hasWord("python", 1)) {
     return {
       type: "SKILL_PYTHON",
-      text: `🐍 **Python (88% Proficiency):**\nIjlal uses Python for **Generative AI multi-agent state machines (LangGraph)**, **RAG pipelines (LangChain)**, and **FastAPI microservices**, backed by Cisco Python certification.`,
+      text: `🐍 **Python Mastery & Cisco Certification (88% Proficiency):**\n**Python** is Ijlal's primary programming language for engineering state-of-the-art **Generative AI systems**, **LangGraph multi-agent state machines**, and **local RAG retrieval pipelines**.\n\n• **Core Capabilities**: Cyclic state graphs, LangChain vector retrieval (ChromaDB / FAISS), asynchronous FastAPI microservices, Pydantic v2 data models, and prompt guardrails.\n• **Certification**: Verified by **Cisco Networking Academy & OpenEDG** (*Python Essentials 1*).`,
       actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
 
-  if (hasWord("java", 1) || (hasWord("android") && (hasWord("sdk") || hasWord("studio")))) {
+  if (
+    hasWord("java", 1) ||
+    (hasWord("android", 1) && !contains("project") && !contains("app") && !contains("safezone") && !contains("apk") && !contains("safe zone")) ||
+    (hasWord("android", 1) && (hasWord("sdk") || hasWord("studio") || hasWord("skill") || hasWord("experience") || contains("what is") || contains("waht is")))
+  ) {
     return {
       type: "SKILL_ANDROID",
-      text: `☕ **Java & Android (88% Proficiency):**\nIjlal builds native Android apps using **Java, Android SDK, Android Studio, and Firebase Realtime Database**, demonstrated in his Safe Zone FYP.`,
+      text: `☕ **Java & Native Android SDK (88% Proficiency):**\n**Java and Android SDK** are Ijlal's core foundation for native mobile engineering.\n\n• **In Ijlal's Work**: As FYP Team Lead, he built **Safe Zone** (Parental Control Android App), engineering background monitoring with \`AccessibilityService\`, device policy administration with \`DevicePolicyManager\`, real-time GPS tracking with Google Maps API, and live child activity synchronization via **Firebase Realtime Database**.`,
       actionLink: { label: "Inspect SafeZone App", tab: "Projects" }
     };
   }
 
   if (
     hasWord("langgraph", 2) ||
-    hasWord("langchain", 2) ||
-    hasWord("rag", 0) ||
-    hasWord("agent", 1) ||
-    contains("generative ai") ||
-    contains("genai") ||
+    contains("agentic ai") ||
+    contains("multi agent") ||
+    contains("multiagent") ||
+    contains("state machine") ||
+    contains("state graph") ||
     contains("prompt engineering") ||
     contains("guardrail") ||
-    contains("prompt")
+    contains("guardrails") ||
+    hasWord("prompt", 1) ||
+    hasWord("prompts", 1)
   ) {
     return {
       type: "SKILL_GENAI",
-      text: `⚡ **LangGraph & Generative AI (86% Proficiency):**\nIjlal engineers **cyclic multi-agent workflows**, local RAG citation engines with sentence-transformers embeddings, and dual-LLM orchestration (Groq Cloud + Google Gemini 2.5).`,
+      text: `⚡ **LangGraph & Generative AI Multi-Agent Systems (86% Proficiency):**\n**LangGraph** and **Agentic Prompt Engineering** are cutting-edge frameworks for orchestrating stateful, multi-agent AI systems with cyclic graphs, persistence, and human-in-the-loop controls.\n\n• **ResumeIQ**: Engineered a **7-node cyclic LangGraph state machine** managing ATS extraction, skill gap analysis, and tailored bullet-point generation with Groq (Llama-3.3-70B) & Gemini 2.5 Flash failover.\n• **Technical Blog Post Factory**: Orchestrated an autonomous **3-agent cyclic loop** (Writer → Fact-Checker with live Tavily search → Syntax-verified Code Generator).\n• **Guardrails**: Integrated Pydantic schema validation, structured JSON outputs, and adversarial hallucination defenses.`,
       actionLink: { label: "Inspect AI Projects", tab: "Projects" }
+    };
+  }
+
+  if (
+    hasWord("rag", 0) ||
+    hasWord("langchain", 2) ||
+    contains("retrieval augmented") ||
+    contains("vector search") ||
+    contains("embeddings") ||
+    contains("chromadb") ||
+    contains("faiss")
+  ) {
+    return {
+      type: "SKILL_GENAI",
+      text: `🔍 **RAG & Vector Retrieval Systems (84% Proficiency):**\n**Retrieval-Augmented Generation (RAG)** grounds LLM responses in external documents and vector embeddings, eliminating hallucinations and ensuring real-time citation accuracy.\n\n• **In Ijlal's Work**: Built high-speed local RAG pipelines using **LangChain**, **sentence-transformers**, and **ChromaDB / FAISS** in **ResumeIQ** (matching candidate experiences to job requirements) and during his AI Development Internship at **Kartoa Technologies**.`,
+      actionLink: { label: "Inspect AI Projects", tab: "Projects" }
+    };
+  }
+
+  if (hasWord("fastapi", 1) || (hasWord("backend") && (hasWord("api") || hasWord("microservice"))) || hasWord("pydantic", 1)) {
+    return {
+      type: "SKILL_FASTAPI",
+      text: `⚙️ **FastAPI & Backend Engineering (82% Proficiency):**\n**FastAPI** is a modern, high-speed Python web framework for building asynchronous REST APIs with automatic OpenAPI documentation and Pydantic v2 data validation.\n\n• **In Ijlal's Work**: Ijlal builds high-performance async AI endpoints, streaming response microservices, and vector search microservices powering frontends with sub-second latency.`,
+      actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
 
   if (hasWord("react", 1) || hasWord("nextjs", 2) || hasWord("typescript", 2) || hasWord("frontend", 1) || (hasWord("web") && (hasWord("dev") || hasWord("development")))) {
     return {
       type: "SKILL_WEB",
-      text: `⚛️ **Full-Stack Web Stack:**\nIjlal builds modern web platforms with **React 19, Next.js 16, TypeScript, Node.js, Express, MongoDB (MERN), and Tailwind CSS v4**.`,
+      text: `⚛️ **React 19, Next.js 16 & TypeScript (80% Proficiency):**\n**React 19** and **Next.js** are modern component-driven web frameworks delivering server-side rendering, streaming interfaces, and responsive web experiences.\n\n• **In Ijlal's Work**: Engineered this high-performance portfolio using **React 19, TypeScript, Tailwind CSS v4, Motion, and Vite / PWA architecture**, as well as the **ResumeIQ** Liquid Glass web platform with Next.js 16!`,
       actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
 
-  if (hasWord("fastapi", 1) || (hasWord("backend") && hasWord("api")) || hasWord("pydantic", 1)) {
+  if (hasWord("tailwind", 1) || contains("tailwind css")) {
     return {
-      type: "SKILL_FASTAPI",
-      text: `⚙️ **FastAPI & Backend Engineering (82% Proficiency):**\nIjlal builds asynchronous REST APIs and AI microservices using **FastAPI, Pydantic v2, and Node.js/Express**, integrating LLMs and vector search endpoints.`,
+      type: "SKILL_WEB",
+      text: `🎨 **Tailwind CSS v4 (82% Proficiency):**\n**Tailwind CSS** is a utility-first CSS engine for crafting modern, responsive design systems directly in markup.\n\n• **In Ijlal's Work**: Designed the custom dark cosmic glassmorphism aesthetic of this portfolio using Tailwind CSS v4, featuring custom HSL color tokens, neon glow highlights, and hardware-accelerated animations.`,
+      actionLink: { label: "View Skills Breakdown", tab: "About" }
+    };
+  }
+
+  if (hasWord("docker", 1) || contains("containerization") || contains("devops")) {
+    return {
+      type: "SKILL_TOOLS",
+      text: `🐳 **Docker & Containerization:**\n**Docker** enables packaging applications, microservices, and their dependencies into isolated containers for reproducible development and seamless production deployments.\n\n• **In Ijlal's Work**: Uses containerized environments for deploying FastAPI AI microservices, vector databases, and consistent Python runtimes.`,
       actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
@@ -1103,7 +1174,7 @@ function generateGroundedResponse(rawQuery) {
   if (hasWord("database", 2) || hasWord("databases", 2) || hasWord("mongodb", 2) || hasWord("firebase", 2) || (hasWord("sql", 0) && !hasWord("code"))) {
     return {
       type: "SKILL_DATABASE",
-      text: `🗄️ **Database & Cloud Storage Stack:**\n• **Firebase Realtime Database (84%)**: Sub-second cloud state synchronization\n• **MongoDB (76%)**: Document storage for MERN web applications\n• **Vector Stores**: ChromaDB / FAISS semantic embeddings for RAG pipelines\n• **SQL**: Relational database modeling fundamentals`,
+      text: `🗄️ **Database & Cloud Storage Architecture:**\n• **Firebase Realtime Database (84%)**: Sub-second cloud state synchronization\n• **MongoDB (76%)**: Document storage for MERN web applications\n• **Vector Stores (ChromaDB / FAISS)**: High-dimensional semantic embeddings and cosine similarity indexing for RAG.\n• **Relational SQL**: Schema normalization, indexing, and transactional integrity fundamentals.`,
       actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
@@ -1111,15 +1182,23 @@ function generateGroundedResponse(rawQuery) {
   if (hasWord("flutter", 1) || hasWord("dart", 1)) {
     return {
       type: "SKILL_FLUTTER",
-      text: `📱 **Flutter & Cross-Platform (55% Proficiency):**\nIjlal has foundational cross-platform mobile experience with **Flutter & Dart**, complementing his deep expertise in **Native Java Android**.`,
+      text: `📱 **Flutter & Cross-Platform (55% Proficiency):**\n**Flutter & Dart** allow building natively compiled applications for mobile from a single codebase.\n\n• **In Ijlal's Work**: Foundational cross-platform mobile development experience complementing his deep primary mastery in **Native Java Android SDK**.`,
       actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
 
-  if (hasWord("figma", 1) || hasWord("postman", 1) || (hasWord("tool", 0) || hasWord("tools", 0))) {
+  if (
+    hasWord("git", 0) ||
+    hasWord("figma", 1) ||
+    hasWord("postman", 1) ||
+    hasWord("vscode", 1) ||
+    contains("vs code") ||
+    hasWord("tool", 0) ||
+    hasWord("tools", 0)
+  ) {
     return {
       type: "SKILL_TOOLS",
-      text: `🛠️ **Engineering Tools & Platforms:**\n• **Git & GitHub (86%)**: Version control & collaborative workflows\n• **VS Code (88%) & Android Studio (85%)**: Primary development IDEs\n• **Postman (78%)**: REST API automated testing\n• **Figma (72%)**: Wireframing & UI/UX prototyping`,
+      text: `🛠️ **Engineering Tools & Platforms:**\n• **Git & GitHub (86%)**: Version control, pull request workflows & CI/CD automation\n• **VS Code (88%) & Android Studio (85%)**: Primary development environments\n• **Postman (78%)**: REST API automated contract testing\n• **Figma (72%)**: Wireframing, UX design systems, and component mockups`,
       actionLink: { label: "View Skills Breakdown", tab: "About" }
     };
   }
@@ -1517,7 +1596,25 @@ const testCases = [
   { q: "what are his titles", expected: "TITLES" },
   { q: "what is his profession", expected: "TITLES" },
 
-  // Skills:
+  // Skills & Concepts:
+  { q: "waht is python", expected: "SKILL_PYTHON" },
+  { q: "what is python", expected: "SKILL_PYTHON" },
+  { q: "tell me about python", expected: "SKILL_PYTHON" },
+  { q: "does he know python", expected: "SKILL_PYTHON" },
+  { q: "python skill", expected: "SKILL_PYTHON" },
+  { q: "what is java", expected: "SKILL_ANDROID" },
+  { q: "what is android", expected: "SKILL_ANDROID" },
+  { q: "what is langgraph", expected: "SKILL_GENAI" },
+  { q: "what is rag", expected: "SKILL_GENAI" },
+  { q: "what is fastapi", expected: "SKILL_FASTAPI" },
+  { q: "what is react", expected: "SKILL_WEB" },
+  { q: "what is typescript", expected: "SKILL_WEB" },
+  { q: "what is tailwind", expected: "SKILL_WEB" },
+  { q: "what is docker", expected: "SKILL_TOOLS" },
+  { q: "what is firebase", expected: "SKILL_DATABASE" },
+  { q: "what is mongodb", expected: "SKILL_DATABASE" },
+  { q: "what is git", expected: "SKILL_TOOLS" },
+  { q: "what is flutter", expected: "SKILL_FLUTTER" },
   { q: "what is his best skill", expected: "TOP_SKILLS" },
   { q: "what is his highest skill", expected: "TOP_SKILLS" },
   { q: "what is his strongest skill", expected: "TOP_SKILLS" },
@@ -1579,6 +1676,33 @@ const testCases = [
   { q: "what time is it in pakistan", expected: "TIMEZONE" },
   { q: "what time is it in islamabad", expected: "TIMEZONE" },
   { q: "give all data in json", expected: "JSON_EXPORT" },
+
+  // Additional spelling variations and concept queries:
+  { q: "wht is python", expected: "SKILL_PYTHON" },
+  { q: "wat is python", expected: "SKILL_PYTHON" },
+  { q: "pythn programming", expected: "SKILL_PYTHON" },
+  { q: "explain python", expected: "SKILL_PYTHON" },
+  { q: "definition of python", expected: "SKILL_PYTHON" },
+  { q: "what is numl", expected: "UNIVERSITY_EDUCATION" },
+  { q: "what is numl university", expected: "UNIVERSITY_EDUCATION" },
+  { q: "what is your education", expected: "LATEST_EDUCATION" },
+  { q: "what is his latest education", expected: "LATEST_EDUCATION" },
+  { q: "what is his highest degree", expected: "LATEST_EDUCATION" },
+  { q: "what is safezone", expected: "SAFEZONE_OVERVIEW" },
+  { q: "what is resumeiq", expected: "RESUMEIQ_OVERVIEW" },
+  { q: "what is technical blog factory", expected: "BLOGFACTORY_OVERVIEW" },
+  { q: "what is kartoa", expected: "KARTOA_EXPERIENCE" },
+  { q: "what is alberuni tech", expected: "ALBERUNI_EXPERIENCE" },
+  { q: "what is cisco certification", expected: "CERT_CISCO" },
+  { q: "what is navttc", expected: "CERT_NAVTTC" },
+  { q: "what is digiskills", expected: "CERT_DIGISKILL" },
+  { q: "what is prompt engineering", expected: "SKILL_GENAI" },
+  { q: "what are guardrails", expected: "SKILL_GENAI" },
+  { q: "what is ats auditor", expected: "RESUMEIQ_ATS" },
+  { q: "what is google xyz formula", expected: "RESUMEIQ_XYZ" },
+  { q: "what is his favorite subject", expected: "FAVORITE_SUBJECT" },
+  { q: "favorite subject of ijlal", expected: "FAVORITE_SUBJECT" },
+  { q: "is artificial intelligence his favorite subject", expected: "FAVORITE_SUBJECT" },
 
   // Conversational / Guardrails:
   { q: "hi", expected: "GREETING" },
