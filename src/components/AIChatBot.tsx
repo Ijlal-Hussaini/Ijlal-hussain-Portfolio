@@ -92,10 +92,11 @@ const KNOWN_VOCABULARY = new Set([
   "formula", "filter", "blocking", "block", "gps", "tracking", "review", "peer", "codeblock", "vector", "embed", "embeddings",
   "and", "or", "in", "of", "to", "for", "with", "on", "at", "by", "from", "as", "into", "like", "tool", "tools", "platform", "platforms",
   "framework", "frameworks", "library", "libraries", "system", "systems", "application", "applications", "things", "been", "doing",
-  "level", "proficiency", "percentage", "percent", "score", "scores", "grade", "grades", "first class", "honors", "distinction",
+  "level", "proficiency", "percentage", "percent", "score", "scores", "grade", "grades", "first class", "honors", "distinction", "highest",
   "subject", "subjects", "course", "courses", "coursework", "passion", "passionate", "challenge", "challenges", "problem", "problems",
   "target", "role", "roles", "position", "frontend", "backend", "fullstack", "style", "ethic", "php", "rust", "ruby", "aws", "c++", "cpp", "c#", "csharp", "swift", "kotlin", "go", "golang", "vue", "angular", "django", "laravel",
   "career", "careers", "goal", "goals", "aspiration", "aspirations", "seek", "seeking", "tackle", "tackled", "joke", "jokes", "story", "stories", "solve", "solves", "solving", "calculator", "calculate", "math", "quicksort", "bubble", "array", "binary", "tree", "component", "navbar", "essay", "poem",
+  "qualification", "qualifications", "study", "studied",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -384,6 +385,12 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       if (/^(tavly|tavili)$/.test(t)) return "tavily";
       if (/^(favorit|favourite|favorute|favoroutie|favoruite)$/.test(t)) return "favorite";
       if (/^(subet|subjct|subjec|subjets)$/.test(t)) return "subject";
+      if (/^(educatoin|eductaion|educaton|eduation|eductn|educasion|edukation|education)$/.test(t)) return "education";
+      if (/^(degre|deree|degreee|degree)$/.test(t)) return "degree";
+      if (/^(colg|colleg|collge|college)$/.test(t)) return "college";
+      if (/^(univrsty|universty|univercity|univrsity|uni|university)$/.test(t)) return "university";
+      if (/^(skool|shcool|schol|school)$/.test(t)) return "school";
+      if (/^(qualifaction|qualificaton|qualification|qualifications)$/.test(t)) return "qualification";
       return t;
     });
 
@@ -923,10 +930,61 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("education background") ||
       contains("academic background") ||
       contains("education history") ||
-      (hasWord("education") && (contains("all") || contains("detail") || contains("full") || contains("list")))
+      (hasWord("education") && (contains("all") || contains("full") || contains("complete") || contains("history")))
     ) {
       return {
         text: `🎓 **Ijlal's Complete Academic Journey:**\n• **BS Software Engineering** (${educationData[0].institution}, ${educationData[0].period}) — **${educationData[0].grade}** (First Class Honors)\n• **Intermediate (CS)** (${educationData[1].institution}, ${educationData[1].period}) — **${educationData[1].grade}**\n• **Matriculation (Science)** (${educationData[2].institution}, ${educationData[2].period}) — **${educationData[2].grade}**`,
+        actionLink: { label: "View Academic Timeline", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // LATEST / CURRENT / HIGHEST EDUCATION & DEGREE
+    // -------------------------------------------------------------
+    if (
+      contains("latest education") ||
+      contains("recent education") ||
+      contains("newest education") ||
+      contains("current education") ||
+      contains("latest degree") ||
+      contains("recent degree") ||
+      contains("highest degree") ||
+      contains("highest education") ||
+      contains("highest qualification") ||
+      contains("latest qualification") ||
+      contains("what is his latest education") ||
+      contains("what is ijlal's latest education") ||
+      contains("what is ijlal latest education") ||
+      contains("what is the latest education") ||
+      contains("what is his education") ||
+      contains("tell me his education") ||
+      contains("what degree did he complete") ||
+      contains("what degree does he have") ||
+      contains("latest study") ||
+      (hasWord("latest") && (hasWord("education") || hasWord("degree") || hasWord("qualification") || hasWord("study"))) ||
+      (hasWord("recent") && (hasWord("education") || hasWord("degree") || hasWord("qualification") || hasWord("study"))) ||
+      (hasWord("highest") && (hasWord("education") || hasWord("degree") || hasWord("qualification"))) ||
+      (hasWord("education") && !hasWord("safezone") && !hasWord("resumeiq") && !hasWord("blogfactory") && (contains("what") || contains("tell") || contains("latest") || contains("lates") || contains("details") || contains("background")))
+    ) {
+      return {
+        text: `🎓 **Latest Education & Degree:**\nIjlal's latest and highest educational qualification is **BS in Software Engineering** from the **National University of Modern Languages (NUML), Islamabad** (${educationData[0].period}), graduating with a **${educationData[0].grade} (First Class Honors)**!`,
+        actionLink: { label: "View Academic Timeline", tab: "About" }
+      };
+    }
+
+    if (
+      hasWord("numl", 1) ||
+      contains("university") ||
+      contains("degree") ||
+      contains("bachelor") ||
+      contains("bs software") ||
+      contains("bs se") ||
+      contains("where did he study") ||
+      contains("which university") ||
+      contains("where he graduated")
+    ) {
+      return {
+        text: `🎓 **BS Software Engineering (NUML Islamabad):**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** (${educationData[0].period}) with a stellar **${educationData[0].grade} (First Class Honors)**!`,
         actionLink: { label: "View Academic Timeline", tab: "About" }
       };
     }
@@ -937,7 +995,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     if (
       (hasWord("project") || hasWord("projects") || contains("portfolio items") || contains("apps built") || contains("what he built") || contains("all projects")) &&
       (contains("list all") || contains("all projects") || contains("show all") || contains("tell me all") || contains("list projects") || contains("projects list") || contains("what projects has he built") || contains("what projects did he make") || contains("project overview")) &&
-      !hasWord("resumeiq", 1) && !hasWord("safezone", 1) && !hasWord("blogfactory", 1) && !hasWord("factory", 1)
+      !hasWord("resumeiq", 1) && !hasWord("safezone", 1) && !hasWord("blogfactory", 1) && !hasWord("factory", 1) &&
+      !hasWord("education") && !hasWord("degree")
     ) {
       return {
         text: `📋 **Ijlal's Featured Projects (${projectsData.length} Total):**\n\n1. 🤖 **ResumeIQ** (AI Career Intelligence & ATS Auditor)\n2. 📝 **Technical Blog Post Factory** (Multi-Agent AI Studio)\n3. 📱 **Safe Zone** (Parental Control Android App — FYP Lead)\n4. 🌐 **Developer Portfolio** (React 19 & Tailwind Web Platform)`,
@@ -949,19 +1008,22 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 18. ORDINAL PROJECT QUESTIONS: LATEST / NEWEST PROJECT
     // -------------------------------------------------------------
     if (
-      contains("latest project") ||
-      contains("newest project") ||
-      contains("recent project") ||
-      contains("most recent project") ||
-      contains("current project") ||
-      contains("which project is latest") ||
-      contains("which project is newest") ||
-      contains("what is his latest project") ||
-      contains("what is ijlal's latest project") ||
-      contains("what is ijlal latest project") ||
-      (hasWord("latest") && (hasWord("project") || hasWord("built") || hasWord("work"))) ||
-      (hasWord("newest") && (hasWord("project") || hasWord("built") || hasWord("work"))) ||
-      (hasWord("recent") && hasWord("project"))
+      (
+        contains("latest project") ||
+        contains("newest project") ||
+        contains("recent project") ||
+        contains("most recent project") ||
+        contains("current project") ||
+        contains("which project is latest") ||
+        contains("which project is newest") ||
+        contains("what is his latest project") ||
+        contains("what is ijlal's latest project") ||
+        contains("what is ijlal latest project") ||
+        (hasWord("latest") && (hasWord("project") || hasWord("built") || hasWord("work"))) ||
+        (hasWord("newest") && (hasWord("project") || hasWord("built") || hasWord("work"))) ||
+        (hasWord("recent") && hasWord("project"))
+      ) &&
+      !hasWord("education") && !hasWord("degree") && !hasWord("qualification") && !hasWord("study") && !hasWord("school") && !hasWord("college")
     ) {
       return {
         text: `🚀 **Ijlal's Latest Projects:**\nIjlal's most recent major projects are **ResumeIQ** (AI Career Platform with a 7-node LangGraph cyclic engine & local RAG) and **Technical Blog Post Factory** (Autonomous 3-Agent AI Studio with live Tavily fact-checking), developed in early 2026!`,
