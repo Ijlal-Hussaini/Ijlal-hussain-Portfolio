@@ -101,6 +101,7 @@ const KNOWN_VOCABULARY = new Set([
   "career", "careers", "goal", "goals", "aspiration", "aspirations", "seek", "seeking", "tackle", "tackled", "joke", "jokes", "story", "stories", "solve", "solves", "solving", "calculator", "calculate", "math", "quicksort", "bubble", "array", "binary", "tree", "component", "navbar", "essay", "poem",
   "qualification", "qualifications", "study", "studied", "defin", "defne", "dfine", "definition", "definitions", "explain", "explanation", "concept", "concepts", "meaning",
   "soft", "communication", "teamwork", "interpersonal", "adaptability", "collaborate", "collaborating", "collaboration", "collaborative", "mentorship", "mentor", "mentoring", "analytical", "reference", "references", "compare", "difference", "versus", "vs", "summarize", "summary", "executive", "preferred", "preference", "join", "joiner", "soon", "earliest",
+  "technologies", "technology", "candidate", "hometown", "person", "owner", "einstein", "biology", "physics", "chemistry", "algorithm", "programming", "growth", "improvement", "improvements", "five", "years", "year", "see", "himself", "myself", "yourself", "site", "govt", "secondary", "boys",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -108,7 +109,7 @@ function isRecognizedToken(token: string): boolean {
   const t = token.toLowerCase();
   if (KNOWN_VOCABULARY.has(t)) return true;
   for (const known of KNOWN_VOCABULARY) {
-    const distLimit = known.length <= 4 ? 0 : (known.length <= 6 ? 1 : 2);
+    const distLimit = known.length <= 3 ? 0 : (known.length <= 6 ? 1 : 2);
     if (Math.abs(t.length - known.length) <= distLimit) {
       if (editDistance(t, known) <= distLimit) {
         return true;
@@ -716,6 +717,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       /\b\d+\s*[\+\-\*\/x]\s*\d+\b/.test(rawQuery) ||
       /^\d+\s*[\+\-\*\/x]\s*\d+$/.test(rawQuery.trim()) ||
       contains("who was einstein") ||
+      contains("einstein") ||
       contains("what is pythons") ||
       contains("pythons") ||
       contains("snake") ||
@@ -732,7 +734,11 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("what is data science") ||
       contains("what is biology") ||
       contains("what is physics") ||
-      contains("what is chemistry")
+      contains("what is chemistry") ||
+      contains("what is an algorithm") ||
+      contains("define algorithm") ||
+      contains("what is programming") ||
+      contains("what is artificial intelligence")
     );
 
     if (isGeneralCodingTask || isGeneralTrivia) {
@@ -745,14 +751,14 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     // 12. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh")
     // -------------------------------------------------------------
-    const isPureDigits = /^\d+$/.test(cleanWords);
+    const isPureDigits = /^\d+$/.test(cleanWords) && !contains("3 96") && !contains("396") && !contains("3.96");
     const isNoiseOrStroke = contains("stroke") && /\d+/.test(cleanWords);
-    const isShortNoise = cleanWords.length <= 4 && !KNOWN_VOCABULARY.has(cleanWords);
+    const isShortNoise = cleanWords.length <= 4 && !rawTokens.some(isRecognizedToken) && !tokens.some(isRecognizedToken);
     const lacksVowels = cleanWords.length > 4 && !/[aeiouy]/.test(cleanWords);
     const hasLongRandomSequence = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(cleanWords);
     const hasNoRecognizedTokens = rawTokens.length > 0 && !rawTokens.some(isRecognizedToken);
 
-    if (isPureDigits || isNoiseOrStroke || isShortNoise || lacksVowels || hasLongRandomSequence || hasNoRecognizedTokens) {
+    if ((isPureDigits || isNoiseOrStroke || isShortNoise || lacksVowels || hasLongRandomSequence || hasNoRecognizedTokens) && !contains("3 96") && !contains("396") && !contains("3.96")) {
       return {
         text: `Oops! That looks like a random keystroke or number. 🤖\n\nHow can I help you today? You can ask me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What is his LangGraph experience?"*\n• *"How can I contact him?"*`,
         actionLink: { label: "Explore All Projects", tab: "Projects" }
@@ -885,12 +891,15 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("aspiring role") ||
       contains("roles is he seeking") ||
       contains("role is he seeking") ||
+      contains("5 years") ||
+      contains("five years") ||
+      contains("where does he see himself") ||
       (hasWord("career") && (hasWord("goals") || hasWord("goal") || hasWord("path") || hasWord("target") || hasWord("seeking") || hasWord("roles"))) ||
       (hasWord("target") && (hasWord("role") || hasWord("job") || hasWord("position") || hasWord("work"))) ||
       ((hasWord("role") || hasWord("roles") || hasWord("job") || hasWord("position")) && (hasWord("target") || hasWord("targeting") || hasWord("looking") || hasWord("seeking") || hasWord("seek") || hasWord("want") || hasWord("aspiring")))
     ) {
       return {
-        text: `🎯 **Target Roles & Career Focus:**\nIjlal is actively targeting high-impact roles including:\n• 🤖 **AI Engineer / Generative AI Developer** (LangGraph & RAG)\n• 💻 **Software Engineer (Python / Full-Stack)**\n• 📱 **Native Android Engineer (Java / Firebase)**\n• ⚙️ **Backend Engineer (FastAPI / Microservices)**`,
+        text: `🎯 **Target Roles & Career Focus:**\nIjlal is actively targeting high-impact roles including:\n• 🤖 **AI Engineer / Generative AI Developer** (LangGraph & RAG)\n• 💻 **Software Engineer (Python / Full-Stack)**\n• 📱 **Native Android Engineer (Java / Firebase)**\n• ⚙️ **Backend Engineer (FastAPI / Microservices)**\n\nHis long-term vision is to architect scalable autonomous agentic workflows and leading high-throughput AI engineering teams.`,
         actionLink: { label: "Discuss Opportunities", tab: "Contact" }
       };
     }
@@ -945,7 +954,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     if (
       hasWord("matric", 1) ||
       hasWord("matriculation", 1) ||
-      contains("vision school") ||
+      contains("vision") ||
       contains("10th grade") ||
       contains("10th marks") ||
       contains("matric marks") ||
@@ -962,7 +971,9 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
     if (
       hasWord("intermediate", 1) ||
-      contains("danyore college") ||
+      contains("danyore") ||
+      contains("degree college") ||
+      contains("govt boys") ||
       contains("fsc") ||
       contains("hssc") ||
       contains("12th grade") ||
@@ -983,6 +994,9 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     if (
       hasWord("cgpa", 1) ||
+      contains("3.96") ||
+      contains("3 96") ||
+      contains("396") ||
       contains("cgoa") ||
       contains("cgpaa") ||
       contains("what is his cgpa") ||
@@ -996,7 +1010,9 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("gpa of ijlal") ||
       contains("first class honors") ||
       contains("his honors") ||
-      contains("distinction")
+      (contains("grade") && !contains("matric") && !contains("inter") && !contains("school") && !contains("college") && !contains("10th") && !contains("12th") && !contains("university") && !contains("numl")) ||
+      (contains("grades") && !contains("matric") && !contains("inter") && !contains("school") && !contains("college") && !contains("10th") && !contains("12th") && !contains("university") && !contains("numl")) ||
+      (contains("marks") && !contains("matric") && !contains("inter") && !contains("school") && !contains("college") && !contains("10th") && !contains("12th") && !contains("university") && !contains("numl"))
     ) {
       return {
         text: `Ijlal's CGPA is **${personalInfo.cgpa}** (First Class Honors) in BS Software Engineering from NUML Islamabad! 🎓`,
@@ -1060,8 +1076,10 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("bs software") ||
       contains("bs se") ||
       contains("where did he study") ||
+      contains("where did he graduate") ||
+      contains("where he graduated") ||
       contains("which university") ||
-      contains("where he graduated")
+      (hasWord("graduate") && (hasWord("where") || hasWord("which") || hasWord("from") || hasWord("university") || hasWord("school") || hasWord("college")))
     ) {
       return {
         text: `🎓 **BS Software Engineering (NUML Islamabad):**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** (${educationData[0].period}) with a stellar **${educationData[0].grade} (First Class Honors)**!`,
@@ -1200,15 +1218,19 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 22. CATEGORIZED PROJECT QUERIES: MOBILE / ANDROID PROJECTS
     // -------------------------------------------------------------
     if (
-      contains("mobile project") ||
-      contains("mobile projects") ||
-      contains("mobile app") ||
-      contains("mobile apps") ||
-      contains("android project") ||
-      contains("android projects") ||
-      contains("android app") ||
-      contains("android apps") ||
-      (hasWord("mobile") && (hasWord("project") || hasWord("app") || hasWord("work")))
+      (
+        contains("mobile project") ||
+        contains("mobile projects") ||
+        contains("mobile app") ||
+        contains("mobile apps") ||
+        contains("android project") ||
+        contains("android projects") ||
+        contains("android app") ||
+        contains("android apps") ||
+        (hasWord("mobile") && (hasWord("project") || hasWord("app") || hasWord("work")))
+      ) &&
+      !hasWord("safezone", 1) &&
+      !contains("safe zone")
     ) {
       return {
         text: `📱 **Ijlal's Mobile Projects:**\n• **Safe Zone — Parental Control Android App (FYP Lead)**: Built natively with **Java, Android SDK, and Firebase Realtime Database**. Features real-time GPS geofencing, remote screen-time lockouts, dynamic web filtering, and system app blocking via AccessibilityService & DevicePolicyManager.`,
@@ -1344,8 +1366,29 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 29. DEVELOPER PORTFOLIO SPECIFIC
     // -------------------------------------------------------------
     if (
-      hasWord("portfolio") &&
-      (contains("built") || contains("how") || contains("stack") || contains("source") || contains("code") || contains("tech") || contains("website"))
+      (
+        hasWord("portfolio") ||
+        contains("this website") ||
+        contains("this site") ||
+        contains("this web app") ||
+        contains("portfolio website") ||
+        contains("built this website") ||
+        contains("made this website")
+      ) &&
+      (
+        contains("built") ||
+        contains("how") ||
+        contains("stack") ||
+        contains("source") ||
+        contains("code") ||
+        contains("tech") ||
+        contains("website") ||
+        contains("maker") ||
+        contains("made") ||
+        contains("created this") ||
+        contains("built this")
+      ) &&
+      !contains("whose")
     ) {
       return {
         text: `🌐 **Developer Portfolio:**\nIjlal's personal web platform built with **React 19, TypeScript, Vite 6, Tailwind CSS v4, Lucide Icons, and Motion**. It features a 100% client-side grounded AI Assistant, modern dark cosmic theme, persistent URL hash routing, and PWA capability.`,
@@ -1406,7 +1449,13 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     // 33. ALBERUNI TECH / REQUIREMENTS ENGINEERING
     // -------------------------------------------------------------
-    if (hasWord("alberuni", 2) || contains("requirement engineering") || contains("srs") || contains("brd")) {
+    if (
+      hasWord("alberuni", 2) ||
+      contains("requirement engineering") ||
+      contains("requirements engineering") ||
+      contains("srs") ||
+      contains("brd")
+    ) {
       return {
         text: `📑 **Requirement Engineering Intern @ NUML × Alberuni Tech (${experienceData[1].period}):**\nIjlal gathered commercial software requirements, authoring standardized **Software Requirements Specifications (SRS)**, **BRDs**, and **UML Use Case diagrams**.`,
         actionLink: { label: "View Experience Details", tab: "About" }
@@ -1697,7 +1746,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("contract") ||
       contains("freelance") ||
       contains("free to work") ||
-      (hasWord("free") && hasWord("work"))
+      (hasWord("free") && hasWord("work")) ||
+      ((hasWord("hire", 1) || contains("hire ijlal") || contains("hire him")) && !hasWord("why"))
     ) {
       return {
         text: `💼 **Work Availability:**\nIjlal is actively open to **Full-time**, **Contract**, and **Freelance** engineering roles. His notice period is **Immediate (0 days)**!`,
@@ -1778,14 +1828,21 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 44. LOCATION / ORIGIN
     // -------------------------------------------------------------
     if (
-      ((hasWord("where", 1) || hasWord("wher", 1)) && (hasWord("from", 1) || hasWord("live", 1) || hasWord("located", 2) || hasWord("he", 0) || hasWord("ijlal", 1))) ||
-      hasWord("location", 2) ||
-      hasWord("city", 1) ||
-      hasWord("country", 2) ||
-      hasWord("hometown", 2) ||
-      hasWord("origin", 2) ||
-      hasWord("gilgit", 1) ||
-      (hasWord("pakistan", 2) && !contains("time"))
+      (
+        ((hasWord("where", 1) || hasWord("wher", 1)) && (hasWord("from", 1) || hasWord("live", 1) || hasWord("located", 2) || hasWord("ijlal", 1))) ||
+        hasWord("location", 2) ||
+        hasWord("city", 1) ||
+        hasWord("country", 2) ||
+        hasWord("hometown", 2) ||
+        hasWord("origin", 2) ||
+        hasWord("gilgit", 1) ||
+        (hasWord("pakistan", 2) && !contains("time"))
+      ) &&
+      !contains("graduate") &&
+      !contains("study") &&
+      !contains("degree") &&
+      !contains("work") &&
+      !contains("job")
     ) {
       return {
         text: `Ijlal is originally from the beautiful valley of **Gilgit, Pakistan** 🏔️ and completed his software engineering degree in **Islamabad**. He is actively open to **remote roles globally** as well as on-site positions in Islamabad!`,
@@ -1861,6 +1918,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // 50. WHO IS IJLAL / ABOUT IJLAL (First name, last name, full name, typos)
     // -------------------------------------------------------------
     if (
+      /^(ijlal|hussain|ijlal\s+hussain|ijlal\s+hussaini|itjal|itjall|ijall|ejlal)$/i.test(cleanWords) ||
+      (tokens.length <= 2 && (tokens.includes("ijlal") || tokens.includes("hussain"))) ||
       contains("who is ijlal") ||
       contains("who is itjall") ||
       contains("who is ijall") ||
@@ -1871,6 +1930,15 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("who is ijlal hussain") ||
       contains("who is ijla hussain") ||
       contains("who is he") ||
+      contains("who is this") ||
+      contains("who is the owner") ||
+      contains("candidate") ||
+      contains("what is his name") ||
+      contains("his name") ||
+      contains("candidate name") ||
+      contains("whose portfolio") ||
+      contains("who owns this") ||
+      contains("developer name") ||
       contains("about ijlal") ||
       contains("about hussain") ||
       contains("about ijlal hussain") ||
@@ -1878,18 +1946,38 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("tell me about ijlal") ||
       contains("tell me about hussain") ||
       contains("tell me about him") ||
+      contains("tell me about candidate") ||
       contains("introduce ijlal") ||
       contains("introduce hussain") ||
       contains("profile of ijlal") ||
       contains("profile of hussain") ||
       contains("background of ijlal") ||
       contains("background of hussain") ||
-      (hasWord("who") && (hasWord("ijlal") || hasWord("hussain") || hasWord("he"))) ||
-      (hasWord("about") && (hasWord("ijlal") || hasWord("hussain") || hasWord("him")))
+      (hasWord("who") && (hasWord("ijlal") || hasWord("hussain") || hasWord("he") || hasWord("person") || hasWord("owner") || hasWord("candidate"))) ||
+      (hasWord("about") && (hasWord("ijlal") || hasWord("hussain") || hasWord("him") || hasWord("candidate")))
     ) {
       return {
         text: `**Ijlal Hussain** is a Software Engineering graduate from NUML Islamabad with an outstanding **3.96 / 4.0 CGPA** (First Class Honors). 🚀\n\nHe specializes in **Generative AI (LangGraph multi-agent systems & RAG)**, **Native Android Development (Java/Firebase)**, and **Full-Stack Web (React 19/MERN)**. He was the Team Lead for the Safe Zone Parental Control FYP and completed AI Engineering internships at Kartoa Technologies and Alberuni Tech.`,
         actionLink: { label: "View Full Profile", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 51. WEAKNESSES & AREAS FOR CONTINUOUS GROWTH
+    // -------------------------------------------------------------
+    if (
+      hasWord("weakness", 2) ||
+      hasWord("weaknesses", 2) ||
+      contains("area of improvement") ||
+      contains("areas of improvement") ||
+      contains("areas for improvement") ||
+      contains("where can he improve") ||
+      contains("what is his weakness") ||
+      contains("what are his weaknesses")
+    ) {
+      return {
+        text: `🌱 **Areas for Continuous Growth:**\nIjlal is an architecture perfectionist who takes great pride in clean code, comprehensive test suites, and strict prompt guardrails. At times, he dives deep into refining edge cases—which he actively balances by practicing agile sprint timeboxing and shipping high-value features iteratively!`,
+        actionLink: { label: "View About & Skills", tab: "About" }
       };
     }
 
