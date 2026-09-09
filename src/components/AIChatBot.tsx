@@ -430,7 +430,174 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 2. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh", "soaidgoasidg")
+    // 2. GREETINGS & SALUTATIONS
+    // -------------------------------------------------------------
+    if (/^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|good\s*(morning|afternoon|evening|day|night))(\s|$)/i.test(cleanWords) || hasWord("hello", 1) || hasWord("salam", 1)) {
+      return {
+        text: `Hello! 👋 I'm Ijlal's AI Assistant. How can I help you today? Ask me about his projects, CGPA (3.96), LangGraph AI experience, or contact details!`,
+        actionLink: { label: "View About & Skills", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 3. CONVERSATIONAL WELL-BEING & SMALL TALK
+    // -------------------------------------------------------------
+    if (
+      contains("how are you") ||
+      contains("how r u") ||
+      contains("how are u") ||
+      contains("how do you do") ||
+      contains("how is it going") ||
+      contains("hows it going") ||
+      contains("how s it going") ||
+      contains("are you good") ||
+      contains("are you ok") ||
+      contains("are you okay") ||
+      contains("are you fine") ||
+      contains("are you doing well") ||
+      contains("how have you been") ||
+      contains("what's up") ||
+      contains("whats up") ||
+      contains("wassup") ||
+      contains("sup") ||
+      (tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || tokens.includes("you") || tokens.includes("things")))
+    ) {
+      return {
+        text: `I'm doing great, thank you for asking! 😊 I'm ready to answer any questions about Ijlal's software engineering projects, skills, education, or career experience. How can I help you today?`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 4. CONVERSATIONAL ACKNOWLEDGMENTS
+    // -------------------------------------------------------------
+    const ackWords = ["ok", "okay", "k", "kk", "alright", "sure", "cool", "nice", "fine", "perfect", "yes", "yep", "yeah", "no", "nah", "nope", "understood", "noted", "good", "got", "it", "sounds"];
+    if (
+      /^(ok|okay|k|kk|alright|sure|cool|nice|got it|fine|perfect|yes|yep|yeah|no|nah|nope|sounds good|understood|noted)$/i.test(cleanWords) ||
+      (rawTokens.length <= 3 && rawTokens.every((t) => ackWords.includes(t.toLowerCase())))
+    ) {
+      return {
+        text: `Got it! 👍 Feel free to ask anything else about Ijlal's background, projects, or skills!`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 5. GRATITUDE & CLOSING
+    // -------------------------------------------------------------
+    if (/^(thank|thanks|thank\s+you|appreciate|awesome|great|cool|goodbye|bye)(\s|$)/i.test(cleanWords) || hasWord("thanks", 1)) {
+      return {
+        text: `You're very welcome! 😊 Feel free to reach out to Ijlal directly through the contact section if you'd like to collaborate or connect!`,
+        actionLink: { label: "Open Contact Form", tab: "Contact" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 6. BOT COMPLIMENTS & PRAISE
+    // -------------------------------------------------------------
+    if (
+      contains("you are smart") ||
+      contains("you are cool") ||
+      contains("you are great") ||
+      contains("you are awesome") ||
+      contains("you are good") ||
+      contains("you are amazing") ||
+      contains("you are fast") ||
+      contains("you are helpful") ||
+      contains("you are clever") ||
+      contains("you're smart") ||
+      contains("you're cool") ||
+      contains("you're great") ||
+      contains("you're awesome") ||
+      contains("you're good") ||
+      contains("good bot") ||
+      contains("nice bot") ||
+      contains("smart bot") ||
+      contains("cool bot") ||
+      contains("great bot") ||
+      contains("i love you") ||
+      contains("love you")
+    ) {
+      return {
+        text: `Thank you so much! 😊 I'm designed to represent Ijlal's software engineering background as accurately and smoothly as possible. Feel free to explore his projects or reach out directly!`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 7. CREATOR & ORIGIN
+    // -------------------------------------------------------------
+    if (
+      contains("who made you") ||
+      contains("who created you") ||
+      contains("who built you") ||
+      contains("who developed you") ||
+      contains("who programmed you") ||
+      contains("who is your creator") ||
+      contains("who is your maker") ||
+      contains("who is your boss") ||
+      contains("who is your owner") ||
+      contains("who designed you")
+    ) {
+      return {
+        text: `I was built and trained by **Ijlal Hussain** as part of his high-performance developer portfolio! 🚀 I run 100% in your browser with zero latency and zero external API dependencies.`,
+        actionLink: { label: "View About & Skills", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 8. HUMAN VS AI / ARE YOU REAL
+    // -------------------------------------------------------------
+    if (
+      contains("are you a human") ||
+      contains("are you human") ||
+      contains("are you a real person") ||
+      contains("are you real") ||
+      contains("are you a bot") ||
+      contains("are you an ai") ||
+      contains("is this a human") ||
+      contains("is this an ai") ||
+      contains("is this a bot") ||
+      contains("am i talking to ijlal") ||
+      contains("am i speaking with ijlal") ||
+      contains("am i talking to a human")
+    ) {
+      return {
+        text: `I am Ijlal's **AI Portfolio Assistant**, running 100% in your browser. If you'd like to speak with **Ijlal Hussain directly in person**, you can reach him via email at **${personalInfo.email}**, WhatsApp at **${personalInfo.phone}**, or LinkedIn! 📬`,
+        actionLink: { label: "Open Contact Form", tab: "Contact" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 9. BOT IDENTITY
+    // -------------------------------------------------------------
+    if (
+      contains("who are you") ||
+      contains("what are you") ||
+      contains("what is your name") ||
+      contains("what do you do") ||
+      contains("tell me about yourself") ||
+      contains("introduce yourself") ||
+      contains("your purpose")
+    ) {
+      return {
+        text: `I am **Ijlal's AI Portfolio Assistant**, running 100% in your browser. I can answer any questions about Ijlal's software engineering projects, academic honors, verified certifications, and skills! 😊`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 10. HELP / BOT CAPABILITIES / MENU
+    // -------------------------------------------------------------
+    if (hasWord("help", 0) || contains("what can you do") || contains("menu") || contains("options") || contains("how to use")) {
+      return {
+        text: `💡 **Here's what you can ask me:**\n• **Academic**: *"What is Ijlal's CGPA?"*, *"Where did he study?"*\n• **Projects**: *"Tell me about ResumeIQ"*, *"SafeZone APK"*, *"Blog Factory"*\n• **AI Tech**: *"LangGraph & RAG experience"*, *"Dual LLM setup"*\n• **Experience**: *"Kartoa internship"*, *"Leadership role"*\n• **Certifications**: *"NAVTTC cert"*, *"Cisco Python cert"*\n• **Hiring & Contact**: *"Why hire Ijlal?"*, *"Is he available?"*, *"Email / WhatsApp"*\n• **Data Export**: *"Give portfolio data in JSON"*`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 11. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh", "soaidgoasidg")
     // -------------------------------------------------------------
     const isPureDigits = /^\d+$/.test(cleanWords);
     const isNoiseOrStroke = contains("stroke") && /\d+/.test(cleanWords);
@@ -1117,173 +1284,6 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       return {
         text: `📱 **Progressive Web App (PWA):**\nThis portfolio is an installable PWA! You can install it on your mobile home screen or desktop for fast app-like access with offline caching.`,
         actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 57. HELP / BOT CAPABILITIES / MENU
-    // -------------------------------------------------------------
-    if (hasWord("help", 0) || contains("what can you do") || contains("menu") || contains("options") || contains("how to use")) {
-      return {
-        text: `💡 **Here's what you can ask me:**\n• **Academic**: *"What is Ijlal's CGPA?"*, *"Where did he study?"*\n• **Projects**: *"Tell me about ResumeIQ"*, *"SafeZone APK"*, *"Blog Factory"*\n• **AI Tech**: *"LangGraph & RAG experience"*, *"Dual LLM setup"*\n• **Experience**: *"Kartoa internship"*, *"Leadership role"*\n• **Certifications**: *"NAVTTC cert"*, *"Cisco Python cert"*\n• **Hiring & Contact**: *"Why hire Ijlal?"*, *"Is he available?"*, *"Email / WhatsApp"*\n• **Data Export**: *"Give portfolio data in JSON"*`,
-        actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 58. GREETINGS & SALUTATIONS
-    // -------------------------------------------------------------
-    if (/^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|good\s*(morning|afternoon|evening|day|night))(\s|$)/i.test(cleanWords) || hasWord("hello", 1) || hasWord("salam", 1)) {
-      return {
-        text: `Hello! 👋 I'm Ijlal's AI Assistant. How can I help you today? Ask me about his projects, CGPA (3.96), LangGraph AI experience, or contact details!`,
-        actionLink: { label: "View About & Skills", tab: "About" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 59. CONVERSATIONAL WELL-BEING & SMALL TALK
-    // -------------------------------------------------------------
-    if (
-      contains("how are you") ||
-      contains("how r u") ||
-      contains("how are u") ||
-      contains("how do you do") ||
-      contains("how is it going") ||
-      contains("hows it going") ||
-      contains("how s it going") ||
-      contains("are you good") ||
-      contains("are you ok") ||
-      contains("are you okay") ||
-      contains("are you fine") ||
-      contains("are you doing well") ||
-      contains("how have you been") ||
-      contains("what's up") ||
-      contains("whats up") ||
-      contains("wassup") ||
-      contains("sup") ||
-      (tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || tokens.includes("you") || tokens.includes("things")))
-    ) {
-      return {
-        text: `I'm doing great, thank you for asking! 😊 I'm ready to answer any questions about Ijlal's software engineering projects, skills, education, or career experience. How can I help you today?`,
-        actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 60. BOT COMPLIMENTS & PRAISE
-    // -------------------------------------------------------------
-    if (
-      contains("you are smart") ||
-      contains("you are cool") ||
-      contains("you are great") ||
-      contains("you are awesome") ||
-      contains("you are good") ||
-      contains("you are amazing") ||
-      contains("you are fast") ||
-      contains("you are helpful") ||
-      contains("you are clever") ||
-      contains("you're smart") ||
-      contains("you're cool") ||
-      contains("you're great") ||
-      contains("you're awesome") ||
-      contains("you're good") ||
-      contains("good bot") ||
-      contains("nice bot") ||
-      contains("smart bot") ||
-      contains("cool bot") ||
-      contains("great bot") ||
-      contains("i love you") ||
-      contains("love you")
-    ) {
-      return {
-        text: `Thank you so much! 😊 I'm designed to represent Ijlal's software engineering background as accurately and smoothly as possible. Feel free to explore his projects or reach out directly!`,
-        actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 61. CREATOR & ORIGIN
-    // -------------------------------------------------------------
-    if (
-      contains("who made you") ||
-      contains("who created you") ||
-      contains("who built you") ||
-      contains("who developed you") ||
-      contains("who programmed you") ||
-      contains("who is your creator") ||
-      contains("who is your maker") ||
-      contains("who is your boss") ||
-      contains("who is your owner") ||
-      contains("who designed you")
-    ) {
-      return {
-        text: `I was built and trained by **Ijlal Hussain** as part of his high-performance developer portfolio! 🚀 I run 100% in your browser with zero latency and zero external API dependencies.`,
-        actionLink: { label: "View About & Skills", tab: "About" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 62. HUMAN VS AI / ARE YOU REAL
-    // -------------------------------------------------------------
-    if (
-      contains("are you a human") ||
-      contains("are you human") ||
-      contains("are you a real person") ||
-      contains("are you real") ||
-      contains("are you a bot") ||
-      contains("are you an ai") ||
-      contains("is this a human") ||
-      contains("is this an ai") ||
-      contains("is this a bot") ||
-      contains("am i talking to ijlal") ||
-      contains("am i speaking with ijlal") ||
-      contains("am i talking to a human")
-    ) {
-      return {
-        text: `I am Ijlal's **AI Portfolio Assistant**, running 100% in your browser. If you'd like to speak with **Ijlal Hussain directly in person**, you can reach him via email at **${personalInfo.email}**, WhatsApp at **${personalInfo.phone}**, or LinkedIn! 📬`,
-        actionLink: { label: "Open Contact Form", tab: "Contact" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 63. BOT IDENTITY
-    // -------------------------------------------------------------
-    if (
-      contains("who are you") ||
-      contains("what are you") ||
-      contains("what is your name") ||
-      contains("what do you do") ||
-      contains("tell me about yourself") ||
-      contains("introduce yourself") ||
-      contains("your purpose")
-    ) {
-      return {
-        text: `I am **Ijlal's AI Portfolio Assistant**, running 100% in your browser. I can answer any questions about Ijlal's software engineering projects, academic honors, verified certifications, and skills! 😊`,
-        actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 64. CONVERSATIONAL ACKNOWLEDGMENTS
-    // -------------------------------------------------------------
-    const ackWords = ["ok", "okay", "k", "kk", "alright", "sure", "cool", "nice", "fine", "perfect", "yes", "yep", "yeah", "no", "nah", "nope", "understood", "noted", "good", "got", "it", "sounds"];
-    if (
-      /^(ok|okay|k|kk|alright|sure|cool|nice|got it|fine|perfect|yes|yep|yeah|no|nah|nope|sounds good|understood|noted)$/i.test(cleanWords) ||
-      (rawTokens.length <= 3 && rawTokens.every((t) => ackWords.includes(t.toLowerCase())))
-    ) {
-      return {
-        text: `Got it! 👍 Feel free to ask anything else about Ijlal's background, projects, or skills!`,
-        actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 65. GRATITUDE & CLOSING
-    // -------------------------------------------------------------
-    if (/^(thank|thanks|thank\s+you|appreciate|awesome|great|cool|goodbye|bye)(\s|$)/i.test(cleanWords) || hasWord("thanks", 1)) {
-      return {
-        text: `You're very welcome! 😊 Feel free to reach out to Ijlal directly through the contact section if you'd like to collaborate or connect!`,
-        actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
 
