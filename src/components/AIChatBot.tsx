@@ -65,6 +65,7 @@ function editDistance(a: string, b: string): number {
 // Comprehensive known vocabulary used to detect random ungrounded keyboard mash
 const KNOWN_VOCABULARY = new Set([
   "hi", "hello", "hey", "salam", "assalam", "aoa", "greetings", "good", "morning", "afternoon", "evening", "night",
+  "welcome", "welcoming", "welcomed", "wlcm", "howdy", "hiya", "yo", "bonjour", "namaste", "salut", "cheers", "peace",
   "how", "are", "you", "doing", "is", "he", "what", "where", "why", "when", "who", "which", "can", "could", "would", "should",
   "tell", "show", "give", "list", "see", "view", "find", "get", "download", "talk", "chat", "contact", "call", "email", "mail",
   "phone", "whatsapp", "linkedin", "github", "hire", "work", "job", "available", "availability", "project", "projects",
@@ -89,7 +90,8 @@ const KNOWN_VOCABULARY = new Set([
   "well", "ready", "test", "testing", "check", "try", "stroke", "number", "numbers", "digit", "digits", "xyz", "ats", "score",
   "formula", "filter", "blocking", "block", "gps", "tracking", "review", "peer", "codeblock", "vector", "embed", "embeddings",
   "and", "or", "in", "of", "to", "for", "with", "on", "at", "by", "from", "as", "into", "like", "tool", "tools", "platform", "platforms",
-  "framework", "frameworks", "library", "libraries", "system", "systems", "application", "applications", "things", "going", "been", "doing"
+  "framework", "frameworks", "library", "libraries", "system", "systems", "application", "applications", "things", "going", "been", "doing",
+  "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
 function isRecognizedToken(token: string): boolean {
@@ -354,8 +356,8 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
 
     // Normalize common phonetic and typo variations
     const tokens = rawTokens.map((t) => {
-      if (/^(itjall|itjal|ijall|ijlla|ijla|ijlall|ijhall|ijlaal|ijlas)$/.test(t)) return "ijlal";
-      if (/^(hussani|husain|hussan|hussin)$/.test(t)) return "hussain";
+      if (/^(itjall|itjal|ijall|ijlla|ijla|ijlall|ijhall|ijlaal|ijlas|ejlal|ejlaal|ijlal)$/.test(t)) return "ijlal";
+      if (/^(hussani|hussaini|husain|hussan|hussin|husayn|husein|hussien|hossain|hossin|hussain)$/.test(t)) return "hussain";
       if (/^(cgoa|cgpaa|cgpa|cpa|gpaa|gpa|marks|grades)$/.test(t)) return "cgpa";
       if (/^(softwer|softwere|sofware)$/.test(t)) return "software";
       if (/^(enginerign|enginering|enginnering|enginer)$/.test(t)) return "engineering";
@@ -430,11 +432,17 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 2. GREETINGS & SALUTATIONS
+    // 2. GREETINGS & SALUTATIONS (Including "welcome", "hi", "salam", etc.)
     // -------------------------------------------------------------
-    if (/^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|good\s*(morning|afternoon|evening|day|night))(\s|$)/i.test(cleanWords) || hasWord("hello", 1) || hasWord("salam", 1)) {
+    if (
+      /^(hi|hello|hey|salam|assalam|aoa|hy|hola|greetings|welcome|welcome\s*here|howdy|hiya|yo|bonjour|namaste|good\s*(morning|afternoon|evening|day|night))(\s|$)/i.test(cleanWords) ||
+      hasWord("hello", 1) ||
+      hasWord("salam", 1) ||
+      hasWord("welcome", 1) ||
+      contains("welcome")
+    ) {
       return {
-        text: `Hello! 👋 I'm Ijlal's AI Assistant. How can I help you today? Ask me about his projects, CGPA (3.96), LangGraph AI experience, or contact details!`,
+        text: `Hello and welcome! 👋 I'm **Ijlal's AI Assistant**. How can I help you today? Ask me about his software engineering projects (ResumeIQ, SafeZone, Blog Factory), his **3.96 CGPA** at NUML, his Generative AI stack, or how to contact him!`,
         actionLink: { label: "View About & Skills", tab: "About" }
       };
     }
@@ -662,6 +670,9 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("what is his cgpa") ||
       contains("what is cgpa") ||
       contains("cgpa of ijlal") ||
+      contains("cgpa of hussain") ||
+      contains("cgpa of ijlal hussain") ||
+      contains("cgpa of ijla") ||
       contains("his gpa") ||
       contains("how much cgpa")
     ) {
@@ -672,21 +683,33 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 5. WHO IS IJLAL / ABOUT IJLAL
+    // 5. WHO IS IJLAL / ABOUT IJLAL (Support first name, last name, full name, and all typos)
     // -------------------------------------------------------------
     if (
       contains("who is ijlal") ||
       contains("who is itjall") ||
       contains("who is ijall") ||
+      contains("who is ijla") ||
+      contains("who is hussain") ||
+      contains("who is hussin") ||
+      contains("who is husain") ||
+      contains("who is ijlal hussain") ||
+      contains("who is ijla hussain") ||
       contains("who is he") ||
       contains("about ijlal") ||
-      contains("about itjall") ||
+      contains("about hussain") ||
+      contains("about ijlal hussain") ||
       contains("tell me about ijlal") ||
+      contains("tell me about hussain") ||
       contains("tell me about him") ||
       contains("introduce ijlal") ||
+      contains("introduce hussain") ||
       contains("profile of ijlal") ||
+      contains("profile of hussain") ||
       contains("background of ijlal") ||
-      (hasWord("who") && (hasWord("ijlal") || hasWord("he")))
+      contains("background of hussain") ||
+      (hasWord("who") && (hasWord("ijlal") || hasWord("hussain") || hasWord("he"))) ||
+      (hasWord("about") && (hasWord("ijlal") || hasWord("hussain") || hasWord("him")))
     ) {
       return {
         text: `**Ijlal Hussain** is a Software Engineering graduate from NUML Islamabad with an outstanding **3.96 / 4.0 CGPA** (First Class Honors). 🚀\n\nHe specializes in **Generative AI (LangGraph multi-agent systems & RAG)**, **Native Android Development (Java/Firebase)**, and **Full-Stack Web (React 19/MERN)**. He was the Team Lead for the Safe Zone Parental Control FYP and completed AI Engineering internships at Kartoa Technologies and Alberuni Tech.`,
