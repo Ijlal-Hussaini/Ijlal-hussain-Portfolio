@@ -62,13 +62,57 @@ function editDistance(a: string, b: string): number {
   return matrix[b.length][a.length];
 }
 
+// Comprehensive known vocabulary used to detect random ungrounded keyboard mash
+const KNOWN_VOCABULARY = new Set([
+  "hi", "hello", "hey", "salam", "assalam", "aoa", "greetings", "good", "morning", "afternoon", "evening", "night",
+  "how", "are", "you", "doing", "is", "he", "what", "where", "why", "when", "who", "which", "can", "could", "would", "should",
+  "tell", "show", "give", "list", "see", "view", "find", "get", "download", "talk", "chat", "contact", "call", "email", "mail",
+  "phone", "whatsapp", "linkedin", "github", "hire", "work", "job", "available", "availability", "project", "projects",
+  "skill", "skills", "tech", "stack", "education", "degree", "university", "school", "college", "cgpa", "gpa", "marks", "grades",
+  "resume", "cv", "experience", "internship", "lead", "leadership", "cert", "certs", "certificate", "certificates", "certification", "certifications",
+  "android", "java", "python", "ai", "ml", "genai", "generative", "langgraph", "langchain", "rag", "fastapi", "react", "nextjs", "typescript",
+  "javascript", "tailwind", "node", "express", "mongo", "mongodb", "firebase", "flutter", "dart", "postman", "figma", "git",
+  "english", "urdu", "brushaski", "language", "languages", "gilgit", "islamabad", "pakistan", "time", "timezone", "location", "city", "country",
+  "age", "old", "born", "birthday", "salary", "rate", "rates", "budget", "pricing", "interview", "meeting", "pwa", "offline",
+  "help", "menu", "options", "commands", "about", "profile", "bio", "background", "summary", "overview", "json", "jason", "data", "info", "information",
+  "ok", "okay", "sure", "cool", "nice", "fine", "perfect", "yes", "no", "thanks", "thank", "bye", "goodbye", "weakness", "weaknesses",
+  "strengths", "strength", "strong", "best", "great", "awesome", "smart", "clever", "bot", "assistant", "agent", "app", "apps", "website",
+  "portfolio", "safezone", "resumeiq", "blogfactory", "factory", "tavily", "adan", "navttc", "cisco", "digiskills", "alberuni", "numl",
+  "danyore", "vision", "intermediate", "matriculation", "matric", "fsc", "hssc", "ssc", "bachelor", "bachelors", "bs", "se", "software",
+  "engineering", "engineer", "developer", "programmer", "coder", "code", "coding", "write", "generate", "create", "build", "built",
+  "maker", "made", "creator", "owner", "author", "boss", "human", "person", "real", "model", "models", "llm", "llms", "groq", "gemini",
+  "llama", "deepseek", "chatgpt", "openai", "claude", "free", "freelance", "contract", "fulltime", "parttime", "remote", "onsite",
+  "relocate", "relocation", "notice", "period", "now", "today", "immediately", "immediate", "urgent", "start", "join", "joining",
+  "details", "detail", "more", "everything", "all", "so", "much", "very", "too", "also", "just", "only", "please", "kindly",
+  "me", "my", "i", "we", "our", "us", "it", "its", "this", "that", "these", "those", "there", "here", "their", "them", "they",
+  "his", "him", "her", "she", "mr", "sir", "bro", "friend", "dude", "buddy", "man", "guy", "sup", "wassup", "up", "going",
+  "well", "ready", "test", "testing", "check", "try", "stroke", "number", "numbers", "digit", "digits", "xyz", "ats", "score",
+  "formula", "filter", "blocking", "block", "gps", "tracking", "review", "peer", "codeblock", "vector", "embed", "embeddings",
+  "and", "or", "in", "of", "to", "for", "with", "on", "at", "by", "from", "as", "into", "like", "tool", "tools", "platform", "platforms",
+  "framework", "frameworks", "library", "libraries", "system", "systems", "application", "applications", "things", "going", "been", "doing"
+]);
+
+function isRecognizedToken(token: string): boolean {
+  const t = token.toLowerCase();
+  if (KNOWN_VOCABULARY.has(t)) return true;
+  for (const known of KNOWN_VOCABULARY) {
+    const distLimit = known.length <= 4 ? 1 : 2;
+    if (Math.abs(t.length - known.length) <= distLimit) {
+      if (editDistance(t, known) <= distLimit) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function hasFuzzyWord(tokens: string[], target: string, maxDist = 2): boolean {
   const targetLower = target.toLowerCase();
-  const effectiveMaxDist = targetLower.length <= 4 ? 1 : maxDist;
+  const effectiveMaxDist = targetLower.length <= 4 ? 0 : maxDist;
   return tokens.some((token) => {
     const t = token.toLowerCase();
     if (t === targetLower) return true;
-    if (targetLower.length <= 3) {
+    if (targetLower.length <= 4) {
       return t === targetLower;
     }
     if (Math.abs(t.length - targetLower.length) <= effectiveMaxDist) {
@@ -386,15 +430,16 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 2. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh")
+    // 2. RANDOM KEYSTROKES / DIGITS / GIBBERISH (e.g. "134343", "stroke 134343", "asdfgh", "soaidgoasidg")
     // -------------------------------------------------------------
     const isPureDigits = /^\d+$/.test(cleanWords);
     const isNoiseOrStroke = contains("stroke") && /\d+/.test(cleanWords);
-    const isShortNoise = cleanWords.length <= 4 && !/^(hi|hey|cgpa|gpa|cpa|ai|fyp|numl|job|cv|web|app|java|help|who|name|age|city|read|call|menu)$/.test(cleanWords);
+    const isShortNoise = cleanWords.length <= 4 && !KNOWN_VOCABULARY.has(cleanWords);
     const lacksVowels = cleanWords.length > 4 && !/[aeiouy]/.test(cleanWords);
     const hasLongRandomSequence = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(cleanWords);
+    const hasNoRecognizedTokens = rawTokens.length > 0 && !rawTokens.some(isRecognizedToken);
 
-    if (isPureDigits || isNoiseOrStroke || isShortNoise || lacksVowels || hasLongRandomSequence) {
+    if (isPureDigits || isNoiseOrStroke || isShortNoise || lacksVowels || hasLongRandomSequence || hasNoRecognizedTokens) {
       return {
         text: `Oops! That looks like a random keystroke or number. 🤖\n\nHow can I help you today? You can ask me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What is his LangGraph experience?"*\n• *"How can I contact him?"*`,
         actionLink: { label: "Explore All Projects", tab: "Projects" }
@@ -426,8 +471,10 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("write an essay") ||
       contains("write a poem") ||
       contains("tell a joke") ||
-      contains("2 + 2") ||
-      contains("math problem") ||
+      contains("calculate") ||
+      contains("math") ||
+      /\b\d+\s*[\+\-\*\/x]\s*\d+\b/.test(input) ||
+      /^\d+\s*[\+\-\*\/x]\s*\d+$/.test(input.trim()) ||
       contains("who was einstein")
     );
 
@@ -1036,7 +1083,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     // 53. TOOLS: GIT, POSTMAN, FIGMA, VS CODE
     // -------------------------------------------------------------
-    if (hasWord("figma", 1) || hasWord("postman", 1) || (hasWord("tool", 1) || hasWord("tools", 1))) {
+    if (hasWord("figma", 1) || hasWord("postman", 1) || (hasWord("tool", 0) || hasWord("tools", 0))) {
       return {
         text: `🛠️ **Engineering Tools & Platforms:**\n• **Git & GitHub (86%)**: Version control & collaborative workflows\n• **VS Code (88%) & Android Studio (85%)**: Primary development IDEs\n• **Postman (78%)**: REST API automated testing\n• **Figma (72%)**: Wireframing & UI/UX prototyping`,
         actionLink: { label: "View Skills Breakdown", tab: "About" }
@@ -1094,7 +1141,130 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 59. CONVERSATIONAL ACKNOWLEDGMENTS
+    // 59. CONVERSATIONAL WELL-BEING & SMALL TALK
+    // -------------------------------------------------------------
+    if (
+      contains("how are you") ||
+      contains("how r u") ||
+      contains("how are u") ||
+      contains("how do you do") ||
+      contains("how is it going") ||
+      contains("hows it going") ||
+      contains("how s it going") ||
+      contains("are you good") ||
+      contains("are you ok") ||
+      contains("are you okay") ||
+      contains("are you fine") ||
+      contains("are you doing well") ||
+      contains("how have you been") ||
+      contains("what's up") ||
+      contains("whats up") ||
+      contains("wassup") ||
+      contains("sup") ||
+      (tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || tokens.includes("you") || tokens.includes("things")))
+    ) {
+      return {
+        text: `I'm doing great, thank you for asking! 😊 I'm ready to answer any questions about Ijlal's software engineering projects, skills, education, or career experience. How can I help you today?`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 60. BOT COMPLIMENTS & PRAISE
+    // -------------------------------------------------------------
+    if (
+      contains("you are smart") ||
+      contains("you are cool") ||
+      contains("you are great") ||
+      contains("you are awesome") ||
+      contains("you are good") ||
+      contains("you are amazing") ||
+      contains("you are fast") ||
+      contains("you are helpful") ||
+      contains("you are clever") ||
+      contains("you're smart") ||
+      contains("you're cool") ||
+      contains("you're great") ||
+      contains("you're awesome") ||
+      contains("you're good") ||
+      contains("good bot") ||
+      contains("nice bot") ||
+      contains("smart bot") ||
+      contains("cool bot") ||
+      contains("great bot") ||
+      contains("i love you") ||
+      contains("love you")
+    ) {
+      return {
+        text: `Thank you so much! 😊 I'm designed to represent Ijlal's software engineering background as accurately and smoothly as possible. Feel free to explore his projects or reach out directly!`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 61. CREATOR & ORIGIN
+    // -------------------------------------------------------------
+    if (
+      contains("who made you") ||
+      contains("who created you") ||
+      contains("who built you") ||
+      contains("who developed you") ||
+      contains("who programmed you") ||
+      contains("who is your creator") ||
+      contains("who is your maker") ||
+      contains("who is your boss") ||
+      contains("who is your owner") ||
+      contains("who designed you")
+    ) {
+      return {
+        text: `I was built and trained by **Ijlal Hussain** as part of his high-performance developer portfolio! 🚀 I run 100% in your browser with zero latency and zero external API dependencies.`,
+        actionLink: { label: "View About & Skills", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 62. HUMAN VS AI / ARE YOU REAL
+    // -------------------------------------------------------------
+    if (
+      contains("are you a human") ||
+      contains("are you human") ||
+      contains("are you a real person") ||
+      contains("are you real") ||
+      contains("are you a bot") ||
+      contains("are you an ai") ||
+      contains("is this a human") ||
+      contains("is this an ai") ||
+      contains("is this a bot") ||
+      contains("am i talking to ijlal") ||
+      contains("am i speaking with ijlal") ||
+      contains("am i talking to a human")
+    ) {
+      return {
+        text: `I am Ijlal's **AI Portfolio Assistant**, running 100% in your browser. If you'd like to speak with **Ijlal Hussain directly in person**, you can reach him via email at **${personalInfo.email}**, WhatsApp at **${personalInfo.phone}**, or LinkedIn! 📬`,
+        actionLink: { label: "Open Contact Form", tab: "Contact" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 63. BOT IDENTITY
+    // -------------------------------------------------------------
+    if (
+      contains("who are you") ||
+      contains("what are you") ||
+      contains("what is your name") ||
+      contains("what do you do") ||
+      contains("tell me about yourself") ||
+      contains("introduce yourself") ||
+      contains("your purpose")
+    ) {
+      return {
+        text: `I am **Ijlal's AI Portfolio Assistant**, running 100% in your browser. I can answer any questions about Ijlal's software engineering projects, academic honors, verified certifications, and skills! 😊`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 64. CONVERSATIONAL ACKNOWLEDGMENTS
     // -------------------------------------------------------------
     const ackWords = ["ok", "okay", "k", "kk", "alright", "sure", "cool", "nice", "fine", "perfect", "yes", "yep", "yeah", "no", "nah", "nope", "understood", "noted", "good", "got", "it", "sounds"];
     if (
@@ -1108,24 +1278,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 60. BOT IDENTITY
-    // -------------------------------------------------------------
-    if (
-      contains("who are you") ||
-      contains("how are you") ||
-      contains("who made you") ||
-      contains("what is your name") ||
-      contains("what do you do") ||
-      contains("are you an ai")
-    ) {
-      return {
-        text: `I am **Ijlal's AI Portfolio Assistant**, running 100% in your browser. I can answer any questions about Ijlal's software engineering projects, academic honors, verified certifications, and skills! 😊`,
-        actionLink: { label: "Explore Projects", tab: "Projects" }
-      };
-    }
-
-    // -------------------------------------------------------------
-    // 61. GRATITUDE & CLOSING
+    // 65. GRATITUDE & CLOSING
     // -------------------------------------------------------------
     if (/^(thank|thanks|thank\s+you|appreciate|awesome|great|cool|goodbye|bye)(\s|$)/i.test(cleanWords) || hasWord("thanks", 1)) {
       return {
@@ -1135,7 +1288,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 62. CONCISE GENERAL GROUNDED FALLBACK
+    // 66. CONCISE GENERAL GROUNDED FALLBACK
     // -------------------------------------------------------------
     return {
       text: `I'm here to answer questions about **Ijlal Hussain**! 🌟\n\nTry asking me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What projects has he built?"*\n• *"What did he do at Kartoa?"*\n• *"How can I contact him?"*`,
