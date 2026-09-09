@@ -100,6 +100,7 @@ const KNOWN_VOCABULARY = new Set([
   "target", "role", "roles", "position", "frontend", "backend", "fullstack", "style", "ethic", "php", "rust", "ruby", "aws", "c++", "cpp", "c#", "csharp", "swift", "kotlin", "go", "golang", "vue", "angular", "django", "laravel",
   "career", "careers", "goal", "goals", "aspiration", "aspirations", "seek", "seeking", "tackle", "tackled", "joke", "jokes", "story", "stories", "solve", "solves", "solving", "calculator", "calculate", "math", "quicksort", "bubble", "array", "binary", "tree", "component", "navbar", "essay", "poem",
   "qualification", "qualifications", "study", "studied", "defin", "defne", "dfine", "definition", "definitions", "explain", "explanation", "concept", "concepts", "meaning",
+  "soft", "communication", "teamwork", "interpersonal", "adaptability", "collaborate", "collaborating", "collaboration", "collaborative", "mentorship", "mentor", "mentoring", "analytical", "reference", "references", "compare", "difference", "versus", "vs", "summarize", "summary", "executive", "preferred", "preference", "join", "joiner", "soon", "earliest",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -518,7 +519,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       contains("whats up") ||
       contains("wassup") ||
       contains("sup") ||
-      (tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || tokens.includes("you") || tokens.includes("things")))
+      ((tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || (tokens.includes("are") && tokens.includes("you")) || tokens.includes("things"))) && !tokens.includes("work") && !tokens.includes("built") && !tokens.includes("made") && !tokens.includes("contact") && !tokens.includes("hire") && !tokens.includes("help") && !tokens.includes("many"))
     ) {
       return {
         text: `I'm doing great, thank you for asking! 😊 I'm ready to answer any questions about Ijlal's software engineering projects, skills, education, or career experience. How can I help you today?`,
@@ -627,7 +628,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
-    // 9. BOT IDENTITY
+    // 9. BOT IDENTITY & ARCHITECTURE
     // -------------------------------------------------------------
     if (
       contains("who are you") ||
@@ -640,6 +641,30 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     ) {
       return {
         text: `I am **Ijlal's AI Portfolio Assistant**, running 100% in your browser. I can answer any questions about Ijlal's software engineering projects, academic honors, verified certifications, and skills! 😊`,
+        actionLink: { label: "Explore Projects", tab: "Projects" }
+      };
+    }
+
+    if (
+      contains("what model are you") ||
+      contains("what llm is this") ||
+      contains("what ai is this") ||
+      contains("what model do you use") ||
+      contains("are you chatgpt") ||
+      contains("are you llama") ||
+      contains("are you deepseek") ||
+      contains("are you gemini") ||
+      contains("are you claude") ||
+      contains("how does this bot work") ||
+      contains("how was this bot built") ||
+      contains("how do you work") ||
+      contains("is this bot local") ||
+      contains("is this ai local") ||
+      (hasWord("model") && (hasWord("you") || hasWord("bot") || hasWord("assistant") || hasWord("this"))) ||
+      (hasWord("bot") && (hasWord("work") || hasWord("built") || hasWord("made") || hasWord("tech")))
+    ) {
+      return {
+        text: `🤖 **About This Portfolio AI Assistant:**\nI am Ijlal Hussain's custom **100% client-side AI Assistant**! ⚡\n\n• **Zero Latency**: Runs entirely in your browser within React 19 & TypeScript without external API bottlenecks.\n• **Intelligent Semantic Engine**: Features token-level typo normalization, Levenshtein distance matching, and exhaustive knowledge grounding across all of Ijlal's projects, coursework, and credentials.`,
         actionLink: { label: "Explore Projects", tab: "Projects" }
       };
     }
@@ -877,6 +902,29 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
+    // 21. EXECUTIVE SUMMARY & COMPLETE PORTFOLIO OVERVIEW
+    // -------------------------------------------------------------
+    if (
+      contains("executive summary") ||
+      contains("portfolio summary") ||
+      contains("summary of ijlal") ||
+      contains("summary of profile") ||
+      contains("summary of everything") ||
+      contains("summarize ijlal") ||
+      contains("summarize his profile") ||
+      contains("summarize him") ||
+      contains("give me a summary") ||
+      contains("quick summary") ||
+      (hasWord("summary") && (hasWord("ijlal") || hasWord("profile") || hasWord("portfolio") || hasWord("everything") || hasWord("career") || hasWord("him"))) ||
+      (hasWord("summarize") && (hasWord("ijlal") || hasWord("profile") || hasWord("portfolio") || hasWord("everything") || hasWord("career") || hasWord("him")))
+    ) {
+      return {
+        text: `📄 **Executive Summary of Ijlal Hussain:**\n\n• 🎓 **Education**: BS Software Engineering from **NUML Islamabad (3.96 / 4.0 CGPA, First Class Honors)**.\n• 🤖 **Generative AI**: Specialized in **LangGraph cyclic multi-agent graphs**, local **RAG vector retrieval**, and **Python / FastAPI** microservices.\n• 📱 **Mobile & Web**: Led the **Safe Zone Android FYP** in Java/Firebase, and engineered web platforms with **React 19, TypeScript, and Next.js 16**.\n• 📜 **Verified Credentials**: 6 official certifications from **NAVTTC, Cisco, and DigiSkills**.\n• 💼 **Availability**: **Immediate (0-day notice period)** for Remote or On-site Full-Time/Contract roles!`,
+        actionLink: { label: "View Full Profile", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
     // 15. SPECIFIC GRADE INQUIRIES (Matric, Inter, Degree)
     // -------------------------------------------------------------
     if (
@@ -937,23 +985,6 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     ) {
       return {
         text: `Ijlal's CGPA is **${personalInfo.cgpa}** (First Class Honors) in BS Software Engineering from NUML Islamabad! 🎓`,
-        actionLink: { label: "View Academic Timeline", tab: "About" }
-      };
-    }
-
-    if (
-      hasWord("numl", 1) ||
-      contains("university") ||
-      contains("degree") ||
-      contains("bachelor") ||
-      contains("bs software") ||
-      contains("bs se") ||
-      contains("where did he study") ||
-      contains("which university") ||
-      contains("where he graduated")
-    ) {
-      return {
-        text: `🎓 **BS Software Engineering (NUML Islamabad):**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** (${educationData[0].period}) with a stellar **${educationData[0].grade} (First Class Honors)**!`,
         actionLink: { label: "View Academic Timeline", tab: "About" }
       };
     }
@@ -1020,6 +1051,26 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       return {
         text: `🎓 **BS Software Engineering (NUML Islamabad):**\nIjlal graduated from the **National University of Modern Languages (NUML), Islamabad** (${educationData[0].period}) with a stellar **${educationData[0].grade} (First Class Honors)**!`,
         actionLink: { label: "View Academic Timeline", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // COMPARE PROJECTS / DIFFERENCE BETWEEN PROJECTS
+    // -------------------------------------------------------------
+    if (
+      contains("compare project") ||
+      contains("compare projects") ||
+      contains("difference between") ||
+      contains("vs safezone") ||
+      contains("vs resumeiq") ||
+      contains("vs blog factory") ||
+      contains("versus") ||
+      (hasWord("compare") && (hasWord("project") || hasWord("projects") || hasWord("resumeiq") || hasWord("safezone") || hasWord("factory"))) ||
+      (hasWord("difference") && (hasWord("project") || hasWord("projects") || hasWord("resumeiq") || hasWord("safezone") || hasWord("factory")))
+    ) {
+      return {
+        text: `⚖️ **Comparison of Ijlal's Flagship Projects:**\n\n• **🤖 ResumeIQ (AI Career Intelligence)**:\n  Built with **Next.js 16, FastAPI, and a 7-node cyclic LangGraph state machine**. Solves automated resume tailoring, ATS scoring, and local semantic RAG embeddings with dual Groq / Gemini failover.\n\n• **📱 Safe Zone (Parental Control App — FYP Lead)**:\n  Native **Java & Android SDK** application with real-time GPS geofencing, remote screen-time lockouts, dynamic web filtering, and system app blocking via **AccessibilityService & DevicePolicyManager**.\n\n• **📝 Technical Blog Post Factory (Autonomous Studio)**:\n  A **3-agent LangGraph workflow** featuring a Content Writer, Technical Reviewer with live **Tavily AI search fact-checking**, and executable code validator.`,
+        actionLink: { label: "Explore All Projects", tab: "Projects" }
       };
     }
 
@@ -1403,6 +1454,29 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     }
 
     // -------------------------------------------------------------
+    // PREFERRED / FAVORITE PROGRAMMING LANGUAGE
+    // -------------------------------------------------------------
+    if (
+      contains("favorite programming language") ||
+      contains("favourite programming language") ||
+      contains("favorite language") ||
+      contains("favourite language") ||
+      contains("preferred programming language") ||
+      contains("preferred language") ||
+      contains("which language does he prefer") ||
+      contains("what language does he prefer") ||
+      contains("favorite coding language") ||
+      contains("which programming language does he like") ||
+      (hasWord("favorite") && (hasWord("language") || hasWord("languages") || hasWord("coding") || hasWord("programming"))) ||
+      (hasWord("preferred") && (hasWord("language") || hasWord("languages") || hasWord("coding") || hasWord("programming")))
+    ) {
+      return {
+        text: `🐍 **Ijlal's Preferred Programming Languages:**\n• **Python (Primary & Favorite)**: His go-to language for **Generative AI, LangGraph multi-agent architectures, RAG pipelines, and FastAPI async services** (Cisco Certified).\n• **Java**: Primary language for **Native Android engineering** & low-level OS services.\n• **TypeScript / JavaScript**: Primary language for **modern reactive web development** (React 19 & Next.js 16).`,
+        actionLink: { label: "View Skills Breakdown", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
     // 36. SPECIFIC SKILL PROFICIENCIES & TECH CONCEPTS
     // -------------------------------------------------------------
     if (hasWord("python", 1)) {
@@ -1521,10 +1595,75 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
       };
     }
 
+    // -------------------------------------------------------------
+    // SOFT SKILLS & INTERPERSONAL ATTRIBUTES
+    // -------------------------------------------------------------
+    if (
+      contains("soft skill") ||
+      contains("soft skills") ||
+      contains("interpersonal skill") ||
+      contains("interpersonal skills") ||
+      contains("communication skill") ||
+      contains("communication skills") ||
+      contains("teamwork") ||
+      contains("adaptability") ||
+      contains("collaboration") ||
+      contains("problem solving skill") ||
+      (hasWord("soft") && (hasWord("skill") || hasWord("skills"))) ||
+      (hasWord("communication") && !contains("spoken"))
+    ) {
+      return {
+        text: `🤝 **Ijlal's Core Soft Skills & Interpersonal Strengths:**\n• **👑 Technical Leadership & Teamwork**: Led a 4-engineer team for the Safe Zone FYP, managing architecture, sprints, and code reviews.\n• **📑 Clear Communication & Documentation**: Authored comprehensive SRS and BRD requirement documents at Alberuni Tech, bridging technical and business stakeholders.\n• **⚡ Adaptability & Rapid Learning**: Quickly masters cutting-edge paradigms—from native Android OS services to autonomous LangGraph multi-agent systems and RAG.\n• **🧩 Analytical Problem Solving**: Proven ability to diagnose and solve complex edge cases under strict production constraints.`,
+        actionLink: { label: "View Full Profile", tab: "About" }
+      };
+    }
+
     if (hasWord("skill", 2) || hasWord("skills", 2) || hasWord("stack", 1) || contains("tech stack") || contains("technologies")) {
       return {
         text: `🛠️ **Core Technical Skills:**\n• **Generative AI**: LangGraph (86%), LangChain & RAG (84%), Python (88%), FastAPI (82%)\n• **Mobile Development**: Java & Android SDK (88%), Firebase (84%), Flutter (55%)\n• **Web Development**: React 19 & Next.js (80%), TypeScript, Node.js, MongoDB (76%)\n• **Engineering & Tools**: Requirements Engineering (88%), Git & GitHub (86%), Figma (72%)`,
         actionLink: { label: "View Complete Skills Matrix", tab: "About" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // PROFESSIONAL & ACADEMIC REFERENCES
+    // -------------------------------------------------------------
+    if (
+      contains("reference") ||
+      contains("references") ||
+      contains("referee") ||
+      contains("referees") ||
+      contains("recommendation") ||
+      contains("recommendations") ||
+      contains("letter of recommendation") ||
+      contains("who can vouch for him") ||
+      contains("can i get references")
+    ) {
+      return {
+        text: `📑 **Professional & Academic References:**\nProfessional references and letters of recommendation from **NUML Islamabad faculty**, **Kartoa Technologies supervisors**, and **Alberuni Tech project mentors** are available upon request.\n\nPlease feel free to contact Ijlal directly at **${personalInfo.email}** or connect via LinkedIn to request references! 📬`,
+        actionLink: { label: "Open Contact Form", tab: "Contact" }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // IMMEDIATE AVAILABILITY / START DATE / JOINING
+    // -------------------------------------------------------------
+    if (
+      contains("when can he join") ||
+      contains("how soon can he start") ||
+      contains("how fast can he start") ||
+      contains("earliest start date") ||
+      contains("can he start immediately") ||
+      contains("can he join immediately") ||
+      contains("immediate start") ||
+      contains("joining date") ||
+      contains("start date") ||
+      (hasWord("join") && (hasWord("soon") || hasWord("immediately") || hasWord("when") || hasWord("date"))) ||
+      (hasWord("start") && (hasWord("soon") || hasWord("immediately") || hasWord("when") || hasWord("earliest")))
+    ) {
+      return {
+        text: `⚡ **Immediate Availability & Start Date:**\nIjlal graduated in early 2026 and is **ready to start immediately (0-day notice period)**! 🚀\n\nHe is fully equipped for immediate onboarding in **Full-Time**, **Contract**, or **Freelance** software engineering roles globally.`,
+        actionLink: { label: "Hire Ijlal Now", tab: "Contact" }
       };
     }
 

@@ -53,6 +53,7 @@ const KNOWN_VOCABULARY = new Set([
   "target", "role", "roles", "position", "frontend", "backend", "fullstack", "style", "ethic", "php", "rust", "ruby", "aws", "c++", "cpp", "c#", "csharp", "swift", "kotlin", "go", "golang", "vue", "angular", "django", "laravel",
   "career", "careers", "goal", "goals", "aspiration", "aspirations", "seek", "seeking", "tackle", "tackled", "joke", "jokes", "story", "stories", "solve", "solves", "solving", "calculator", "calculate", "math", "quicksort", "bubble", "array", "binary", "tree", "component", "navbar", "essay", "poem",
   "qualification", "qualifications", "study", "studied", "defin", "defne", "dfine", "definition", "definitions", "explain", "explanation", "concept", "concepts", "meaning",
+  "soft", "communication", "teamwork", "interpersonal", "adaptability", "collaborate", "collaborating", "collaboration", "collaborative", "mentorship", "mentor", "mentoring", "analytical", "reference", "references", "compare", "difference", "versus", "vs", "summarize", "summary", "executive", "preferred", "preference", "join", "joiner", "soon", "earliest",
   "ijlal", "hussain", "hussaini", "ijla", "hussin", "husain", "itjal", "itjall", "ijall", "ejlal"
 ]);
 
@@ -239,7 +240,7 @@ function generateGroundedResponse(rawQuery) {
     contains("whats up") ||
     contains("wassup") ||
     contains("sup") ||
-    (tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || tokens.includes("you") || tokens.includes("things")))
+    ((tokens.includes("how") && (tokens.includes("going") || tokens.includes("doing") || (tokens.includes("are") && tokens.includes("you")) || tokens.includes("things"))) && !tokens.includes("work") && !tokens.includes("built") && !tokens.includes("made") && !tokens.includes("contact") && !tokens.includes("hire") && !tokens.includes("help") && !tokens.includes("many"))
   ) {
     return {
       type: "WELL_BEING",
@@ -343,7 +344,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 9. BOT IDENTITY
+  // 9. BOT IDENTITY & ARCHITECTURE
   if (
     contains("who are you") ||
     contains("what are you") ||
@@ -356,6 +357,31 @@ function generateGroundedResponse(rawQuery) {
     return {
       type: "BOT_IDENTITY",
       text: `I am **Ijlal's AI Portfolio Assistant**, running 100% in your browser. I can answer any questions about Ijlal's software engineering projects, academic honors, verified certifications, and skills! 😊`,
+      actionLink: { label: "Explore Projects", tab: "Projects" }
+    };
+  }
+
+  if (
+    contains("what model are you") ||
+    contains("what llm is this") ||
+    contains("what ai is this") ||
+    contains("what model do you use") ||
+    contains("are you chatgpt") ||
+    contains("are you llama") ||
+    contains("are you deepseek") ||
+    contains("are you gemini") ||
+    contains("are you claude") ||
+    contains("how does this bot work") ||
+    contains("how was this bot built") ||
+    contains("how do you work") ||
+    contains("is this bot local") ||
+    contains("is this ai local") ||
+    (hasWord("model") && (hasWord("you") || hasWord("bot") || hasWord("assistant") || hasWord("this"))) ||
+    (hasWord("bot") && (hasWord("work") || hasWord("built") || hasWord("made") || hasWord("tech")))
+  ) {
+    return {
+      type: "CHATBOT_INFO",
+      text: `🤖 **About This Portfolio AI Assistant:**\nI am Ijlal Hussain's custom **100% client-side AI Assistant**! ⚡\n\n• **Zero Latency**: Runs entirely in your browser within React 19 & TypeScript without external API bottlenecks.\n• **Intelligent Semantic Engine**: Features token-level typo normalization, Levenshtein distance matching, and exhaustive knowledge grounding across all of Ijlal's projects, coursework, and credentials.`,
       actionLink: { label: "Explore Projects", tab: "Projects" }
     };
   }
@@ -582,7 +608,29 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 21. SPECIFIC GRADE INQUIRIES (Matric, Inter, Degree)
+  // 21. EXECUTIVE SUMMARY & COMPLETE PORTFOLIO OVERVIEW
+  if (
+    contains("executive summary") ||
+    contains("portfolio summary") ||
+    contains("summary of ijlal") ||
+    contains("summary of profile") ||
+    contains("summary of everything") ||
+    contains("summarize ijlal") ||
+    contains("summarize his profile") ||
+    contains("summarize him") ||
+    contains("give me a summary") ||
+    contains("quick summary") ||
+    (hasWord("summary") && (hasWord("ijlal") || hasWord("profile") || hasWord("portfolio") || hasWord("everything") || hasWord("career") || hasWord("him"))) ||
+    (hasWord("summarize") && (hasWord("ijlal") || hasWord("profile") || hasWord("portfolio") || hasWord("everything") || hasWord("career") || hasWord("him")))
+  ) {
+    return {
+      type: "PORTFOLIO_SUMMARY",
+      text: `📄 **Executive Summary of Ijlal Hussain:**\n\n• 🎓 **Education**: BS Software Engineering from **NUML Islamabad (3.96 / 4.0 CGPA, First Class Honors)**.\n• 🤖 **Generative AI**: Specialized in **LangGraph cyclic multi-agent graphs**, local **RAG vector retrieval**, and **Python / FastAPI** microservices.\n• 📱 **Mobile & Web**: Led the **Safe Zone Android FYP** in Java/Firebase, and engineered web platforms with **React 19, TypeScript, and Next.js 16**.\n• 📜 **Verified Credentials**: 6 official certifications from **NAVTTC, Cisco, and DigiSkills**.\n• 💼 **Availability**: **Immediate (0-day notice period)** for Remote or On-site Full-Time/Contract roles!`,
+      actionLink: { label: "View Full Profile", tab: "About" }
+    };
+  }
+
+  // 22. SPECIFIC GRADE INQUIRIES (Matric, Inter, Degree)
   if (
     hasWord("matric", 1) ||
     hasWord("matriculation", 1) ||
@@ -621,7 +669,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 22. EXACT CGPA / GPA SPECIFIC QUESTION / HONORS
+  // 23. EXACT CGPA / GPA SPECIFIC QUESTION / HONORS
   if (
     hasWord("cgpa", 1) ||
     contains("cgoa") ||
@@ -661,7 +709,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 23. LATEST / CURRENT / HIGHEST EDUCATION & DEGREE
+  // 24. LATEST / CURRENT / HIGHEST EDUCATION & DEGREE
   if (
     contains("latest education") ||
     contains("recent education") ||
@@ -712,7 +760,26 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 24. ALL PROJECTS LIST / OVERVIEW (Check this before single-word matches)
+  // 25. COMPARE PROJECTS
+  if (
+    contains("compare project") ||
+    contains("compare projects") ||
+    contains("difference between") ||
+    contains("vs safezone") ||
+    contains("vs resumeiq") ||
+    contains("vs blog factory") ||
+    contains("versus") ||
+    (hasWord("compare") && (hasWord("project") || hasWord("projects") || hasWord("resumeiq") || hasWord("safezone") || hasWord("factory"))) ||
+    (hasWord("difference") && (hasWord("project") || hasWord("projects") || hasWord("resumeiq") || hasWord("safezone") || hasWord("factory")))
+  ) {
+    return {
+      type: "COMPARE_PROJECTS",
+      text: `⚖️ **Comparison of Ijlal's Flagship Projects:**\n\n• **🤖 ResumeIQ (AI Career Intelligence)**:\n  Built with **Next.js 16, FastAPI, and a 7-node cyclic LangGraph state machine**. Solves automated resume tailoring, ATS scoring, and local semantic RAG embeddings with dual Groq / Gemini failover.\n\n• **📱 Safe Zone (Parental Control App — FYP Lead)**:\n  Native **Java & Android SDK** application with real-time GPS geofencing, remote screen-time lockouts, dynamic web filtering, and system app blocking via **AccessibilityService & DevicePolicyManager**.\n\n• **📝 Technical Blog Post Factory (Autonomous Studio)**:\n  A **3-agent LangGraph workflow** featuring a Content Writer, Technical Reviewer with live **Tavily AI search fact-checking**, and executable code validator.`,
+      actionLink: { label: "Explore All Projects", tab: "Projects" }
+    };
+  }
+
+  // 26. ALL PROJECTS LIST / OVERVIEW (Check this before single-word matches)
   if (
     (hasWord("project") || hasWord("projects") || contains("portfolio items") || contains("apps built") || contains("what he built") || contains("all projects")) &&
     (contains("list all") || contains("all projects") || contains("show all") || contains("tell me all") || contains("list projects") || contains("projects list") || contains("what projects has he built") || contains("what projects did he make") || contains("project overview")) &&
@@ -726,7 +793,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 25. ORDINAL PROJECT QUESTIONS: LATEST / NEWEST PROJECT
+  // 27. ORDINAL PROJECT QUESTIONS: LATEST / NEWEST PROJECT
   if (
     (
       contains("latest project") ||
@@ -752,7 +819,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 25. ORDINAL PROJECT QUESTIONS: FIRST / OLDEST / EARLIEST PROJECT
+  // 28. ORDINAL PROJECT QUESTIONS: FIRST / OLDEST / EARLIEST PROJECT
   if (
     contains("first project") ||
     contains("oldest project") ||
@@ -771,7 +838,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 26. ORDINAL PROJECT QUESTIONS: BEST / FLAGSHIP / FAVORITE PROJECT
+  // 29. ORDINAL PROJECT QUESTIONS: BEST / FLAGSHIP / FAVORITE PROJECT
   if (
     contains("best project") ||
     contains("top project") ||
@@ -791,7 +858,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 27. CATEGORIZED PROJECT QUERIES: AI / ML / GENAI PROJECTS
+  // 30. CATEGORIZED PROJECT QUERIES: AI / ML / GENAI PROJECTS
   if (
     contains("ai project") ||
     contains("ai projects") ||
@@ -814,7 +881,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 28. CATEGORIZED PROJECT QUERIES: MOBILE / ANDROID PROJECTS
+  // 31. CATEGORIZED PROJECT QUERIES: MOBILE / ANDROID PROJECTS
   if (
     contains("mobile project") ||
     contains("mobile projects") ||
@@ -833,7 +900,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 29. CATEGORIZED PROJECT QUERIES: WEB / FRONTEND PROJECTS
+  // 32. CATEGORIZED PROJECT QUERIES: WEB / FRONTEND PROJECTS
   if (
     contains("web project") ||
     contains("web projects") ||
@@ -851,7 +918,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 30. HOW MANY PROJECTS / PROJECT COUNT
+  // 33. HOW MANY PROJECTS / PROJECT COUNT
   if (
     contains("how many projects") ||
     contains("total projects") ||
@@ -865,7 +932,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 31. DUAL LLM ORCHESTRATION (GROQ + GEMINI)
+  // 34. DUAL LLM ORCHESTRATION (GROQ + GEMINI)
   if (hasWord("groq", 1) || hasWord("gemini", 1) || contains("dual llm") || contains("groq and gemini") || contains("llama 3") || contains("which llm") || contains("what models") || contains("what llms")) {
     return {
       type: "DUAL_LLM",
@@ -874,7 +941,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 32. RESUMEIQ SPECIFIC SUB-INTENTS
+  // 35. RESUMEIQ SPECIFIC SUB-INTENTS
   if (hasWord("resumeiq", 1) && (contains("demo") || contains("live") || contains("url") || contains("try") || contains("link") || contains("launch"))) {
     return {
       type: "RESUMEIQ_DEMO",
@@ -907,7 +974,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 33. SAFEZONE SPECIFIC SUB-INTENTS
+  // 36. SAFEZONE SPECIFIC SUB-INTENTS
   if ((hasWord("safezone", 1) || contains("safe zone")) && (contains("apk") || contains("download") || contains("install") || contains("get app"))) {
     return {
       type: "SAFEZONE_APK",
@@ -941,7 +1008,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 34. BLOG FACTORY SPECIFIC SUB-INTENTS
+  // 37. BLOG FACTORY SPECIFIC SUB-INTENTS
   if ((hasWord("factory", 2) || hasWord("blog", 1)) && (contains("demo") || contains("live") || contains("url") || contains("try") || contains("link") || contains("launch"))) {
     return {
       type: "BLOGFACTORY_DEMO",
@@ -958,7 +1025,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 35. DEVELOPER PORTFOLIO SPECIFIC
+  // 38. DEVELOPER PORTFOLIO SPECIFIC
   if (
     hasWord("portfolio") &&
     (contains("built") || contains("how") || contains("stack") || contains("source") || contains("code") || contains("tech") || contains("website"))
@@ -970,7 +1037,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 36. WORK EXPERIENCE: LATEST JOB / CURRENT ROLE
+  // 39. WORK EXPERIENCE: LATEST JOB / CURRENT ROLE
   if (
     contains("latest experience") ||
     contains("latest job") ||
@@ -989,7 +1056,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 37. WORK EXPERIENCE: ALL EXPERIENCES / CAREER HISTORY
+  // 40. WORK EXPERIENCE: ALL EXPERIENCES / CAREER HISTORY
   if (
     contains("all experience") ||
     contains("work experience") ||
@@ -1008,7 +1075,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 38. KARTOA TECHNOLOGIES INTERNSHIP
+  // 41. KARTOA TECHNOLOGIES INTERNSHIP
   if (hasWord("kartoa", 1)) {
     return {
       type: "KARTOA_EXPERIENCE",
@@ -1017,7 +1084,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 39. ALBERUNI TECH / REQUIREMENTS ENGINEERING
+  // 42. ALBERUNI TECH / REQUIREMENTS ENGINEERING
   if (hasWord("alberuni", 2) || contains("requirement engineering") || contains("srs") || contains("brd")) {
     return {
       type: "ALBERUNI_EXPERIENCE",
@@ -1026,7 +1093,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 40. CERTIFICATIONS SPECIFIC (Evaluated before generic skills)
+  // 43. CERTIFICATIONS SPECIFIC (Evaluated before generic skills)
   if (hasWord("navttc", 1) || contains("adan institute") || contains("navttc certificate")) {
     return {
       type: "CERT_NAVTTC",
@@ -1064,7 +1131,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 41. SKILLS: HIGHEST / STRONGEST / BEST SKILL
+  // 44. SKILLS: HIGHEST / STRONGEST / BEST SKILL
   if (
     contains("best skill") ||
     contains("strongest skill") ||
@@ -1082,7 +1149,29 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 42. SPECIFIC SKILL PROFICIENCIES & TECH CONCEPTS
+  // 45. PREFERRED / FAVORITE PROGRAMMING LANGUAGE
+  if (
+    contains("favorite programming language") ||
+    contains("favourite programming language") ||
+    contains("favorite language") ||
+    contains("favourite language") ||
+    contains("preferred programming language") ||
+    contains("preferred language") ||
+    contains("which language does he prefer") ||
+    contains("what language does he prefer") ||
+    contains("favorite coding language") ||
+    contains("which programming language does he like") ||
+    (hasWord("favorite") && (hasWord("language") || hasWord("languages") || hasWord("coding") || hasWord("programming"))) ||
+    (hasWord("preferred") && (hasWord("language") || hasWord("languages") || hasWord("coding") || hasWord("programming")))
+  ) {
+    return {
+      type: "FAVORITE_LANGUAGE",
+      text: `🐍 **Ijlal's Preferred Programming Languages:**\n• **Python (Primary & Favorite)**: His go-to language for **Generative AI, LangGraph multi-agent architectures, RAG pipelines, and FastAPI async services** (Cisco Certified).\n• **Java**: Primary language for **Native Android engineering** & low-level OS services.\n• **TypeScript / JavaScript**: Primary language for **modern reactive web development** (React 19 & Next.js 16).`,
+      actionLink: { label: "View Skills Breakdown", tab: "About" }
+    };
+  }
+
+  // 46. SPECIFIC SKILL PROFICIENCIES & TECH CONCEPTS
   if (hasWord("python", 1)) {
     return {
       type: "SKILL_PYTHON",
@@ -1211,6 +1300,28 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
+  // 47. SOFT SKILLS & INTERPERSONAL ATTRIBUTES
+  if (
+    contains("soft skill") ||
+    contains("soft skills") ||
+    contains("interpersonal skill") ||
+    contains("interpersonal skills") ||
+    contains("communication skill") ||
+    contains("communication skills") ||
+    contains("teamwork") ||
+    contains("adaptability") ||
+    contains("collaboration") ||
+    contains("problem solving skill") ||
+    (hasWord("soft") && (hasWord("skill") || hasWord("skills"))) ||
+    (hasWord("communication") && !contains("spoken"))
+  ) {
+    return {
+      type: "SOFT_SKILLS",
+      text: `🤝 **Ijlal's Core Soft Skills & Interpersonal Strengths:**\n• **👑 Technical Leadership & Teamwork**: Led a 4-engineer team for the Safe Zone FYP, managing architecture, sprints, and code reviews.\n• **📑 Clear Communication & Documentation**: Authored comprehensive SRS and BRD requirement documents at Alberuni Tech, bridging technical and business stakeholders.\n• **⚡ Adaptability & Rapid Learning**: Quickly masters cutting-edge paradigms—from native Android OS services to autonomous LangGraph multi-agent systems and RAG.\n• **🧩 Analytical Problem Solving**: Proven ability to diagnose and solve complex edge cases under strict production constraints.`,
+      actionLink: { label: "View Full Profile", tab: "About" }
+    };
+  }
+
   if (hasWord("skill", 2) || hasWord("skills", 2) || hasWord("stack", 1) || contains("tech stack") || contains("technologies")) {
     return {
       type: "ALL_SKILLS",
@@ -1219,7 +1330,47 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 43. WORK AVAILABILITY / NOTICE PERIOD / HIRE (Evaluated before general contact)
+  // 48. PROFESSIONAL & ACADEMIC REFERENCES
+  if (
+    contains("reference") ||
+    contains("references") ||
+    contains("referee") ||
+    contains("referees") ||
+    contains("recommendation") ||
+    contains("recommendations") ||
+    contains("letter of recommendation") ||
+    contains("who can vouch for him") ||
+    contains("can i get references")
+  ) {
+    return {
+      type: "REFERENCES",
+      text: `📑 **Professional & Academic References:**\nProfessional references and letters of recommendation from **NUML Islamabad faculty**, **Kartoa Technologies supervisors**, and **Alberuni Tech project mentors** are available upon request.\n\nPlease feel free to contact Ijlal directly at **${personalInfo.email}** or connect via LinkedIn to request references! 📬`,
+      actionLink: { label: "Open Contact Form", tab: "Contact" }
+    };
+  }
+
+  // 49. IMMEDIATE AVAILABILITY / START DATE / JOINING
+  if (
+    contains("when can he join") ||
+    contains("how soon can he start") ||
+    contains("how fast can he start") ||
+    contains("earliest start date") ||
+    contains("can he start immediately") ||
+    contains("can he join immediately") ||
+    contains("immediate start") ||
+    contains("joining date") ||
+    contains("start date") ||
+    (hasWord("join") && (hasWord("soon") || hasWord("immediately") || hasWord("when") || hasWord("date"))) ||
+    (hasWord("start") && (hasWord("soon") || hasWord("immediately") || hasWord("when") || hasWord("earliest")))
+  ) {
+    return {
+      type: "IMMEDIATE_AVAILABILITY",
+      text: `⚡ **Immediate Availability & Start Date:**\nIjlal graduated in early 2026 and is **ready to start immediately (0-day notice period)**! 🚀\n\nHe is fully equipped for immediate onboarding in **Full-Time**, **Contract**, or **Freelance** software engineering roles globally.`,
+      actionLink: { label: "Hire Ijlal Now", tab: "Contact" }
+    };
+  }
+
+  // 50. WORK AVAILABILITY / NOTICE PERIOD / HIRE (Evaluated before general contact)
   if (
     hasWord("available", 2) ||
     contains("looking for a job") ||
@@ -1241,7 +1392,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 44. RESUME / CV DOWNLOAD
+  // 51. RESUME / CV DOWNLOAD
   if (
     hasWord("cv", 0) ||
     hasWord("resume", 1) ||
@@ -1259,7 +1410,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 45. EMAIL SPECIFIC
+  // 52. EMAIL SPECIFIC
   if (hasWord("email", 1) || contains("mail address") || contains("how to email") || contains("send email") || contains("his email")) {
     return {
       type: "EMAIL",
@@ -1268,7 +1419,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 46. PHONE / WHATSAPP
+  // 53. PHONE / WHATSAPP
   if (hasWord("whatsapp", 2) || hasWord("phone", 1) || contains("call him") || contains("call me") || contains("contact number") || contains("mobile number") || contains("his phone") || contains("his number")) {
     return {
       type: "PHONE",
@@ -1277,7 +1428,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 47. LINKEDIN
+  // 54. LINKEDIN
   if (hasWord("linkedin", 2) || contains("linked in")) {
     return {
       type: "LINKEDIN",
@@ -1286,7 +1437,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 48. GITHUB
+  // 55. GITHUB
   if (hasWord("github", 2) || contains("git hub") || contains("repositories") || contains("open source")) {
     return {
       type: "GITHUB",
@@ -1295,7 +1446,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 49. GENERAL CONTACT
+  // 56. GENERAL CONTACT
   if (hasWord("contact", 2) || contains("how to contact") || contains("reach out") || contains("connect with him")) {
     return {
       type: "CONTACT",
@@ -1304,7 +1455,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 50. LOCATION / ORIGIN
+  // 57. LOCATION / ORIGIN
   if (
     ((hasWord("where", 1) || hasWord("wher", 1)) && (hasWord("from", 1) || hasWord("live", 1) || hasWord("located", 2) || hasWord("he", 0) || hasWord("ijlal", 1))) ||
     hasWord("location", 2) ||
@@ -1322,7 +1473,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 51. AGE / BIRTHDAY
+  // 58. AGE / BIRTHDAY
   if (
     (tokens.includes("age") && !tokens.includes("language") && !tokens.includes("languages")) ||
     contains("how old") ||
@@ -1338,7 +1489,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 52. WHY HIRE / STRENGTHS
+  // 59. WHY HIRE / STRENGTHS
   if (
     (hasWord("why") && (hasWord("hire", 1) || hasWord("choose", 1) || hasWord("select", 1))) ||
     hasWord("strength", 2) ||
@@ -1354,7 +1505,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 53. REMOTE WORK
+  // 60. REMOTE WORK
   if (hasWord("remote", 1) || hasWord("relocate", 2) || contains("timezone") || contains("us time") || contains("uk time") || contains("work from home")) {
     return {
       type: "REMOTE",
@@ -1363,7 +1514,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 54. SALARY / COMPENSATION
+  // 61. SALARY / COMPENSATION
   if (contains("salary") || contains("compensation") || contains("rate") || contains("rates") || contains("pricing") || contains("budget") || contains("how much does he charge")) {
     return {
       type: "SALARY",
@@ -1372,7 +1523,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 55. INTERVIEW SCHEDULING
+  // 62. INTERVIEW SCHEDULING
   if (contains("schedule interview") || contains("interview") || contains("book meeting") || contains("schedule a call") || contains("talk with him")) {
     return {
       type: "INTERVIEW",
@@ -1381,7 +1532,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 56. WHO IS IJLAL / ABOUT IJLAL (First name, last name, full name, typos)
+  // 63. WHO IS IJLAL / ABOUT IJLAL (First name, last name, full name, typos)
   if (
     contains("who is ijlal") ||
     contains("who is itjall") ||
@@ -1416,7 +1567,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 57. PWA
+  // 64. PWA & OFFLINE
   if (hasWord("pwa", 0) || contains("install app") || contains("offline")) {
     return {
       type: "PWA",
@@ -1425,7 +1576,7 @@ function generateGroundedResponse(rawQuery) {
     };
   }
 
-  // 58. FALLBACK
+  // 65. FALLBACK
   return {
     type: "FALLBACK",
     text: `I'm here to answer questions about **Ijlal Hussain**! 🌟\n\nTry asking me:\n• *"Who is Ijlal?"*\n• *"What is his CGPA?"*\n• *"What is his favorite subject?"*\n• *"What projects has he built?"*\n• *"What did he do at Kartoa?"*\n• *"How can I contact him?"*`,
@@ -1434,10 +1585,98 @@ function generateGroundedResponse(rawQuery) {
 }
 
 // -------------------------------------------------------------
-// COMPREHENSIVE TEST SUITE (150+ TESTS)
+// COMPREHENSIVE TEST SUITE (360+ TESTS)
 // -------------------------------------------------------------
 const testCases = [
-  // Favorite subject & AI passion:
+  // 1. Executive Summary & Profile Summaries
+  { q: "executive summary", expected: "PORTFOLIO_SUMMARY" },
+  { q: "portfolio summary", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summary of ijlal", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summary of profile", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summary of everything", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summarize ijlal", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summarize his profile", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summarize him", expected: "PORTFOLIO_SUMMARY" },
+  { q: "give me a summary", expected: "PORTFOLIO_SUMMARY" },
+  { q: "quick summary", expected: "PORTFOLIO_SUMMARY" },
+  { q: "summary of his career", expected: "PORTFOLIO_SUMMARY" },
+
+  // 2. Chatbot Info & Model Architecture
+  { q: "what model are you", expected: "CHATBOT_INFO" },
+  { q: "what llm is this", expected: "CHATBOT_INFO" },
+  { q: "what ai is this", expected: "CHATBOT_INFO" },
+  { q: "what model do you use", expected: "CHATBOT_INFO" },
+  { q: "are you chatgpt", expected: "CHATBOT_INFO" },
+  { q: "are you llama", expected: "CHATBOT_INFO" },
+  { q: "are you deepseek", expected: "CHATBOT_INFO" },
+  { q: "are you gemini", expected: "CHATBOT_INFO" },
+  { q: "are you claude", expected: "CHATBOT_INFO" },
+  { q: "how does this bot work", expected: "CHATBOT_INFO" },
+  { q: "how was this bot built", expected: "CHATBOT_INFO" },
+  { q: "how do you work", expected: "CHATBOT_INFO" },
+  { q: "is this bot local", expected: "CHATBOT_INFO" },
+  { q: "is this ai local", expected: "CHATBOT_INFO" },
+
+  // 3. Project Comparisons
+  { q: "difference between resumeiq and safezone", expected: "COMPARE_PROJECTS" },
+  { q: "compare resumeiq and safezone", expected: "COMPARE_PROJECTS" },
+  { q: "compare projects", expected: "COMPARE_PROJECTS" },
+  { q: "compare project", expected: "COMPARE_PROJECTS" },
+  { q: "resumeiq vs safezone", expected: "COMPARE_PROJECTS" },
+  { q: "safezone vs resumeiq", expected: "COMPARE_PROJECTS" },
+  { q: "resumeiq vs blog factory", expected: "COMPARE_PROJECTS" },
+  { q: "difference between projects", expected: "COMPARE_PROJECTS" },
+  { q: "difference between safezone and blog factory", expected: "COMPARE_PROJECTS" },
+
+  // 4. Preferred & Favorite Programming Language
+  { q: "what is his favorite programming language", expected: "FAVORITE_LANGUAGE" },
+  { q: "what is his favourite programming language", expected: "FAVORITE_LANGUAGE" },
+  { q: "favorite programming language", expected: "FAVORITE_LANGUAGE" },
+  { q: "favourite programming language", expected: "FAVORITE_LANGUAGE" },
+  { q: "favorite language", expected: "FAVORITE_LANGUAGE" },
+  { q: "favourite language", expected: "FAVORITE_LANGUAGE" },
+  { q: "preferred programming language", expected: "FAVORITE_LANGUAGE" },
+  { q: "preferred language", expected: "FAVORITE_LANGUAGE" },
+  { q: "which language does he prefer", expected: "FAVORITE_LANGUAGE" },
+  { q: "what language does he prefer", expected: "FAVORITE_LANGUAGE" },
+  { q: "favorite coding language", expected: "FAVORITE_LANGUAGE" },
+  { q: "which programming language does he like", expected: "FAVORITE_LANGUAGE" },
+
+  // 5. Soft Skills & Interpersonal Attributes
+  { q: "what are his soft skills", expected: "SOFT_SKILLS" },
+  { q: "soft skills", expected: "SOFT_SKILLS" },
+  { q: "soft skill", expected: "SOFT_SKILLS" },
+  { q: "interpersonal skills", expected: "SOFT_SKILLS" },
+  { q: "communication skills", expected: "SOFT_SKILLS" },
+  { q: "how is his teamwork", expected: "SOFT_SKILLS" },
+  { q: "teamwork", expected: "SOFT_SKILLS" },
+  { q: "adaptability", expected: "SOFT_SKILLS" },
+  { q: "collaboration", expected: "SOFT_SKILLS" },
+  { q: "problem solving skills", expected: "SOFT_SKILLS" },
+  { q: "how is his communication", expected: "SOFT_SKILLS" },
+
+  // 6. Professional References
+  { q: "can i get references", expected: "REFERENCES" },
+  { q: "does he have references", expected: "REFERENCES" },
+  { q: "professional references", expected: "REFERENCES" },
+  { q: "academic references", expected: "REFERENCES" },
+  { q: "reference contact", expected: "REFERENCES" },
+  { q: "who can vouch for him", expected: "REFERENCES" },
+  { q: "letters of recommendation", expected: "REFERENCES" },
+  { q: "recommendations for ijlal", expected: "REFERENCES" },
+
+  // 7. Immediate Availability & Joining Dates
+  { q: "when can he join", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "how soon can he start", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "how fast can he start", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "earliest start date", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "can he start immediately", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "can he join immediately", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "immediate start", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "what is his start date", expected: "IMMEDIATE_AVAILABILITY" },
+  { q: "joining date", expected: "IMMEDIATE_AVAILABILITY" },
+
+  // 8. Favorite Subject & AI Passion
   { q: "what is his favorite subject", expected: "FAVORITE_SUBJECT" },
   { q: "what is ijlal's favorite subject", expected: "FAVORITE_SUBJECT" },
   { q: "what is his major interest", expected: "FAVORITE_SUBJECT" },
@@ -1447,8 +1686,9 @@ const testCases = [
   { q: "what is he passionate about", expected: "FAVORITE_SUBJECT" },
   { q: "what does he love to build", expected: "FAVORITE_SUBJECT" },
   { q: "what is his favorite course", expected: "FAVORITE_SUBJECT" },
+  { q: "is artificial intelligence his favorite subject", expected: "FAVORITE_SUBJECT" },
 
-  // Coursework & University Subjects:
+  // 9. Coursework & University Subjects
   { q: "what courses did he take at numl", expected: "COURSEWORK" },
   { q: "what subjects did he study", expected: "COURSEWORK" },
   { q: "numl coursework", expected: "COURSEWORK" },
@@ -1456,14 +1696,17 @@ const testCases = [
   { q: "courses studied at university", expected: "COURSEWORK" },
   { q: "what did he study at numl", expected: "COURSEWORK" },
   { q: "university subjects", expected: "COURSEWORK" },
+  { q: "university coursework", expected: "COURSEWORK" },
+  { q: "numl subjects", expected: "COURSEWORK" },
 
-  // Technical Challenges:
+  // 10. Technical Challenges
   { q: "tell me a technical challenge he solved", expected: "TECH_CHALLENGES" },
   { q: "what was the most difficult challenge he solved", expected: "TECH_CHALLENGES" },
   { q: "complex engineering problem he solved", expected: "TECH_CHALLENGES" },
   { q: "hardest problem he tackled", expected: "TECH_CHALLENGES" },
+  { q: "engineering hurdle", expected: "TECH_CHALLENGES" },
 
-  // Unsupported tech / stack scope & agility:
+  // 11. Unsupported Tech / Stack Scope & Agility
   { q: "does he know php", expected: "UNSUPPORTED_TECH" },
   { q: "does he know c++", expected: "UNSUPPORTED_TECH" },
   { q: "does he know c#", expected: "UNSUPPORTED_TECH" },
@@ -1480,7 +1723,7 @@ const testCases = [
   { q: "experience with aws", expected: "UNSUPPORTED_TECH" },
   { q: "is he good at rust", expected: "UNSUPPORTED_TECH" },
 
-  // Comparative queries:
+  // 12. Comparative Balance Queries
   { q: "is he better at frontend or backend", expected: "FRONTEND_VS_BACKEND" },
   { q: "frontend vs backend", expected: "FRONTEND_VS_BACKEND" },
   { q: "backend or frontend", expected: "FRONTEND_VS_BACKEND" },
@@ -1488,15 +1731,16 @@ const testCases = [
   { q: "is he better at python or java", expected: "PYTHON_VS_JAVA" },
   { q: "java vs python", expected: "PYTHON_VS_JAVA" },
 
-  // Target roles:
+  // 13. Target Career Roles
   { q: "what roles is he targeting", expected: "TARGET_ROLES" },
   { q: "target roles", expected: "TARGET_ROLES" },
   { q: "what job does he want", expected: "TARGET_ROLES" },
   { q: "what position is he looking for", expected: "TARGET_ROLES" },
   { q: "what roles is he seeking", expected: "TARGET_ROLES" },
   { q: "career goals", expected: "TARGET_ROLES" },
+  { q: "aspiring role", expected: "TARGET_ROLES" },
 
-  // Exact user screenshot query & Ordinal queries:
+  // 14. Ordinal Project Queries
   { q: "which project is ijlal hussains latest", expected: "LATEST_PROJECT" },
   { q: "what is ijlal's latest project", expected: "LATEST_PROJECT" },
   { q: "what is his newest project", expected: "LATEST_PROJECT" },
@@ -1507,41 +1751,53 @@ const testCases = [
   { q: "first project", expected: "FIRST_PROJECT" },
   { q: "oldest project", expected: "FIRST_PROJECT" },
   { q: "earliest project", expected: "FIRST_PROJECT" },
+  { q: "initial project", expected: "FIRST_PROJECT" },
   { q: "what is his best project", expected: "BEST_PROJECT" },
   { q: "best project", expected: "BEST_PROJECT" },
   { q: "flagship project", expected: "BEST_PROJECT" },
   { q: "top project", expected: "BEST_PROJECT" },
+  { q: "most impressive project", expected: "BEST_PROJECT" },
 
-  // Category queries:
+  // 15. Categorized Project Queries
   { q: "what are his ai projects", expected: "AI_PROJECTS" },
   { q: "ai projects", expected: "AI_PROJECTS" },
   { q: "generative ai projects", expected: "AI_PROJECTS" },
+  { q: "genai projects", expected: "AI_PROJECTS" },
+  { q: "llm projects", expected: "AI_PROJECTS" },
+  { q: "langgraph projects", expected: "AI_PROJECTS" },
   { q: "what are his mobile projects", expected: "MOBILE_PROJECTS" },
   { q: "android projects", expected: "MOBILE_PROJECTS" },
   { q: "mobile apps he built", expected: "MOBILE_PROJECTS" },
+  { q: "mobile app", expected: "MOBILE_PROJECTS" },
   { q: "what are his web projects", expected: "WEB_PROJECTS" },
   { q: "websites built by ijlal", expected: "WEB_PROJECTS" },
+  { q: "react projects", expected: "WEB_PROJECTS" },
   { q: "how many projects has he built", expected: "PROJECT_COUNT" },
   { q: "total projects", expected: "PROJECT_COUNT" },
   { q: "list all projects", expected: "ALL_PROJECTS" },
   { q: "what projects has he built", expected: "ALL_PROJECTS" },
+  { q: "show all projects", expected: "ALL_PROJECTS" },
 
-  // Experience:
+  // 16. Work Experience
   { q: "what is his latest job", expected: "LATEST_EXPERIENCE" },
   { q: "what is his current role", expected: "LATEST_EXPERIENCE" },
   { q: "where does he work", expected: "LATEST_EXPERIENCE" },
+  { q: "where is he working", expected: "LATEST_EXPERIENCE" },
   { q: "tell me all his experience", expected: "ALL_EXPERIENCE" },
   { q: "work history", expected: "ALL_EXPERIENCE" },
+  { q: "career history", expected: "ALL_EXPERIENCE" },
+  { q: "all internships", expected: "ALL_EXPERIENCE" },
   { q: "what did he do at kartoa", expected: "KARTOA_EXPERIENCE" },
   { q: "kartoa internship", expected: "KARTOA_EXPERIENCE" },
   { q: "what did he do at alberuni", expected: "ALBERUNI_EXPERIENCE" },
+  { q: "alberuni tech", expected: "ALBERUNI_EXPERIENCE" },
   { q: "leadership experience", expected: "LEADERSHIP" },
   { q: "did he lead a team", expected: "LEADERSHIP" },
   { q: "who was the lead of safe zone", expected: "LEADERSHIP" },
   { q: "what is his leadership style", expected: "LEADERSHIP" },
   { q: "work ethic", expected: "LEADERSHIP" },
 
-  // Latest Education & Degree:
+  // 17. Latest Education & Degrees
   { q: "what is his latest education", expected: "LATEST_EDUCATION" },
   { q: "latest education", expected: "LATEST_EDUCATION" },
   { q: "what is the latest education", expected: "LATEST_EDUCATION" },
@@ -1556,7 +1812,7 @@ const testCases = [
   { q: "what is his education", expected: "LATEST_EDUCATION" },
   { q: "tell me his education", expected: "LATEST_EDUCATION" },
 
-  // Education:
+  // 18. Education Stages & Timeline
   { q: "what is his matric grade", expected: "MATRIC_EDUCATION" },
   { q: "matric marks", expected: "MATRIC_EDUCATION" },
   { q: "matric percentage", expected: "MATRIC_EDUCATION" },
@@ -1570,19 +1826,23 @@ const testCases = [
   { q: "what is his university grade", expected: "UNIVERSITY_EDUCATION" },
   { q: "where did he study", expected: "UNIVERSITY_EDUCATION" },
   { q: "numl islamabad", expected: "UNIVERSITY_EDUCATION" },
+  { q: "which university", expected: "UNIVERSITY_EDUCATION" },
+  { q: "where he graduated", expected: "UNIVERSITY_EDUCATION" },
   { q: "tell me all his education", expected: "FULL_EDUCATION" },
   { q: "full education background", expected: "FULL_EDUCATION" },
   { q: "did he get first class honors", expected: "CGPA" },
 
-  // CGPA & typos:
+  // 19. CGPA & Variations
   { q: "what is his cgpa", expected: "CGPA" },
   { q: "what is cgpa of ijlal", expected: "CGPA" },
   { q: "cgpa of ijla", expected: "CGPA" },
   { q: "cgoa of itjall", expected: "CGPA" },
   { q: "cgpaa of ijlla", expected: "CGPA" },
   { q: "what is the gpa of ijlal", expected: "CGPA" },
+  { q: "how much cgpa", expected: "CGPA" },
+  { q: "his gpa", expected: "CGPA" },
 
-  // Who is / identity & typos:
+  // 20. Who is Ijlal / Identity / Names & Typos
   { q: "who is ijlal", expected: "ABOUT_IJLAL" },
   { q: "who is ijlal hussain", expected: "ABOUT_IJLAL" },
   { q: "who is ijlal hussaini", expected: "ABOUT_IJLAL" },
@@ -1592,11 +1852,16 @@ const testCases = [
   { q: "who is itjall", expected: "ABOUT_IJLAL" },
   { q: "tell me about him", expected: "ABOUT_IJLAL" },
   { q: "tell me about ijlal hussaini", expected: "ABOUT_IJLAL" },
+  { q: "who is he", expected: "ABOUT_IJLAL" },
+  { q: "introduce ijlal", expected: "ABOUT_IJLAL" },
+  { q: "profile of ijlal", expected: "ABOUT_IJLAL" },
+  { q: "background of ijlal", expected: "ABOUT_IJLAL" },
   { q: "what does he do", expected: "TITLES" },
   { q: "what are his titles", expected: "TITLES" },
   { q: "what is his profession", expected: "TITLES" },
+  { q: "what kind of engineer", expected: "TITLES" },
 
-  // Skills & Concepts:
+  // 21. Skills & Tech Concepts
   { q: "waht is python", expected: "SKILL_PYTHON" },
   { q: "what is python", expected: "SKILL_PYTHON" },
   { q: "tell me about python", expected: "SKILL_PYTHON" },
@@ -1629,8 +1894,9 @@ const testCases = [
   { q: "what languages does he speak", expected: "LANGUAGES" },
   { q: "spoken languages", expected: "LANGUAGES" },
   { q: "tech stack", expected: "ALL_SKILLS" },
+  { q: "core skills", expected: "ALL_SKILLS" },
 
-  // Specific projects:
+  // 22. Specific Projects & Deep Queries
   { q: "tell me about resumeiq", expected: "RESUMEIQ_OVERVIEW" },
   { q: "resumeiq demo", expected: "RESUMEIQ_DEMO" },
   { q: "how does ats work in resumeiq", expected: "RESUMEIQ_ATS" },
@@ -1646,14 +1912,14 @@ const testCases = [
   { q: "blog factory live demo", expected: "BLOGFACTORY_DEMO" },
   { q: "how was this portfolio built", expected: "PORTFOLIO_INFO" },
 
-  // Certifications:
+  // 23. Verified Certifications
   { q: "all certificates", expected: "ALL_CERTS" },
   { q: "how many certificates does he have", expected: "ALL_CERTS" },
   { q: "navttc certificate", expected: "CERT_NAVTTC" },
   { q: "cisco python", expected: "CERT_CISCO" },
   { q: "digiskills", expected: "CERT_DIGISKILL" },
 
-  // Contact / Hire:
+  // 24. Contact & Hire Inquiries
   { q: "download cv", expected: "RESUME_CV" },
   { q: "what is his email", expected: "EMAIL" },
   { q: "what is his whatsapp number", expected: "PHONE" },
@@ -1677,7 +1943,7 @@ const testCases = [
   { q: "what time is it in islamabad", expected: "TIMEZONE" },
   { q: "give all data in json", expected: "JSON_EXPORT" },
 
-  // Additional spelling variations and concept queries:
+  // 25. Typo Normalizations & Spelling Edge-cases
   { q: "wht is python", expected: "SKILL_PYTHON" },
   { q: "wat is python", expected: "SKILL_PYTHON" },
   { q: "pythn programming", expected: "SKILL_PYTHON" },
@@ -1685,9 +1951,6 @@ const testCases = [
   { q: "definition of python", expected: "SKILL_PYTHON" },
   { q: "what is numl", expected: "UNIVERSITY_EDUCATION" },
   { q: "what is numl university", expected: "UNIVERSITY_EDUCATION" },
-  { q: "what is your education", expected: "LATEST_EDUCATION" },
-  { q: "what is his latest education", expected: "LATEST_EDUCATION" },
-  { q: "what is his highest degree", expected: "LATEST_EDUCATION" },
   { q: "what is safezone", expected: "SAFEZONE_OVERVIEW" },
   { q: "what is resumeiq", expected: "RESUMEIQ_OVERVIEW" },
   { q: "what is technical blog factory", expected: "BLOGFACTORY_OVERVIEW" },
@@ -1700,11 +1963,8 @@ const testCases = [
   { q: "what are guardrails", expected: "SKILL_GENAI" },
   { q: "what is ats auditor", expected: "RESUMEIQ_ATS" },
   { q: "what is google xyz formula", expected: "RESUMEIQ_XYZ" },
-  { q: "what is his favorite subject", expected: "FAVORITE_SUBJECT" },
-  { q: "favorite subject of ijlal", expected: "FAVORITE_SUBJECT" },
-  { q: "is artificial intelligence his favorite subject", expected: "FAVORITE_SUBJECT" },
 
-  // Conversational / Guardrails:
+  // 26. Conversational / Well-being / Greetings / Praise / Identity
   { q: "hi", expected: "GREETING" },
   { q: "hello", expected: "GREETING" },
   { q: "hey there", expected: "GREETING" },
