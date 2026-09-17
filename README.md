@@ -11,7 +11,7 @@
 
   <p align="center">
     <a href="https://ijlalhussain.vercel.app/"><img src="https://img.shields.io/badge/Live_Demo-ijlalhussain.vercel.app-00f5ff?style=for-the-badge&logo=vercel&logoColor=black" alt="Live Portfolio Website" /></a>
-    <a href="https://linkedin.com/in/ijlal-hussain786"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile" /></a>
+    <a href="https://www.linkedin.com/in/ijlalhussain-se/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Profile" /></a>
     <a href="mailto:ijlalhussain.eng@gmail.com"><img src="https://img.shields.io/badge/Direct_Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Direct Email" /></a>
     <a href="https://wa.me/923118672135"><img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp Chat" /></a>
   </p>
@@ -188,7 +188,7 @@ npm run build
 
 - 🌐 **Live Website**: [ijlalhussain.vercel.app](https://ijlalhussain.vercel.app/)
 - 📧 **Direct Email**: [ijlalhussain.eng@gmail.com](mailto:ijlalhussain.eng@gmail.com)
-- 💼 **LinkedIn**: [linkedin.com/in/ijlal-hussain786](https://linkedin.com/in/ijlal-hussain786)
+- 💼 **LinkedIn**: [linkedin.com/in/ijlalhussain-se](https://www.linkedin.com/in/ijlalhussain-se/)
 - 🐙 **GitHub**: [github.com/Ijlal-Hussaini](https://github.com/Ijlal-Hussaini)
 - 💬 **WhatsApp**: [+92 311 867 2135](https://wa.me/923118672135)
 - 📍 **Location**: Gilgit, Pakistan (Available for Global Remote Opportunities)

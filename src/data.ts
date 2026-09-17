@@ -78,7 +78,7 @@ export const personalInfo: PersonalInfo = {
   email: "ijlalhussain.eng@gmail.com",
   phone: "+92 311 867 2135",
   location: "Gilgit, Pakistan",
-  linkedin: "https://linkedin.com/in/ijlal-hussain786",
+  linkedin: "https://www.linkedin.com/in/ijlalhussain-se/",
   github: "https://github.com/Ijlal-Hussaini",
   university: "NUML Islamabad",
   cgpa: "3.96 / 4.0",

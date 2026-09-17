@@ -1799,7 +1799,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     if (hasWord("linkedin", 2) || contains("linked in")) {
       return {
-        text: `Connect with Ijlal on LinkedIn: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin}) 💼`,
+        text: `Connect with Ijlal on LinkedIn: [linkedin.com/in/ijlalhussain-se](${personalInfo.linkedin}) 💼`,
         actionLink: { label: "Open LinkedIn Profile", url: personalInfo.linkedin }
       };
     }
@@ -1819,7 +1819,7 @@ export default function AIChatBot({ onNavigate, isScrollTopVisible = false }: AI
     // -------------------------------------------------------------
     if (hasWord("contact", 2) || contains("how to contact") || contains("reach out") || contains("connect with him")) {
       return {
-        text: `You can connect with Ijlal directly through:\n• **Email**: ${personalInfo.email}\n• **WhatsApp/Phone**: ${personalInfo.phone}\n• **LinkedIn**: [linkedin.com/in/ijlal-hussain786](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})`,
+        text: `You can connect with Ijlal directly through:\n• **Email**: ${personalInfo.email}\n• **WhatsApp/Phone**: ${personalInfo.phone}\n• **LinkedIn**: [linkedin.com/in/ijlalhussain-se](${personalInfo.linkedin})\n• **GitHub**: [github.com/Ijlal-Hussaini](${personalInfo.github})`,
         actionLink: { label: "Open Contact Form", tab: "Contact" }
       };
     }
